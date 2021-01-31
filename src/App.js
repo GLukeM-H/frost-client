@@ -19,7 +19,7 @@ function App() {
   return (
     <div className="App">
       <AppNavBar />
-      <Container fluid={true}>
+      <Container fluid>
         <Row>
           <Col className="border" md={{ size: 2 }}>
           </Col>
@@ -30,18 +30,6 @@ function App() {
           </Col>
         </Row>
       </Container>
-
-
-      
-      {/* <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <div>{comp}</div>
-        <button onClick={() => dispatch(actions.addLink("google.com"))} >add link to google</button>
-        <button onClick={() => dispatch(actions.addDiv("adding a div"))} >add a div</button>
-        <button onClick={() => dispatch(actions.addText("some different text"))} >add some text</button>
-        <div>{div}</div>
-        <div>{txt}</div>
-      </header> */}
     </div>
   );
 }

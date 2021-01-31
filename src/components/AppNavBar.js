@@ -8,7 +8,9 @@ import {
     Nav,
     NavItem,
     NavLink,
-    Container
+    Container,
+    Row,
+    Col
  } from 'reactstrap';
 
 
@@ -32,21 +34,27 @@ import {
         return (
             <div>
                 <Navbar color="dark" dark expand="sm" className="mb-5">
-                    <Container>
+                    <Container fluid>
                         <NavbarBrand href="/">
                             Spades
                         </NavbarBrand>
                         <NavbarToggler onClick={() => this.toggle()} />
+                        <NavbarToggler className="d-block d-sm-none" onClick={() => alert("clicked")} />
                         <Collapse isOpen={this.state.isOpen} navbar>
-                            <Nav className="ml-auto" navbar>
+                            <Nav className="mr-auto" navbar>
                                 <NavItem>
                                     <NavLink href="https://google.com">
                                         Google
                                     </NavLink>
                                 </NavItem>
-                                <AppTools />
+                                <NavItem>
+                                    <NavLink href="/">
+                                        <AppTools />
+                                    </NavLink>
+                                </NavItem>
                             </Nav>
                         </Collapse>
+                        <NavbarToggler className="d-none d-sm-block" onClick={() => alert("clicked")} />
                     </Container>
                 </Navbar>
             </div>

@@ -17,7 +17,7 @@ const bodyTemp = (
 const contentReducer = (state = initState, action) => {
     switch (action.type) {
         case "GET_BODY_COMPONENTS":
-            return {...state, contentComp: bodyTemp}
+            return {...state, contentComp: bodyTemp};
         case "ADD_TEXT":
             return {...state, text: action.payload};
         case "ADD_DIV":

@@ -1,5 +1,8 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import AppTools from './AppTools';
+import { navActions } from '../actions';
 import { 
     Collapse,
     Navbar,
@@ -25,9 +28,7 @@ import {
      }
 
      toggle() {
-         this.setState({
-             isOpen: !this.state.isOpen
-         });
+         this.props.toggleNav();
      }
 
      render() {
@@ -40,7 +41,7 @@ import {
                         </NavbarBrand>
                         <NavbarToggler onClick={() => this.toggle()} />
                         <NavbarToggler className="d-block d-sm-none" onClick={() => alert("clicked")} />
-                        <Collapse isOpen={this.state.isOpen} navbar>
+                        <Collapse isOpen={this.props.navIsOpen} navbar>
                             <Nav className="mr-auto" navbar>
                                 <NavItem>
                                     <NavLink href="https://google.com">
@@ -49,7 +50,7 @@ import {
                                 </NavItem>
                                 <NavItem>
                                     <NavLink href="/">
-                                        <AppTools />
+                                        Word
                                     </NavLink>
                                 </NavItem>
                             </Nav>
@@ -62,4 +63,14 @@ import {
      }
  }
 
- export default AppNavBar;
+AppNavBar.propTypes = {
+    toggleNav: PropTypes.func.isRequired,
+    navIsOpen: PropTypes.object.isRequired
+}
+
+const mapStateToProps = (state) => ({
+    navIsOpen: state.navState.navIsOpen
+})
+
+
+ export default connect(mapStateToProps, { toggleNav: navActions.togglenav })(AppNavBar);

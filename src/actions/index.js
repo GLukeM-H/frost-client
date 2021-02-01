@@ -1,3 +1,7 @@
-import * as actions from "./contentActions";
+import * as contActions from './contentActions';
+import * as navActions from './navActions';
 
-export default actions;
+export {
+    contActions,
+    navActions
+}

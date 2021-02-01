@@ -1,8 +1,10 @@
 import contentReducer from './contReducers';
-import {combineReducers} from 'redux';
+import navReducer from './navReducers';
+import { combineReducers } from 'redux';
 
 const rootReducer = combineReducers({
-    contentTree: contentReducer
+    contentTree: contentReducer,
+    navState: navReducer
 });
 
 export default rootReducer;

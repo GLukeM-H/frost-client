@@ -12,7 +12,7 @@ class AppCont extends React.Component {
     }
     
     render() {
-        return ();
+        return [];
     }
 }
 

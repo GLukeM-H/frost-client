@@ -1,5 +1,20 @@
 .App {
+  width: 100vw;
+  height: 100vh;
   text-align: center;
+}
+
+.AppTools {
+  height: calc(100% - 56px);
+  width: 250px;
+  z-index: 10;
+  margin-top: 56px;
+  position: fixed;
+  left: calc(100% - 250px);
+}
+
+.BodyContainer {
+  padding-top: 100px;
 }
 
 body {

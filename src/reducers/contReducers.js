@@ -7,9 +7,12 @@ const initState = {
     )
 }
 
+var space = Array(100).fill(<br />);
+
 const bodyTemp = (
         <div>
-            Here's the body component that should come from the database (but isn't right now).
+            <p>Here's the body component that should come from the database (but isn't right now).</p>
+            {space}
         </div>
     );
 

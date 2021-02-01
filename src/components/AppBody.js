@@ -10,7 +10,11 @@ class AppBody extends React.Component {
     }
     
     render() {
-        return [this.props.contentTree.contentComp];
+        return (
+            <div>
+                {[this.props.contentTree.contentComp]}
+            </div>
+        );
     }
 }
 

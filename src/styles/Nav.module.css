@@ -1,0 +1,5 @@
+.AppNavBar {
+    z-index: 20;
+    position: fixed !important;
+    width: 100vw;
+}

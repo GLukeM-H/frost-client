@@ -3,3 +3,9 @@ export const toggleNav = () => {
         type: "TOGGLE_NAV"
     }
 }
+
+export const toggleTools = () => {
+    return {
+        type: "TOGGLE_TOOLS"
+    }
+}

@@ -12,7 +12,6 @@ import {
     NavLink,
     Container
 } from 'reactstrap';
-import navStyle from '../styles/Nav.module.css';
 
 class AppNavBar extends React.Component {
     constructor(props) {
@@ -24,13 +23,13 @@ class AppNavBar extends React.Component {
     }
 
     openTools() {
-        alert("this should open the tools!");
+        this.props.toggleTools();
     }
 
     render() {
         return (
             <div>
-                <Navbar color="dark" dark expand="sm" className={navStyle.AppNavBar}>
+                <Navbar className="AppNavBar" color="dark" dark expand="sm">
                     <Container fluid>
                         <NavbarBrand href="/">
                             Spades
@@ -38,7 +37,7 @@ class AppNavBar extends React.Component {
                         <NavbarToggler onClick={() => this.toggle()} />
                         <NavbarToggler className="d-block d-sm-none" onClick={() => this.openTools()} />
                         <Collapse isOpen={this.props.navIsOpen} navbar>
-                            <Nav className="mr-auto" navbar>
+                            <Nav navbar>
                                 <NavItem>
                                     <NavLink href="/">
                                         Home
@@ -61,7 +60,8 @@ class AppNavBar extends React.Component {
 
 AppNavBar.propTypes = {
     toggleNav: PropTypes.func.isRequired,
-    navIsOpen: PropTypes.object.isRequired
+    toggleTools: PropTypes.func.isRequired,
+    navIsOpen: PropTypes.bool.isRequired
 }
 
 const mapStateToProps = (state) => ({
@@ -69,4 +69,7 @@ const mapStateToProps = (state) => ({
 })
 
 
- export default connect(mapStateToProps, { toggleNav: navActions.toggleNav })(AppNavBar);
+ export default connect(mapStateToProps, {
+     toggleNav: navActions.toggleNav,
+     toggleTools: navActions.toggleTools 
+})(AppNavBar);

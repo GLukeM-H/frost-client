@@ -1,17 +1,80 @@
+:root {
+  --nav-height: 56px;
+  --tools-width: 15rem;
+}
+
 .App {
-  width: 100vw;
-  height: 100vh;
   text-align: center;
 }
 
-.AppTools {
-  height: calc(100% - 56px);
-  width: 250px;
-  z-index: 10;
-  margin-top: 56px;
+.AppNavBar {
+  z-index: 20;
   position: fixed;
-  left: calc(100% - 250px);
+  width: 100vw;
 }
+
+.AppTools {
+  height: calc(100% - var(--nav-height));
+  width: var(--tools-width);
+  z-index: 10;
+  margin-top: var(--nav-height);
+  position: fixed;
+  left: calc(100% - var(--tools-width));
+}
+
+/* tool menu transitions */
+
+.tools-enter {
+  transform: translateX(var(--tools-width));
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,0);
+}
+
+.tools-enter-active {
+  transform: translateX(0);
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+  transition: all 500ms ease-out;
+}
+
+.tools-enter-done {
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+  transform: translateX(0);
+}
+
+.tools-exit {
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+  transform: translateX(0);
+}
+
+.tools-exit-active {
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,0);
+  transform: translateX(var(--tools-width));
+  transition: all 500ms ease-out;
+}
+
+.tools-exit-done {
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,0);
+  transform: translateX(var(--tools-width));
+}
+
+/*
+.tools-enter {
+  transform: translateX(0);
+}
+
+.tools-enter-active {
+  transform: translateX(-15rem);
+  transition: all 1000ms ease-in;
+}
+
+.tools-exit {
+  transform: translateX(-15rem);
+}
+
+.tools-exit-active {
+  transform: translateX(0);
+  transition: all 1000ms ease-out;
+}
+*/
 
 .BodyContainer {
   padding-top: 100px;

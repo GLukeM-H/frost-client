@@ -5,24 +5,17 @@ export const getBody = () => {
     }
 }
 
-export const addDiv = text => {
+export const addComp = compClass => {
     return {
-        type: "ADD_DIV",
-        payload: text
+        type: "ADD_COMP",
+        payload: compClass
     }
 }
 
-export const addLink = linkTo => {
+export const insertComp = parentInState => {
     return {
-        type: "ADD_LINK",
-        payload: linkTo
-    }
-}
-
-export const addText = text => {
-    return {
-        type: "ADD_TEXT",
-        payload: text
+        type: "INSERT_COMP",
+        payload: parentInState
     }
 }
 

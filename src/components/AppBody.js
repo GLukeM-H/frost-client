@@ -12,7 +12,8 @@ class AppBody extends React.Component {
     render() {
         return (
             <div>
-                {[this.props.contentTree.contentComp]}
+                {this.props.contentState.newComp && this.props.contentState.contentComp[this.props.contentState.newComp]}
+                {this.props.contentState.contentComp.root}}
             </div>
         );
     }
@@ -21,11 +22,11 @@ class AppBody extends React.Component {
 
 AppBody.propTypes = {
     getBody: PropTypes.func.isRequired,
-    contentTree: PropTypes.object.isRequired
+    contentState: PropTypes.object.isRequired
 }
 
 const mapStateToProps = (state) => ({
-    contentTree: state.contentTree
+    contentState: state.contentState
 })
 
 export default connect(mapStateToProps, { getBody: contActions.getBody })(AppBody);

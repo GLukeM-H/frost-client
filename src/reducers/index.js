@@ -3,7 +3,7 @@ import navReducer from './navReducers';
 import { combineReducers } from 'redux';
 
 const rootReducer = combineReducers({
-    contentTree: contentReducer,
+    contentState: contentReducer,
     navState: navReducer
 });
 

@@ -7,10 +7,13 @@ import {
     Navbar,
     NavbarToggler,
     NavbarBrand,
+    NavbarText,
     Nav,
     NavItem,
     NavLink,
-    Container
+    Container,
+    Row,
+    Col
 } from 'reactstrap';
 
 class AppTools extends React.Component {
@@ -20,12 +23,21 @@ class AppTools extends React.Component {
             <div>
                 <CSSTransition 
                 in={this.props.toolsOpen} 
-                timeout={500}
+                timeout={200}
                 classNames="tools"
                 unmountOnExit={true}>        
-                    <Navbar className="AppTools rounded" color="light" light>
+                    <Navbar className="tools rounded" color="light" light>
                         <Container>
-                            Word
+                            <NavbarText className="mb-3 border-bottom">
+                                Tools
+                            </NavbarText>
+                            <Nav navbar>
+                                <NavItem>
+                                    <NavLink onClick={() => alert('hey')}>
+                                        Word
+                                    </NavLink>
+                                </NavItem>
+                            </Nav>
                         </Container>
                     </Navbar>
                 </CSSTransition>

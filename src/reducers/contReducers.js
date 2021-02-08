@@ -1,3 +1,19 @@
+import EmptyBlock from '../components/EmptyBlock';
+import Row from '../components/content/Row';
+import { connect } from 'react-redux';
+import { v4 as uuid } from 'uuid';
+
+const connectState = (comp, id) => {
+    let mapStateToProps = state => ({
+        state: state.contentState.contentComp[id]
+    });
+    
+    return connect(mapStateToProps, {})(comp);
+}
+
+const createComp = {
+    'Row': id => <Row id={id} />
+}
 
 const initState = {
     contentComp: (
@@ -11,7 +27,7 @@ var space = Array(100).fill(<br />);
 
 const bodyTemp = (
         <div>
-            <p>Here's the body component that should come from the database (but isn't right now).</p>
+            <EmptyBlock />
             {space}
         </div>
     );
@@ -20,13 +36,14 @@ const bodyTemp = (
 const contentReducer = (state = initState, action) => {
     switch (action.type) {
         case "GET_BODY_COMPONENTS":
-            return {...state, contentComp: bodyTemp};
-        case "ADD_TEXT":
-            return {...state, text: action.payload};
-        case "ADD_DIV":
-            return {...state, div: (<div>{action.payload}</div>)};
-        case "ADD_LINK":
-            return {...state, div: (<a href={`https://${action.payload}`} target="_blank" rel="noreferrer">{action.payload}</a>)};
+            return {...state, contentComp: { root: bodyTemp }};
+        case "ADD_COMP":
+            let newId = uuid();
+            return {
+                ...state, 
+                contentComp: {...state.contentComp, [newId]: createComp[action.payload](newId)},
+                newComp: newId
+            };
         default:
             return state;
     }

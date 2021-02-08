@@ -18,24 +18,24 @@ class AppNavBar extends React.Component {
         super(props);
     }
 
-    toggle() {
+    toggleNav() {
         this.props.toggleNav();
     }
 
-    openTools() {
+    toggleTools() {
         this.props.toggleTools();
     }
 
     render() {
         return (
             <div>
-                <Navbar className="AppNavBar" color="dark" dark expand="sm">
+                <Navbar color="dark" dark expand="sm">
                     <Container fluid>
                         <NavbarBrand href="/">
                             Spades
                         </NavbarBrand>
-                        <NavbarToggler onClick={() => this.toggle()} />
-                        <NavbarToggler className="d-block d-sm-none" onClick={() => this.openTools()} />
+                        <NavbarToggler onClick={() => this.toggleNav()} />
+                        <NavbarToggler className="d-block d-sm-none" onClick={() => this.toggleTools()} />
                         <Collapse isOpen={this.props.navIsOpen} navbar>
                             <Nav navbar>
                                 <NavItem>
@@ -50,7 +50,7 @@ class AppNavBar extends React.Component {
                                 </NavItem>
                             </Nav>
                         </Collapse>
-                        <NavbarToggler className="d-none d-sm-block" onClick={() => this.openTools()} />
+                        <NavbarToggler className="d-none d-sm-block" onClick={() => this.toggleTools()} />
                     </Container>
                 </Navbar>
             </div>

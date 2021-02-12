@@ -1,42 +1,22 @@
-import EmptyBlock from '../components/EmptyBlock';
-import Row from '../components/content/Row';
-import { connect } from 'react-redux';
+import { createComp } from '../helpers/createComp';
 import { v4 as uuid } from 'uuid';
-
-const connectState = (comp, id) => {
-    let mapStateToProps = state => ({
-        state: state.contentState.contentComp[id]
-    });
-    
-    return connect(mapStateToProps, {})(comp);
-}
-
-const createComp = {
-    'Row': id => <Row id={id} />
-}
 
 const initState = {
     contentComp: (
         <div>
             Loading page...
         </div>
-    )
+    ),
+    editing: false,
+    newComp: null
 }
-
-var space = Array(100).fill(<br />);
-
-const bodyTemp = (
-        <div>
-            <EmptyBlock />
-            {space}
-        </div>
-    );
-
 
 const contentReducer = (state = initState, action) => {
     switch (action.type) {
         case "GET_BODY_COMPONENTS":
-            return {...state, contentComp: { root: bodyTemp }};
+            return {...state,
+                    contentComp: { 
+                        root: { comp: createComp['Container']('root'), inner: [] }}};
         case "ADD_COMP":
             let newId = uuid();
             return {
@@ -44,6 +24,10 @@ const contentReducer = (state = initState, action) => {
                 contentComp: {...state.contentComp, [newId]: createComp[action.payload](newId)},
                 newComp: newId
             };
+        case "INSERT_AFTER":
+            return {
+                ...state,
+            }
         default:
             return state;
     }

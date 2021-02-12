@@ -29,12 +29,12 @@ class AppTools extends React.Component {
                     <Navbar className="tools rounded" color="light" light>
                         <Container>
                             <NavbarText className="mb-3 border-bottom">
-                                Tools
+                                Components
                             </NavbarText>
                             <Nav navbar>
                                 <NavItem>
                                     <NavLink onClick={() => alert('hey')}>
-                                        Word
+                                        + Add Row
                                     </NavLink>
                                 </NavItem>
                             </Nav>

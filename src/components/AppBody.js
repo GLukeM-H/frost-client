@@ -13,7 +13,7 @@ class AppBody extends React.Component {
         return (
             <div>
                 {this.props.contentState.newComp && this.props.contentState.contentComp[this.props.contentState.newComp]}
-                {this.props.contentState.contentComp.root}}
+                {this.props.contentState.contentComp.root && this.props.contentState.contentComp.root.comp}
             </div>
         );
     }

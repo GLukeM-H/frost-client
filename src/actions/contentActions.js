@@ -12,10 +12,10 @@ export const addComp = compClass => {
     }
 }
 
-export const insertComp = parentInState => {
+export const insertAfter = parentId => {
     return {
-        type: "INSERT_COMP",
-        payload: parentInState
+        type: "INSERT_AFTER",
+        payload: parentId
     }
 }
 

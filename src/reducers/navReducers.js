@@ -1,7 +1,7 @@
 
 const initState = {
     navIsOpen: false,
-    toolsOpen: false
+    toolsOpen: false,
 }
 
 const navReducer = (state = initState, action) => {

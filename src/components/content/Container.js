@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Container } from 'reactstrap';
+import { Container, Row, Col } from 'reactstrap';
 import EmptyBlock from '../EmptyBlock';
-import { createComp } from '../../helpers/createComp';
+import EditButton from '../EditButton';
+// import { createComp } from '../../helpers/createComp';
 
 class ContainerComp extends React.Component {
     constructor(props) {
@@ -16,19 +17,20 @@ class ContainerComp extends React.Component {
     render() {
         return (
             <Container>
-                {this.props.editing && <EmptyBlock />}
-                {this.props.inner.map(childState => createComp[childState.type](childState.id))}
+                {this.props.editing && <EditButton parentId={this.props.id} childId={null}/>}
+                {this.props.children}                
             </Container>);
     }
 }
 
 
 ContainerComp.propTypes = {
-    id: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired
 }
 
 const mapStateToProps = (state, props) => ({
-    inner: state.contentState.contentComp[props.id].inner.map(id => state.contentState.contentComp[id]),
+    children: state.contentState.contentComp[props.id].childIds.map(id => state.contentState.contentComp[id].comp),
+    parentId: state.contentState.contentComp[props.id].parentId,
     editing: state.contentState.editing
 })
 

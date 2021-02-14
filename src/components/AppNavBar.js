@@ -1,15 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { navActions } from '../actions';
+import { navActions, contActions } from '../actions';
 import { 
     Collapse,
-    Navbar,
-    NavbarToggler,
-    NavbarBrand,
-    Nav,
-    NavItem,
-    NavLink,
+    Navbar, Nav, NavbarToggler, NavbarBrand, NavItem, NavLink,
+    UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem,
     Container
 } from 'reactstrap';
 
@@ -22,11 +18,19 @@ class AppNavBar extends React.Component {
         this.props.toggleNav();
     }
 
-    toggleTools() {
+    handleEditing() {
         this.props.toggleTools();
+        this.props.toggleEditing();
     }
 
     render() {
+        let dropdownInner = [
+            <DropdownToggle>:)</DropdownToggle>,
+            <DropdownMenu>
+                <DropdownItem header>Hi, Luke</DropdownItem>
+                <DropdownItem onClick={() => this.handleEditing()}>Edit Page</DropdownItem>
+            </DropdownMenu>
+        ];
         return (
             <div>
                 <Navbar color="dark" dark expand="sm">
@@ -35,7 +39,9 @@ class AppNavBar extends React.Component {
                             Spades
                         </NavbarBrand>
                         <NavbarToggler onClick={() => this.toggleNav()} />
-                        <NavbarToggler className="d-block d-sm-none" onClick={() => this.toggleTools()} />
+                        <UncontrolledDropdown nav className="d-block d-sm-none">
+                            {dropdownInner}
+                        </UncontrolledDropdown>
                         <Collapse isOpen={this.props.navIsOpen} navbar>
                             <Nav navbar>
                                 <NavItem>
@@ -50,7 +56,10 @@ class AppNavBar extends React.Component {
                                 </NavItem>
                             </Nav>
                         </Collapse>
-                        <NavbarToggler className="d-none d-sm-block" onClick={() => this.toggleTools()} />
+                        {/* <NavbarToggler className="d-none d-sm-block" onClick={() => this.toggleTools()} /> */}
+                        <UncontrolledDropdown nav className="d-none d-sm-block">
+                            {dropdownInner}
+                        </UncontrolledDropdown>
                     </Container>
                 </Navbar>
             </div>
@@ -61,6 +70,7 @@ class AppNavBar extends React.Component {
 AppNavBar.propTypes = {
     toggleNav: PropTypes.func.isRequired,
     toggleTools: PropTypes.func.isRequired,
+    toggleEditing: PropTypes.func.isRequired,
     navIsOpen: PropTypes.bool.isRequired
 }
 
@@ -71,5 +81,6 @@ const mapStateToProps = (state) => ({
 
  export default connect(mapStateToProps, {
      toggleNav: navActions.toggleNav,
-     toggleTools: navActions.toggleTools 
+     toggleTools: navActions.toggleTools,
+     toggleEditing: contActions.toggleEditing
 })(AppNavBar);

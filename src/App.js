@@ -19,12 +19,13 @@ function App() {
       <Container className="BodyContainer" fluid>
         <Row>
           <Col className="border" md={{ size: 2 }}>
-            lalalal
+            <br />
           </Col>
           <Col md={{ size: 8 }}>
             <AppBody />
           </Col>
           <Col className="border" md={{ size: 2 }}>
+            <br />
           </Col>
         </Row>
       </Container>

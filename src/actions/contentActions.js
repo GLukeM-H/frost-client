@@ -5,17 +5,22 @@ export const getBody = () => {
     }
 }
 
-export const addComp = compClass => {
+export const addComp = compName => {
     return {
         type: "ADD_COMP",
-        payload: compClass
+        payload: compName
     }
 }
 
-export const insertAfter = parentId => {
+export const insertAfter = ({parentId, childId}) => {
     return {
         type: "INSERT_AFTER",
-        payload: parentId
+        payload: { parentId, childId }
     }
 }
 
+export const toggleEditing = () => {
+    return {
+        type: "TOGGLE_EDITING"
+    }
+}

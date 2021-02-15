@@ -1,26 +1,32 @@
 export const getBody = () => {
     return {
-        type: "GET_BODY_COMPONENTS",
-        payload: null
+        type: "BODY_COMPONENTS/GET",
     }
 }
 
-export const addComp = compName => {
+export const insertComp = (parentId, childId, compName='EmptyBlock') => {
     return {
-        type: "ADD_COMP",
-        payload: compName
+        type: "EDIT/INSERT",
+        payload: {parentId, childId, compName}
     }
 }
 
-export const insertAfter = ({parentId, childId}) => {
+export const deleteComp = id => {
     return {
-        type: "INSERT_AFTER",
-        payload: { parentId, childId }
+        type: "EDIT/DELETE",
+        payload: id
+    }
+}
+
+export const replaceComp = (parentId, childId, compName) => {
+    return dispatch => {
+        dispatch(insertComp(parentId, childId, compName));
+        dispatch(deleteComp(childId));
     }
 }
 
 export const toggleEditing = () => {
     return {
-        type: "TOGGLE_EDITING"
+        type: "EDIT/TOGGLE"
     }
 }

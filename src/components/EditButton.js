@@ -7,7 +7,7 @@ import { Button } from 'reactstrap';
 class EditButton extends React.Component {
 
     handleClick() {
-        this.props.insertAfter({ parentId: this.props.parentId, childId: this.props.childId });
+        this.props.insertComp(this.props.parentId, this.props.childId, 'EmptyBlock');
     }
 
     render() {
@@ -21,9 +21,9 @@ class EditButton extends React.Component {
 
 
 EditButton.propTypes = {
-    toolsOpen: PropTypes.bool.isRequired,
+    insertComp: PropTypes.func.isRequired,
     parentId: PropTypes.string.isRequired,
-    childId: PropTypes.string.isRequired
+    childId: PropTypes.string
 }
 
 const mapStateToProps = (state) => ({
@@ -31,4 +31,4 @@ const mapStateToProps = (state) => ({
     toolsOpen: state.navState.toolsOpen
 })
 
-export default connect(mapStateToProps, { insertAfter: contActions.insertAfter })(EditButton);
+export default connect(mapStateToProps, { insertComp: contActions.insertComp })(EditButton);

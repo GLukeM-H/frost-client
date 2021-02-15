@@ -18,8 +18,14 @@ class AppTools extends React.Component {
         this.props.toggleEditing();
     }
     
-    handleAddComp(compName) {
-        this.props.addComp(compName);
+    handleClick({ onClick, input}) {
+        switch (onClick) {
+            case 'insertComp': //Should not be insert here. Need to replace. Will probably need new prop with state of parentId
+                this.props.insertComp(input);
+                break;
+            default:
+                console.log(`No case for ${onClick}`);
+        }
     }
     
     render(){
@@ -41,9 +47,9 @@ class AppTools extends React.Component {
                                 Components
                             </NavbarText>
                             <Nav navbar>
-                                {AppToolsData.map(item => (
+                                {AppToolsData['Container'].map(item => (
                                     <NavItem>
-                                        <NavLink onClick={() => this.handleAddComp(item.compName)}>
+                                        <NavLink onClick={() => this.handleClick(item)}>
                                             {item.text}
                                         </NavLink>
                                     </NavItem>
@@ -61,7 +67,7 @@ AppTools.propTypes = {
     toolsOpen: PropTypes.bool.isRequired,
     toggleTools: PropTypes.func.isRequired,
     toggleEditing: PropTypes.func.isRequired,
-    addComp: PropTypes.func.isRequired
+    insertComp: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => ({
@@ -72,5 +78,5 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
     toggleTools: navActions.toggleTools,
     toggleEditing: contActions.toggleEditing,
-    addComp: contActions.addComp
+    insertComp: contActions.insertComp
 })(AppTools);

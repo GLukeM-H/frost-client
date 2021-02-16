@@ -1,95 +1,38 @@
 import { createComp } from '../helpers/createComp';
+import Container from '../components/content/Container';
+import {
+    insertComponent,
+    deleteComponent,
+    moveComponent
+} from '../helpers/contentStateHelpers';
 import { v4 as uuid } from 'uuid';
+import { ROOT_COMP, INIT_STATE } from '../data/contReducerConstants';
 
-const insertComponent = (state, compName, id, parentId, index) => {
-    var childIds = state.contentComp[parentId].childIds;
-
-    return {
-        ...state,
-        contentComp: {
-            ...state.contentComp,
-            [parentId]: {
-                ...state.contentComp[parentId],
-                childIds: childIds.slice(0, index).concat(id, childIds.slice(index))
-            },
-            [id]: { comp: createComp[compName](id), childIds: [], parentId }
-        }
-    };
-}
-
-const deleteComponent = (state, id) => {
-
-    var newState = state;
-    for (var i in state.contentComp[id].childIds) {
-        newState = deleteComponent(newState, state.contentComp[id].childIds[i]);
-    }
-
-    var parentId = newState.contentComp[id].parentId;
-    var newContentComp = parentId ? (
-        {
-            ...newState.contentComp,
-            [parentId]: {
-                ...newState.contentComp[parentId],
-                childIds: newState.contentComp[parentId].childIds.filter(childId => childId !== id)
-            }
-        }
-    ) : ({...newState.contentComp});
-    
-    delete newContentComp[id];
-
-    return {
-        ...newState,
-        contentComp: newContentComp
-    }
-
-}
-
-const moveComponent = (state, id, oldParentId, newParentId, index) => {
-    let oldChildIds = state.contentComp[oldParentId].childIds;
-    let newChildIds = state.contentComp[newParentId].childIds;
-
-    return {
-        ...state,
-        contentComp: {
-            ...state.contentComp,
-            [oldParentId]: {
-                ...state.contentComp[oldParentId],
-                childIds: oldChildIds.filter(childId => childId !== id)
-            },
-            [newParentId]: {
-                ...state.contentComp[newParentId],
-                childIds: newChildIds.slice(0, index).concat(id, newChildIds.slice(index))
-            },
-        }
-    }
-}
-
-const initState = {
-    contentComp: (
-        <div>
-            Loading page...
-        </div>
-    ),
-    editing: false,
-    insertId: null,
-    addCompError: null
-}
-
-const contentReducer = (state = initState, action) => {
+const contentReducer = (state = INIT_STATE, action) => {
+    var newId;
     switch (action.type) {
         case "BODY_COMPONENTS/GET":
             return {
                 ...state,
                 contentComp: { 
-                    rootComp: { comp: createComp['Container']('rootComp'), childIds: [], parentId: null }}};
+                    [ROOT_COMP]: { ...state.contentComp[ROOT_COMP], comp: createComp['Container'](ROOT_COMP)}
+                }
+            };
         case "EDIT/INSERT":
-            let { parentId, childId, compName } = action.payload;
-            let index = childId ? state.contentComp[parentId].childIds.indexOf(childId) : 0;
-            let newId = uuid();
-
-            return insertComponent(state, compName, newId, parentId, index);
+            return insertComponent(state, uuid(), ...action.payload);
         case "EDIT/DELETE":
             return deleteComponent(state, action.payload);
+        case "EDIT/MOVE":
+            return moveComponent(state, ...action.payload);
+        case "EDIT/INSERT_PLACEHOLDER":
+            newId = uuid();
+            return { ...insertComponent(state, newId, 'EmptyBlock', ...action.payload), placeholderId: newId}
+        case "EDIT/CLEAR_PLACEHOLDER":
+            if (state.placeholderId){
+                return { ...deleteComponent(state, state.placeholderId), placeholderId: null};
+            } else {
+                return { ...state }
+            }
         case "EDIT/TOGGLE":
             return { ...state, editing: !state.editing };
         default:

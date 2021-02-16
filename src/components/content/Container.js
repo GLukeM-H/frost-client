@@ -16,8 +16,8 @@ class ContainerComp extends React.Component {
     
     render() {
         return (
-            <Container>
-                {this.props.editing && <EditButton parentId={this.props.id} childId={null}/>}
+            <Container style={{height: "50px", backgroundColor: "ghostwhite"}}>
+                {this.props.editing && <EditButton compName="Container" parentId={this.props.id} childId={null}/>}
                 {this.props.children}                
             </Container>);
     }
@@ -25,12 +25,15 @@ class ContainerComp extends React.Component {
 
 
 ContainerComp.propTypes = {
-    id: PropTypes.string.isRequired
+    id: PropTypes.string.isRequired,
+    children: PropTypes.object.isRequired,
+    parentId: PropTypes.object,
+    editing: PropTypes.bool.isRequired
 }
 
-const mapStateToProps = (state, props) => ({
-    children: state.contentState.contentComp[props.id].childIds.map(id => state.contentState.contentComp[id].comp),
-    parentId: state.contentState.contentComp[props.id].parentId,
+const mapStateToProps = (state, ownProps) => ({
+    children: state.contentState.contentComp[ownProps.id].childIds.map(id => state.contentState.contentComp[id].comp),
+    parentId: state.contentState.contentComp[ownProps.id].parentId,
     editing: state.contentState.editing
 })
 

@@ -6,9 +6,10 @@ import { AppToolsData } from '../data/AppToolsData';
 import { CSSTransition } from 'react-transition-group';
 import { 
     Collapse,
-    Navbar, NavbarText, Nav, NavItem, NavLink,
+    Navbar, Nav, NavItem, NavLink, NavbarText,
     Container, Row, Col,
-    Button
+    Button,
+    Breadcrumb, BreadcrumbItem
 } from 'reactstrap';
 
 class AppTools extends React.Component {
@@ -18,10 +19,10 @@ class AppTools extends React.Component {
         this.props.toggleEditing();
     }
     
-    handleClick({ onClick, input}) {
+    handleClick({ onClick, input }) {
         switch (onClick) {
-            case 'insertComp': //Should not be insert here. Need to replace. Will probably need new prop with state of parentId
-                this.props.insertComp(input);
+            case 'replacePlaceholder':
+                this.props.replacePlaceholder(input, this.props.placeholderId);
                 break;
             default:
                 console.log(`No case for ${onClick}`);
@@ -43,9 +44,11 @@ class AppTools extends React.Component {
                                 className="position-absolute"
                                 style={{alignSelf: "end"}}
                                 onClick={() => this.handleClose()} />
-                            <NavbarText className="mb-3 border-bottom">
-                                Components
-                            </NavbarText>
+                            <Breadcrumb>
+                                <BreadcrumbItem active>
+                                    Components
+                                </BreadcrumbItem>
+                            </Breadcrumb>
                             <Nav navbar>
                                 {AppToolsData['Container'].map(item => (
                                     <NavItem>
@@ -65,18 +68,20 @@ class AppTools extends React.Component {
 
 AppTools.propTypes = {
     toolsOpen: PropTypes.bool.isRequired,
+    placeholderId: PropTypes.string.isRequired,
     toggleTools: PropTypes.func.isRequired,
     toggleEditing: PropTypes.func.isRequired,
-    insertComp: PropTypes.func.isRequired
+    replacePlaceholder: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => ({
-    toolsOpen: state.navState.toolsOpen
+    toolsOpen: state.navState.toolsOpen,
+    placeholderId: state.contentState.placeholderId
 })
 
 
 export default connect(mapStateToProps, {
     toggleTools: navActions.toggleTools,
     toggleEditing: contActions.toggleEditing,
-    insertComp: contActions.insertComp
+    replacePlaceholder: contActions.replacePlaceholder,
 })(AppTools);

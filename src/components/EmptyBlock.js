@@ -19,7 +19,7 @@ class EmptyBlock extends React.Component {
 
 
 EmptyBlock.propTypes = {
-    id: PropTypes.string.isRequired
+    key: PropTypes.string.isRequired
 }
 
 const mapStateToProps = (state) => ({

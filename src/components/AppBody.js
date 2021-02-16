@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { contActions } from '../actions';
+import { ROOT_COMP } from '../data/contReducerConstants';
 
 class AppBody extends React.Component {
     
@@ -12,8 +13,7 @@ class AppBody extends React.Component {
     render() {
         return (
             <div>
-                {(this.props.contentState.contentComp['rootComp'] && this.props.contentState.contentComp['rootComp'].comp) ||
-                this.props.contentState.contentComp}
+                {this.props.rootComponent}
             </div>
         );
     }
@@ -22,11 +22,11 @@ class AppBody extends React.Component {
 
 AppBody.propTypes = {
     getBody: PropTypes.func.isRequired,
-    contentState: PropTypes.object.isRequired
+    rootComponent: PropTypes.object.isRequired
 }
 
 const mapStateToProps = (state) => ({
-    contentState: state.contentState
+    rootComponent: state.contentState.contentComp[ROOT_COMP].comp
 })
 
 export default connect(mapStateToProps, { getBody: contActions.getBody })(AppBody);

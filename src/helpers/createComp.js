@@ -4,8 +4,8 @@ import Row from '../components/content/Container';
 import Col from '../components/content/Col';
 
 export const createComp = {
-    'EmptyBlock': id => <EmptyBlock id={id} />,
-    'Container': id => <Container id={id} />,
-    'Row': id => <Row id={id} />,
-    'Col': id => <Col id={id} />
+    'EmptyBlock': id => <EmptyBlock key={id} id={id} />,
+    'Container': id => <Container key={id} id={id} />,
+    'Row': id => <Row key={id} id={id} />,
+    'Col': id => <Col key={id} id={id} />
 }

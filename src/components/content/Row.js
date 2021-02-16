@@ -11,7 +11,7 @@ class RowComp extends React.Component {
 
 
 RowComp.propTypes = {
-    id: PropTypes.string.isRequired,
+    key: PropTypes.string.isRequired,
 }
 
 export default RowComp;

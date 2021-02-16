@@ -2,14 +2,14 @@ export const AppToolsData = {
     Container: [
         {
             text: "+ Add Row",
-            onClick: "insertComp",
+            onClick: "replacePlaceholder",
             input: "Row"
         }
     ],
     Row: [
         {
             text: "+ Add Column",
-            onClick: "insertComp",
+            onClick: "replacePlaceholder",
             input: "Col"
         }
     ]

@@ -1,4 +1,4 @@
-import EmptyBlock from '../components/EmptyBlock';
+import EmptyBlock from '../components/content/EmptyBlock';
 import Container from '../components/content/Container';
 import Row from '../components/content/Container';
 import Col from '../components/content/Col';

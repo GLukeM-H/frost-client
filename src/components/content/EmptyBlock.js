@@ -19,11 +19,10 @@ class EmptyBlock extends React.Component {
 
 
 EmptyBlock.propTypes = {
-    key: PropTypes.string.isRequired
+    id: PropTypes.string.isRequired
 }
 
 const mapStateToProps = (state) => ({
-    contentState: state.contentState,
     toolsOpen: state.navState.toolsOpen
 })
 

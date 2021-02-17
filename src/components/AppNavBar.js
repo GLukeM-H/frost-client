@@ -10,9 +10,6 @@ import {
 } from 'reactstrap';
 
 class AppNavBar extends React.Component {
-    constructor(props) {
-        super(props);
-    }
 
     toggleNav() {
         this.props.toggleNav();
@@ -25,8 +22,8 @@ class AppNavBar extends React.Component {
 
     render() {
         let dropdownInner = [
-            <DropdownToggle>:)</DropdownToggle>,
-            <DropdownMenu>
+            <DropdownToggle key={1}>:)</DropdownToggle>,
+            <DropdownMenu key={2}>
                 <DropdownItem header>Hi, Luke</DropdownItem>
                 <DropdownItem onClick={() => this.handleEditing()}>Edit Page</DropdownItem>
             </DropdownMenu>
@@ -56,7 +53,6 @@ class AppNavBar extends React.Component {
                                 </NavItem>
                             </Nav>
                         </Collapse>
-                        {/* <NavbarToggler className="d-none d-sm-block" onClick={() => this.toggleTools()} /> */}
                         <UncontrolledDropdown nav className="d-none d-sm-block">
                             {dropdownInner}
                         </UncontrolledDropdown>

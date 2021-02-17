@@ -1,5 +1,3 @@
-import { createComp } from '../helpers/createComp';
-import Container from '../components/content/Container';
 import {
     insertComponent,
     deleteComponent,
@@ -15,7 +13,7 @@ const contentReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 contentComp: { 
-                    [ROOT_COMP]: { ...state.contentComp[ROOT_COMP], comp: createComp['Container'](ROOT_COMP)}
+                    [ROOT_COMP]: { ...state.contentComp[ROOT_COMP], comp: 'Container'}
                 }
             };
         case "EDIT/INSERT":

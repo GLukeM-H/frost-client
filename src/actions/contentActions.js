@@ -37,7 +37,7 @@ export const insertPlaceholder = (parentId, childId) => {
         dispatch(clearPlaceholder());
         dispatch({
             type: "EDIT/INSERT_PLACEHOLDER",
-            payload: [ parentId, childId ]    
+            payload: [ parentId, childId ]
         });
     }
 }

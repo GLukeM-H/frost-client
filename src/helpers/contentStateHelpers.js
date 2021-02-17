@@ -1,4 +1,3 @@
-import { createComp } from './createComp';
 import { ROOT_COMP } from '../data/contReducerConstants';
 
 export const insertComponent = (state, id, compName, parentId, childId) => {
@@ -25,7 +24,7 @@ export const insertComponent = (state, id, compName, parentId, childId) => {
                 ...state.contentComp[parentId],
                 childIds: childIds.slice(0, index).concat(id, childIds.slice(index))
             },
-            [id]: { comp: createComp[compName](id), childIds: [], parentId }
+            [id]: { comp: compName, props: { key: id, id }, inner: '', childIds: [], parentId }
         }
     };
 }
@@ -74,6 +73,10 @@ export const moveComponent = (state, id, oldParentId, newParentId, index) => {
                 ...state.contentComp[newParentId],
                 childIds: newChildIds.slice(0, index).concat(id, newChildIds.slice(index))
             },
+            [id]: {
+                ...state.contentComp[id],
+                parentId: newParentId
+            }
         }
     }
 }

@@ -11,7 +11,7 @@ class ColComp extends React.Component {
 
 
 ColComp.propTypes = {
-    key: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
 }
 
 export default ColComp;

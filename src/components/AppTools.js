@@ -50,8 +50,8 @@ class AppTools extends React.Component {
                                 </BreadcrumbItem>
                             </Breadcrumb>
                             <Nav navbar>
-                                {AppToolsData['Container'].map(item => (
-                                    <NavItem>
+                                {AppToolsData['Container'].map((item, index) => (
+                                    <NavItem key={index}>
                                         <NavLink onClick={() => this.handleClick(item)}>
                                             {item.text}
                                         </NavLink>
@@ -68,7 +68,7 @@ class AppTools extends React.Component {
 
 AppTools.propTypes = {
     toolsOpen: PropTypes.bool.isRequired,
-    placeholderId: PropTypes.string.isRequired,
+    placeholderId: PropTypes.string,
     toggleTools: PropTypes.func.isRequired,
     toggleEditing: PropTypes.func.isRequired,
     replacePlaceholder: PropTypes.func.isRequired

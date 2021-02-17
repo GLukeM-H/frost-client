@@ -2,9 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Container, Row, Col } from 'reactstrap';
-import EmptyBlock from '../EmptyBlock';
 import EditButton from '../EditButton';
-// import { createComp } from '../../helpers/createComp';
+import * as comp from './';
 
 class ContainerComp extends React.Component {
     constructor(props) {
@@ -16,9 +15,9 @@ class ContainerComp extends React.Component {
     
     render() {
         return (
-            <Container style={{height: "50px", backgroundColor: "ghostwhite"}}>
+            <Container style={{height: "100%", backgroundColor: "ghostwhite"}}>
                 {this.props.editing && <EditButton compName="Container" parentId={this.props.id} childId={null}/>}
-                {this.props.children}                
+                {this.props.children.map(child => React.createElement(comp[child.comp], child.props, child.inner))}                
             </Container>);
     }
 }
@@ -26,13 +25,13 @@ class ContainerComp extends React.Component {
 
 ContainerComp.propTypes = {
     id: PropTypes.string.isRequired,
-    children: PropTypes.object.isRequired,
-    parentId: PropTypes.object,
+    children: PropTypes.array.isRequired,
+    parentId: PropTypes.string,
     editing: PropTypes.bool.isRequired
 }
 
 const mapStateToProps = (state, ownProps) => ({
-    children: state.contentState.contentComp[ownProps.id].childIds.map(id => state.contentState.contentComp[id].comp),
+    children: state.contentState.contentComp[ownProps.id].childIds.map(id => state.contentState.contentComp[id]),
     parentId: state.contentState.contentComp[ownProps.id].parentId,
     editing: state.contentState.editing
 })

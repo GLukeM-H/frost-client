@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { 
-    Container, 
-    Button 
+    Container
 } from 'reactstrap';
 
 class EmptyBlock extends React.Component {

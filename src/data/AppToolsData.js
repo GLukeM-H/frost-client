@@ -1,4 +1,11 @@
 export const AppToolsData = {
+    Components: [
+        {
+            text: "+ Add Container",
+            onClick: "replacePlaceholder",
+            input: "Container"
+        }
+    ],
     Container: [
         {
             text: "+ Add Row",

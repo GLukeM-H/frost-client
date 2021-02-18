@@ -1,11 +1,18 @@
 export const toggleNav = () => {
     return {
-        type: "TOGGLE_NAV"
+        type: "NAV/TOGGLE"
     }
 }
 
 export const toggleTools = () => {
     return {
-        type: "TOGGLE_TOOLS"
+        type: "TOOLS/TOGGLE"
+    }
+}
+
+export const setToolsView = payload => {
+    return {
+        type: "TOOLS/SET_VIEW",
+        payload
     }
 }

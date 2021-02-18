@@ -6,16 +6,21 @@ import EditButton from '../EditButton';
 import * as comp from './';
 
 class ContainerComp extends React.Component {
-    constructor(props) {
-        super(props);
+
+    style() {
+        if (!this.props.children.length && this.props.editing){
+            return {
+                minHeight: "200px",
+                backgroundColor: "ghostwhite"
+            }
+        } else {
+            return {}
+        }
     }
-    
-    componentDidMount() {
-    }
-    
+
     render() {
         return (
-            <Container style={{height: "100%", backgroundColor: "ghostwhite"}}>
+            <Container style={this.style()}>
                 {this.props.editing && <EditButton compName="Container" parentId={this.props.id} childId={null}/>}
                 {this.props.children.map(child => React.createElement(comp[child.comp], child.props, child.inner))}                
             </Container>);

@@ -13,7 +13,7 @@ const contentReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 contentComp: { 
-                    [ROOT_COMP]: { ...state.contentComp[ROOT_COMP], comp: 'Container'}
+                    [ROOT_COMP]: { ...state.contentComp[ROOT_COMP], comp: 'Container', inner: ''}
                 }
             };
         case "EDIT/INSERT":

@@ -6,10 +6,22 @@ import EditButton from '../EditButton';
 import * as comp from './';
 
 class RowComp extends React.Component {
+
+    style() {
+        if (!this.props.children.length && this.props.editing){
+            return {
+                minHeight: "200px",
+                backgroundColor: "ghostwhite"
+            }
+        } else {
+            return {}
+        }
+    }
+
     
     render() {
         return (
-        <Row>
+        <Row style={this.style()}>
             {this.props.editing && <EditButton compName="Row" parentId={this.props.id} childId={null} />}
             {this.props.children.map(child => React.createElement(comp[child.comp], child.props, child.inner))}                
         </Row>);

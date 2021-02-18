@@ -9,24 +9,52 @@ import {
     Navbar, Nav, NavItem, NavLink, NavbarText,
     Container, Row, Col,
     Button,
-    Breadcrumb, BreadcrumbItem
+    Breadcrumb, BreadcrumbItem, NavbarBrand
 } from 'reactstrap';
 
 class AppTools extends React.Component {
+
+    view = {
+        Components: [(
+            <NavItem key={1}>
+                <Button color="primary" onClick={() => this.handleClick('Container')}>
+                    + Add Container
+                </Button>
+            </NavItem>),
+            <NavItem key={2}>
+                <NavbarText>adds a container to the dom</NavbarText>
+            </NavItem>
+        ],
+        Container: [(
+            <NavItem key={1}>
+                <Button color="primary" onClick={() => this.handleClick('Row')}>
+                    + Add Row
+                </Button>
+            </NavItem>
+        )],
+        Row: [(
+            <NavItem key={1}>
+                <Button color="primary" onClick={() => this.handleClick('Col')}>
+                    + Add Column
+                </Button>
+            </NavItem>
+        )],
+        Col: [(
+            <NavItem key={1}>
+                <Button color="primary" onClick={() => this.handleClick('Container')}>
+                    + Add Container
+                </Button>
+            </NavItem>
+        )]
+    }
  
     handleClose() {
         this.props.toggleTools();
         this.props.toggleEditing();
     }
     
-    handleClick({ onClick, input }) {
-        switch (onClick) {
-            case 'replacePlaceholder':
-                this.props.replacePlaceholder(input, this.props.placeholderId);
-                break;
-            default:
-                console.log(`No case for ${onClick}`);
-        }
+    handleClick(compName) {
+        this.props.replacePlaceholder(compName, this.props.placeholderId);
     }
     
     render(){
@@ -50,13 +78,7 @@ class AppTools extends React.Component {
                                 </BreadcrumbItem>
                             </Breadcrumb>
                             <Nav navbar>
-                                {AppToolsData['Container'].map((item, index) => (
-                                    <NavItem key={index}>
-                                        <NavLink onClick={() => this.handleClick(item)}>
-                                            {item.text}
-                                        </NavLink>
-                                    </NavItem>
-                                ))}
+                                {this.view[this.props.toolsView]}
                             </Nav>
                         </Container>
                     </Navbar>
@@ -68,6 +90,7 @@ class AppTools extends React.Component {
 
 AppTools.propTypes = {
     toolsOpen: PropTypes.bool.isRequired,
+    toolsView: PropTypes.string.isRequired,
     placeholderId: PropTypes.string,
     toggleTools: PropTypes.func.isRequired,
     toggleEditing: PropTypes.func.isRequired,
@@ -76,6 +99,7 @@ AppTools.propTypes = {
 
 const mapStateToProps = (state) => ({
     toolsOpen: state.navState.toolsOpen,
+    toolsView: state.navState.toolsView,
     placeholderId: state.contentState.placeholderId
 })
 

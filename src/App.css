@@ -64,6 +64,17 @@
   cursor: pointer;
 }
 
+/* Edit Button */
+
+/* .edit-dropdown {
+  transform: translate(-10px,-10px);
+} */
+
+.edit-button {
+  height: 25px;
+  width: 25px;
+}
+
 
 /* Body Container */
 

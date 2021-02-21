@@ -1,20 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Container, Row, Col } from 'reactstrap';
+import { Container } from 'reactstrap';
 import EditButton from '../EditButton';
 import * as comp from './';
+import { contActions } from '../../actions';
 
 class ContainerComp extends React.Component {
 
     style() {
-        if (!this.props.children.length && this.props.editing){
-            return {
-                minHeight: "200px",
-                backgroundColor: "ghostwhite"
+        var style={padding: "10px"};
+        if (this.props.editing){
+            style = {
+                ...style,
+                border: "4px dashed ghostwhite",
+                borderRadius: "15px"
             }
-        } else {
-            return {}
+        }
+        if (this.props.selected == this.props.id) {
+            style = {
+                ...style,
+                border: "4px dashed lightblue"
+            }
+        }
+
+        return style;
+    }
+
+    componentDidMount() {
+        if (!this.props.children.length) {
+            this.props.insertComp('Row', this.props.id, null);
         }
     }
 
@@ -32,14 +47,17 @@ ContainerComp.propTypes = {
     id: PropTypes.string.isRequired,
     children: PropTypes.array.isRequired,
     parentId: PropTypes.string,
-    editing: PropTypes.bool.isRequired
+    editing: PropTypes.bool.isRequired,
+    selected: PropTypes.string,
+    insertComp: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state, ownProps) => ({
     children: state.contentState.contentComp[ownProps.id].childIds.map(id => state.contentState.contentComp[id]),
     parentId: state.contentState.contentComp[ownProps.id].parentId,
-    editing: state.contentState.editing
+    editing: state.contentState.editing,
+    selected: state.contentState.selected
 })
 
 
-export default connect(mapStateToProps, {})(ContainerComp);
+export default connect(mapStateToProps, { insertComp: contActions.insertComp })(ContainerComp);

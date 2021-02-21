@@ -32,34 +32,38 @@ export const replaceComp = (parentId, childId, compName) => {
     }
 }
 
-export const insertPlaceholder = (parentId, childId) => {
-    return dispatch => {
-        dispatch(clearPlaceholder());
-        dispatch({
-            type: "EDIT/INSERT_PLACEHOLDER",
-            payload: [ parentId, childId ]
-        });
+export const selectedComp = id => {
+    return {
+        type: "EDIT/SELECTED_COMP",
+        payload: id
     }
 }
 
-export const clearPlaceholder = () => {
-    return {    
-        type: "EDIT/CLEAR_PLACEHOLDER"
-    }
-}
+// export const insertPlaceholder = (parentId, childId) => {
+//     return dispatch => {
+//         dispatch(clearPlaceholder());
+//         dispatch({
+//             type: "EDIT/INSERT_PLACEHOLDER",
+//             payload: [ parentId, childId ]
+//         });
+//     }
+// }
 
-export const replacePlaceholder = (compName, placeholderId) => {
-    return dispatch => {
-        dispatch(insertComp(compName, null, placeholderId));
-        dispatch(clearPlaceholder());
-    }
-}
+// export const clearPlaceholder = () => {
+//     return {    
+//         type: "EDIT/CLEAR_PLACEHOLDER"
+//     }
+// }
+
+// export const replacePlaceholder = (compName, placeholderId) => {
+//     return dispatch => {
+//         dispatch(insertComp(compName, null, placeholderId));
+//         dispatch(clearPlaceholder());
+//     }
+// }
 
 export const toggleEditing = () => {
-    return dispatch => {
-        dispatch(clearPlaceholder());
-        dispatch({
-            type: "EDIT/TOGGLE"
-        });
+    return {
+        type: "EDIT/TOGGLE"
     }
 }

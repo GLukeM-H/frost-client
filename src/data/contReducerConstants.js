@@ -11,6 +11,6 @@ export const INIT_STATE = {
     },
     editing: false,
     insertId: null,
-    placeholderId: null
+    selected: ''
 }
 

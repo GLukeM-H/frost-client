@@ -54,7 +54,7 @@ class AppTools extends React.Component {
     }
     
     handleClick(compName) {
-        this.props.replacePlaceholder(compName, this.props.placeholderId);
+        this.props.insertComp(compName, this.props.selected);
     }
     
     render(){
@@ -91,21 +91,20 @@ class AppTools extends React.Component {
 AppTools.propTypes = {
     toolsOpen: PropTypes.bool.isRequired,
     toolsView: PropTypes.string.isRequired,
-    placeholderId: PropTypes.string,
     toggleTools: PropTypes.func.isRequired,
     toggleEditing: PropTypes.func.isRequired,
-    replacePlaceholder: PropTypes.func.isRequired
+    insertComp: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => ({
     toolsOpen: state.navState.toolsOpen,
     toolsView: state.navState.toolsView,
-    placeholderId: state.contentState.placeholderId
+    selected: state.contentState.selected
 })
 
 
 export default connect(mapStateToProps, {
     toggleTools: navActions.toggleTools,
     toggleEditing: contActions.toggleEditing,
-    replacePlaceholder: contActions.replacePlaceholder,
+    insertComp: contActions.insertComp,
 })(AppTools);

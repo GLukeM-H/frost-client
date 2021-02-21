@@ -8,14 +8,22 @@ import * as comp from './';
 class ColComp extends React.Component {
 
     style() {
-        if (!this.props.children.length && this.props.editing){
-            return {
-                minHeight: "200px",
-                backgroundColor: "ghostwhite"
+        var style={};
+        if (this.props.editing){
+            style = {
+                ...style,
+                border: "4px dashed ghostwhite",
+                borderRadius: "15px"
             }
-        } else {
-            return {}
         }
+        if (this.props.selected == this.props.id) {
+            style = {
+                ...style,
+                border: "4px dashed lightblue"
+            }
+        }
+
+        return style;
     }
     
     render() {
@@ -33,13 +41,15 @@ ColComp.propTypes = {
     id: PropTypes.string.isRequired,
     children: PropTypes.array.isRequired,
     parentId: PropTypes.string,
-    editing: PropTypes.bool.isRequired
+    editing: PropTypes.bool.isRequired,
+    selected: PropTypes.string
 }
 
 const mapStateToProps = (state, ownProps) => ({
     children: state.contentState.contentComp[ownProps.id].childIds.map(id => state.contentState.contentComp[id]),
     parentId: state.contentState.contentComp[ownProps.id].parentId,
-    editing: state.contentState.editing
+    editing: state.contentState.editing,
+    selected: state.contentState.selected
 });
 
 export default connect(mapStateToProps, {})(ColComp);

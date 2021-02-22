@@ -39,7 +39,6 @@ class EditButton extends React.Component {
 
 
 EditButton.propTypes = {
-    insertPlaceholder: PropTypes.func.isRequired,
     setToolsView: PropTypes.func.isRequired,
     selectedComp: PropTypes.func.isRequired,
     parentId: PropTypes.string.isRequired,
@@ -53,7 +52,6 @@ const mapStateToProps = (state) => ({
 })
 
 export default connect(mapStateToProps, {
-    insertPlaceholder: contActions.insertPlaceholder,
     deleteComp: contActions.deleteComp,
     selectedComp: contActions.selectedComp,
     setToolsView: navActions.setToolsView

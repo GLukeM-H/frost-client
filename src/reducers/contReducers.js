@@ -1,43 +1,35 @@
+import { produce } from 'immer';
 import {
     insertComponent,
     deleteComponent,
-    moveComponent
+    moveComponent,
+    newComponent
 } from '../helpers/contentStateHelpers';
 import { v4 as uuid } from 'uuid';
 import { ROOT_COMP, INIT_STATE } from '../data/contReducerConstants';
 
-const contentReducer = (state = INIT_STATE, action) => {
-    // var newId;
+const contentReducer = produce((draft, action) => {
     switch (action.type) {
         case "BODY_COMPONENTS/GET":
-            return {
-                ...state,
-                contentComp: { 
-                    [ROOT_COMP]: { ...state.contentComp[ROOT_COMP], comp: 'Container', inner: ''}
-                }
-            };
+            newComponent(draft, 'Container', ROOT_COMP, null);
+            return
         case "EDIT/INSERT":
-            return insertComponent(state, uuid(), ...action.payload);
+            insertComponent(draft, uuid(), ...action.payload);
+            return
         case "EDIT/DELETE":
-            return deleteComponent(state, action.payload);
+            deleteComponent(draft, action.payload);
+            return
         case "EDIT/MOVE":
-            return moveComponent(state, ...action.payload);
+            moveComponent(draft, ...action.payload);
+            return
         case "EDIT/SELECTED_COMP":
-            return { ...state, selected: action.payload }
-        // case "EDIT/INSERT_PLACEHOLDER":
-        //     newId = uuid();
-        //     return { ...insertComponent(state, newId, 'EmptyBlock', ...action.payload), placeholderId: newId }
-        // case "EDIT/CLEAR_PLACEHOLDER":
-        //     if (state.placeholderId){
-        //         return { ...deleteComponent(state, state.placeholderId), placeholderId: null };
-        //     } else {
-        //         return { ...state }
-        //     }
+            draft.selected = action.payload;
+            return
         case "EDIT/TOGGLE":
-            return { ...state, editing: !state.editing };
-        default:
-            return { ...state };
+            draft.editing = !draft.editing;
+            return
     }
-}
+}, INIT_STATE);
+
 
 export default contentReducer;

@@ -1,17 +1,18 @@
-import { initState } from '../data/navReducerConstants';
+import { produce } from 'immer';
+import { INIT_STATE } from '../data/navReducerConstants';
 
-
-const navReducer = (state = initState, action) => {
+const navReducer = produce((draft, action) => {
     switch (action.type) {
         case "NAV/TOGGLE":
-            return { ...state, navIsOpen: !state.navIsOpen };
+            draft.navIsOpen = !draft.navIsOpen;
+            return
         case "TOOLS/TOGGLE":
-            return { ...state, toolsOpen: !state.toolsOpen };
+            draft.toolsOpen = !draft.toolsOpen;
+            return
         case "TOOLS/SET_VIEW":
-            return { ...state, toolsView: action.payload };
-        default:
-            return { ...state };
+            draft.toolsView = action.payload;
+            return
     }
-}
+}, INIT_STATE);
 
 export default navReducer;

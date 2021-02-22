@@ -61,10 +61,11 @@ class AppTools extends React.Component {
         return (
             <div>
                 <CSSTransition 
-                in={this.props.toolsOpen} 
-                timeout={200}
-                classNames="tools"
-                unmountOnExit={true}>        
+                    in={this.props.toolsOpen} 
+                    timeout={200}
+                    classNames="tools"
+                    unmountOnExit={true}
+                >        
                     <Navbar className="tools rounded" color="light" light>
                         <Container className="pr-0 pl-0">
                             <Button

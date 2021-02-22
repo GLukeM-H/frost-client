@@ -12,6 +12,7 @@ export const newComponent = (state, compName, id, parentId) => {
 
 export const insertComponent = (state, id, compName, parentId, childId) => {
     var index;
+    // handle default cases
     if (childId) {
         if (!parentId) {
             parentId = state.contentComp[childId].parentId;

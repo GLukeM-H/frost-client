@@ -1,4 +1,4 @@
-export const initState = {
+export const INIT_STATE = {
     navIsOpen: false,
     toolsOpen: false,
     toolsView: 'Components'

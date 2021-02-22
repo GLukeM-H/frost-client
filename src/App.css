@@ -3,17 +3,13 @@
   --tools-width: 15rem;
 }
 
-.App {
-  text-align: center;
-}
-
 /* Navbar */
 
-.navbar {
+/* .navbar {
   z-index: 20;
   position: fixed;
   width: 100vw;
-}
+} */
 
 /* Tools Menu */
 
@@ -78,8 +74,8 @@
 
 /* Body Container */
 
-.BodyContainer {
-  padding-top: 100px;
+.body-container {
+  padding-top: 50px;
 }
 
 body {

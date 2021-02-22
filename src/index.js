@@ -8,9 +8,7 @@ import store from './store.js';
 
 ReactDOM.render(
   <Provider store={store} >
-    <React.Fragment>
-      <App />
-    </React.Fragment>
+    <App />
   </Provider>,
   document.getElementById('root')
 );

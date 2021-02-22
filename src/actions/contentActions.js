@@ -63,7 +63,8 @@ export const selectedComp = id => {
 // }
 
 export const toggleEditing = () => {
-    return {
-        type: "EDIT/TOGGLE"
+    return dispatch => {
+        dispatch(selectedComp(''));
+        dispatch({type: "EDIT/TOGGLE"});
     }
 }

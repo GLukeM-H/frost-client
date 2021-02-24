@@ -16,17 +16,12 @@ import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import { 
-    Collapse,
-    Navbar, Nav, NavbarToggler, NavbarBrand, NavItem, NavLink,
-    UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem,
-    Container
-} from 'reactstrap';
 
 /*~~~~~ Styles ~~~~~*/
 const useStyles = makeStyles(theme => ({
     appNav: {
       flexGrow: 1,
+      backdropFilter: "blur(10px)"
     },
     menuButton: {
       marginRight: theme.spacing(2),
@@ -37,7 +32,7 @@ const useStyles = makeStyles(theme => ({
       textAlign: "start"
     },
     userMenu: {
-        color: "white",
+        color: "black",
         outline: "0px !important",
         textTransform: "capitalize",
         fontSize: "1rem"
@@ -125,7 +120,7 @@ function AppNavBar(props) {
 
     return (
         <div className={style.appNav}>
-            <AppBar>
+            <AppBar position="static" color="transparent">
                 <Toolbar>
                     <IconButton className={style.menuButton} edge="start" color="inherit" aria-label="menu">
                         <MenuIcon />
@@ -139,127 +134,6 @@ function AppNavBar(props) {
         </div>
     );
 }
-
-// class AppNavBar extends React.Component {
-//     constructor(props) {
-//         super(props);
-//         this.style = useStyles();
-//     }
-
-//     toggleNav() {
-//         this.props.toggleNav();
-//     }
-
-//     handleEditing() {
-//         this.props.toggleTools();
-//         this.props.toggleEditing();
-//     }
-
-//     render() {
-//         let dropdownInner = [
-//             <DropdownToggle key={1} caret>Luke</DropdownToggle>,
-//             <DropdownMenu key={2}>
-//                 <DropdownItem header>Editing</DropdownItem>
-//                 <DropdownItem onClick={() => this.handleEditing()}>Edit Page</DropdownItem>
-//             </DropdownMenu>
-//         ];
-//         return (
-//             <React.Fragment className={this.style.appNav}>
-//                 <AppBar position='static'>
-//                     <Toolbar>
-//                         <IconButton className={this.style.menuButton} edge="start" color="inherit" aria-label="menu">
-//                             <MenuIcon />
-//                         </IconButton>
-//                         <Typography variant="h6" className={this.style.title}>
-//                             Spades
-//                         </Typography>
-//                         <Button color="inherit">Luke</Button>
-//                     </Toolbar>
-//                     {/* <Container fluid>
-//                         <NavbarBrand href="/">
-//                             Spades
-//                         </NavbarBrand>
-//                         <NavbarToggler onClick={() => this.toggleNav()} />
-//                         <UncontrolledDropdown nav className="d-block d-sm-none">
-//                             {dropdownInner}
-//                         </UncontrolledDropdown>
-//                         <Collapse isOpen={this.props.navIsOpen} navbar>
-//                             <Nav navbar>
-//                                 <NavItem>
-//                                     <NavLink href="/">
-//                                         Home
-//                                     </NavLink>
-//                                 </NavItem>
-//                                 <NavItem>
-//                                     <NavLink href="/">
-//                                         Word
-//                                     </NavLink>
-//                                 </NavItem>
-//                             </Nav>
-//                         </Collapse>
-//                         <UncontrolledDropdown nav className="d-none d-sm-block">
-//                             {dropdownInner}
-//                         </UncontrolledDropdown>
-//                     </Container> */}
-//                 </AppBar>
-//             </React.Fragment>
-//         );
-//     }
-// }
-
-// class AppNavBar extends React.Component {
-
-//     toggleNav() {
-//         this.props.toggleNav();
-//     }
-
-//     handleEditing() {
-//         this.props.toggleTools();
-//         this.props.toggleEditing();
-//     }
-
-//     render() {
-//         let dropdownInner = [
-//             <DropdownToggle key={1} caret>Luke</DropdownToggle>,
-//             <DropdownMenu key={2}>
-//                 <DropdownItem header>Editing</DropdownItem>
-//                 <DropdownItem onClick={() => this.handleEditing()}>Edit Page</DropdownItem>
-//             </DropdownMenu>
-//         ];
-//         return (
-//             <React.Fragment>
-//                 <Navbar color="dark" dark expand="sm">
-//                     <Container fluid>
-//                         <NavbarBrand href="/">
-//                             Spades
-//                         </NavbarBrand>
-//                         <NavbarToggler onClick={() => this.toggleNav()} />
-//                         <UncontrolledDropdown nav className="d-block d-sm-none">
-//                             {dropdownInner}
-//                         </UncontrolledDropdown>
-//                         <Collapse isOpen={this.props.navIsOpen} navbar>
-//                             <Nav navbar>
-//                                 <NavItem>
-//                                     <NavLink href="/">
-//                                         Home
-//                                     </NavLink>
-//                                 </NavItem>
-//                                 <NavItem>
-//                                     <NavLink href="/">
-//                                         Word
-//                                     </NavLink>
-//                                 </NavItem>
-//                             </Nav>
-//                         </Collapse>
-//                         <UncontrolledDropdown nav className="d-none d-sm-block">
-//                             {dropdownInner}
-//                         </UncontrolledDropdown>
-//                     </Container>
-//                 </Navbar>
-//             </React.Fragment>
-//         );
-//     }
-// }
 
 AppNavBar.propTypes = {
     toggleNav: PropTypes.func.isRequired,

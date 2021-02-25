@@ -11,7 +11,7 @@ import { ROOT_COMP, INIT_STATE } from '../data/contReducerConstants';
 const contentReducer = produce((draft, action) => {
     switch (action.type) {
         case "BODY_COMPONENTS/GET":
-            newComponent(draft, 'Container', ROOT_COMP, null);
+            newComponent(draft, 'Grid', ROOT_COMP, null, {isContainer: true});
             return
         case "EDIT/INSERT":
             insertComponent(draft, uuid(), ...action.payload);

@@ -19,7 +19,7 @@ class ColComp extends React.Component {
         if (this.props.selected == this.props.id) {
             style = {
                 ...style,
-                border: "4px dashed lightblue"
+                outline: "2px dashed lightblue"
             }
         }
 

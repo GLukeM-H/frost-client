@@ -13,6 +13,7 @@ import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
+import { BreadcrumbItem } from 'reactstrap';
 
 const useStyles = makeStyles(theme => ({
     drawer: {
@@ -37,32 +38,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
+
 const ToolsDrawer = props => {
-    const view = {
-        Components: [(
-            <ListItem button key={1} onClick={() => handleClick('Container')}>
-                <ListItemText primary="Add Container" />
-            </ListItem>),
-            <ListItem key={2}>
-                <ListItemText primary="Adds a container to the dom" />
-            </ListItem>
-        ],
-        Container: [(
-            <ListItem button key={1} onClick={() => handleClick('Row')}>
-                <ListItemText primary="Add Row" />
-            </ListItem>
-        )],
-        Row: [(
-            <ListItem button key={1} onClick={() => handleClick('Col')}>
-                <ListItemText primary="Add a Column" />
-            </ListItem>
-        )],
-        Col: [(
-            <ListItem button key={1} onClick={() => handleClick('Container')}>
-                <ListItemText primary="Add a Container" />
-            </ListItem>
-        )]
-    }
     
     const classes = useStyles();
 
@@ -73,8 +50,38 @@ const ToolsDrawer = props => {
         props.toggleEditing();
     }
 
-    const handleClick = compName => {
-        props.insertComp(compName, props.selected);
+    const handleClick = (compName, compProps) => {
+        props.insertComp(compName, props.selected, null, compProps);
+    }
+
+    const view = {
+        Components: {
+            breadcrumb: ["Components"],
+            tools: [
+                <ListItem button key={0}>
+                    <ListItemText primary="Highlight Containers" />
+                </ListItem>,
+                <ListItem button key={1}>
+                    <ListItemText primary="Highlight Items" />
+                </ListItem>
+            ]
+        },
+        Item: {
+            breadcrumb: ["Components", "Item"],
+            tools: [
+                <ListItem button key={0} onClick={() => handleClick('Grid', { isContainer: true })}>
+                    <ListItemText primary="Add Container" />
+                </ListItem>
+            ]
+        },
+        Container: {
+            breadcrumb: ["Components","Container"],
+            tools: [
+                <ListItem button key={1} onClick={() => handleClick('Grid', { isContainer: false })}>
+                    <ListItemText primary="Add Item" />
+                </ListItem>
+            ]
+        },
     }
 
     return (
@@ -88,16 +95,18 @@ const ToolsDrawer = props => {
             <List>
                 <ListItem>
                     <Breadcrumbs aria-label="breadcrumb">
-                        <Link color="inherit" onClick={handleView}>
-                            Components
-                        </Link>
-                        <Typography color="textPrimary">Container</Typography>
+                        {view[props.toolsView].breadcrumb.map((name, index) => {
+                            let last = view[props.toolsView].breadcrumb.length == index + 1;
+                            return  last ? (<Typography key={index} color="textPrimary">{name}</Typography>) : (
+                                <Link key={index} color="inherit" onClick={handleView}>{name}</Link>
+                            ) 
+                        })}
                     </Breadcrumbs>            
                 </ListItem>    
             </List>
             <Divider />
             <List>
-                {view[props.toolsView]}
+                {view[props.toolsView].tools}
             </List>
         </Drawer>
     );

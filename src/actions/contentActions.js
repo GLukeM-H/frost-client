@@ -4,10 +4,10 @@ export const getBody = () => {
     }
 }
 
-export const insertComp = (compName, parentId, childId) => {
+export const insertComp = (compName, parentId, childId, props={}) => {
     return {
         type: "EDIT/INSERT",
-        payload: [ compName, parentId, childId ]
+        payload: [ compName, parentId, childId, props ]
     }
 }
 
@@ -38,29 +38,6 @@ export const selectedComp = id => {
         payload: id
     }
 }
-
-// export const insertPlaceholder = (parentId, childId) => {
-//     return dispatch => {
-//         dispatch(clearPlaceholder());
-//         dispatch({
-//             type: "EDIT/INSERT_PLACEHOLDER",
-//             payload: [ parentId, childId ]
-//         });
-//     }
-// }
-
-// export const clearPlaceholder = () => {
-//     return {    
-//         type: "EDIT/CLEAR_PLACEHOLDER"
-//     }
-// }
-
-// export const replacePlaceholder = (compName, placeholderId) => {
-//     return dispatch => {
-//         dispatch(insertComp(compName, null, placeholderId));
-//         dispatch(clearPlaceholder());
-//     }
-// }
 
 export const toggleEditing = () => {
     return dispatch => {

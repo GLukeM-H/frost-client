@@ -12,7 +12,7 @@ class EditButton extends React.Component {
 
     handleSelect() {
         this.props.selectedComp(this.props.parentId);
-        this.props.setToolsView(this.props.compName);
+        this.props.setToolsView(this.props.name);
     }
 
     handleDelete() {
@@ -27,7 +27,7 @@ class EditButton extends React.Component {
                         \
                     </DropdownToggle>
                     <DropdownMenu style={{textAlign: "center"}}>
-                        <DropdownItem header style={{borderBottom: "3px solid ghostwhite"}}>{this.props.compName}</DropdownItem>
+                        <DropdownItem header style={{borderBottom: "3px solid ghostwhite"}}>{this.props.name}</DropdownItem>
                         <DropdownItem onClick={() => this.handleSelect()}>edit</DropdownItem>
                         {(this.props.parentId !== ROOT_COMP) && (<DropdownItem onClick={() => this.handleDelete()}>delete</DropdownItem>)}
                     </DropdownMenu>
@@ -43,7 +43,7 @@ EditButton.propTypes = {
     selectedComp: PropTypes.func.isRequired,
     parentId: PropTypes.string.isRequired,
     childId: PropTypes.string,
-    compName: PropTypes.string.isRequired
+    name: PropTypes.string.isRequired
 }
 
 const mapStateToProps = (state) => ({

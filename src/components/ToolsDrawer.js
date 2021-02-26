@@ -77,7 +77,7 @@ const ToolsDrawer = props => {
         Container: {
             breadcrumb: ["Components","Container"],
             tools: [
-                <ListItem button key={1} onClick={() => handleClick('Grid', { isContainer: false })}>
+                <ListItem button key={1} onClick={() => handleClick('Grid', { isContainer: false, xs: 2 })}>
                     <ListItemText primary="Add Item" />
                 </ListItem>
             ]

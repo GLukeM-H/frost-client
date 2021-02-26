@@ -6,6 +6,20 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: "#486d99", 
+      white: "ghostwhite"
+    },
+    secondary: {
+      main: "#8c4f5a",
+      white: "ghostwhite"
+    }
+  }
+});
 
 
 const useStyles = makeStyles(theme => ({
@@ -29,17 +43,19 @@ function App() {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
-      <Grid container className={classes.app}>
-        <Grid item xs={12} className={classes.navbarContainer}>
-          <AppNavBar/>
+    <ThemeProvider theme={theme}>
+      <div className={classes.root}>
+        <Grid container className={classes.app}>
+          <Grid item xs={12} className={classes.navbarContainer}>
+            <AppNavBar/>
+          </Grid>
+          <Grid item className={classes.bodyItem} xs={12}>    
+            <AppBody />
+          </Grid>
+          <ToolsDrawer />
         </Grid>
-        <Grid item className={classes.bodyItem} xs={12}>    
-          <AppBody />
-        </Grid>
-        <ToolsDrawer />
-      </Grid>
-    </div>
+      </div>
+    </ThemeProvider>
   );
 }
 

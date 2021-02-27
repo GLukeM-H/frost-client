@@ -1,6 +1,31 @@
-export const getBody = () => {
+import axios from 'axios';
+
+export const getBody = () => dispatch => {
+    dispatch(setBodyLoading());
+    axios.get('/api/pages').then(res => 
+        dispatch({
+            type: "BODY/GET",
+            payload: res.data
+        })
+    );
+}
+
+export const saveBody = (contentComp, contentCompId) => dispatch => {
+    axios
+        .post('api/pages', { contentComp, creator: "Luke" })
+        .then( res => {
+            if (contentCompId) {
+                axios.delete('api/pages/' + contentCompId)
+                    .catch( e => {console.log(e); alert(e)})
+            }
+            dispatch({ type: "BODY/SAVE", payload: res.data._id });
+        })
+        .catch( e => { console.log(e); alert(e); })
+}
+
+export const setBodyLoading = () => {
     return {
-        type: "BODY_COMPONENTS/GET",
+        type: "BODY/LOADING"
     }
 }
 
@@ -25,11 +50,9 @@ export const moveComp = (id, oldParent, newParent, index) => {
     }
 }
 
-export const replaceComp = (parentId, childId, compName) => {
-    return dispatch => {
+export const replaceComp = (parentId, childId, compName) => dispatch => {
         dispatch(insertComp(parentId, childId, compName));
         dispatch(deleteComp(childId));
-    }
 }
 
 export const selectedComp = id => {
@@ -39,9 +62,7 @@ export const selectedComp = id => {
     }
 }
 
-export const toggleEditing = () => {
-    return dispatch => {
+export const toggleEditing = () => dispatch => {
         dispatch(selectedComp(''));
         dispatch({type: "EDIT/TOGGLE"});
-    }
 }

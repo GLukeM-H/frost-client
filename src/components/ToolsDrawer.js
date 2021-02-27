@@ -13,7 +13,8 @@ import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-import { BreadcrumbItem } from 'reactstrap';
+import Button from '@material-ui/core/Button';
+import PublishIcon from '@material-ui/icons/Publish';
 
 const useStyles = makeStyles(theme => ({
     drawer: {
@@ -43,7 +44,9 @@ const ToolsDrawer = props => {
     
     const classes = useStyles();
 
-    const handleView = () => {}
+    const handleView = view => {
+        props.setToolsView(view);
+    }
 
     const handleClose = () => {
         props.toggleTools();
@@ -52,6 +55,10 @@ const ToolsDrawer = props => {
 
     const handleClick = (compName, compProps) => {
         props.insertComp(compName, props.selected, null, compProps);
+    }
+
+    const handleSave = () => {
+        props.saveBody(props.contentComp, props.contentCompId);
     }
 
     const view = {
@@ -63,6 +70,9 @@ const ToolsDrawer = props => {
                 </ListItem>,
                 <ListItem button key={1}>
                     <ListItemText primary="Highlight Items" />
+                </ListItem>,
+                <ListItem button key={2}>
+                    <ListItemText primary="Start from scratch" />
                 </ListItem>
             ]
         },
@@ -98,7 +108,7 @@ const ToolsDrawer = props => {
                         {view[props.toolsView].breadcrumb.map((name, index) => {
                             let last = view[props.toolsView].breadcrumb.length == index + 1;
                             return  last ? (<Typography key={index} color="textPrimary">{name}</Typography>) : (
-                                <Link key={index} color="inherit" onClick={handleView}>{name}</Link>
+                                <Link key={index} color="inherit" onClick={() => handleView(name)}>{name}</Link>
                             ) 
                         })}
                     </Breadcrumbs>            
@@ -108,6 +118,7 @@ const ToolsDrawer = props => {
             <List>
                 {view[props.toolsView].tools}
             </List>
+            <Button onClick={handleSave} color={props.savedChanges ? "primary" : "secondary"}><PublishIcon />&ensp;Save</Button>
         </Drawer>
     );
 }
@@ -117,19 +128,29 @@ ToolsDrawer.propTypes = {
     toolsOpen: PropTypes.bool.isRequired,
     toolsView: PropTypes.string.isRequired,
     toggleTools: PropTypes.func.isRequired,
+    setToolsView: PropTypes.func.isRequired,
     toggleEditing: PropTypes.func.isRequired,
-    insertComp: PropTypes.func.isRequired
+    insertComp: PropTypes.func.isRequired,
+    saveBody: PropTypes.func.isRequired,
+    savedChanges: PropTypes.bool.isRequired,
+    contentComp: PropTypes.object.isRequired,
+    contentCompId: PropTypes.string.isRequired
 }
 
 const mapStateToProps = (state) => ({
     toolsOpen: state.navState.toolsOpen,
     toolsView: state.navState.toolsView,
-    selected: state.contentState.selected
+    selected: state.contentState.selected,
+    savedChanges: state.contentState.savedChanges,
+    contentComp: state.contentState.contentComp,
+    contentCompId: state.contentState.contentCompId
 })
 
 
 export default connect(mapStateToProps, {
     toggleTools: navActions.toggleTools,
+    setToolsView: navActions.setToolsView,
     toggleEditing: contActions.toggleEditing,
     insertComp: contActions.insertComp,
+    saveBody: contActions.saveBody
 })(ToolsDrawer);

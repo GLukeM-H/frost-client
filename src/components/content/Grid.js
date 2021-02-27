@@ -26,13 +26,12 @@ const useStyles = makeStyles(theme => ({
 
 const GridComp = props => {
     const classes = useStyles();
-    const gridRef = React.useRef();
-    const isSelected = props.selected == props.id;
+    const isSelected = props.selected === props.id;
 
     const applyClasses = () => {
         let classNames = classes.default
         if (props.editing) {
-            classNames += " "+ (isSelected && classes.selected)
+            classNames += " " + (isSelected && classes.selected)
             if (!props.children.length) {
                 classNames += " " + (props.isContainer ? classes.containerNoChild : classes.itemNoChild)
             }

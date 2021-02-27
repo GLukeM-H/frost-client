@@ -9,8 +9,11 @@ export const INIT_STATE = {
             parentId: null
         }
     },
+    contentCompId: "",
     editing: false,
     insertId: null,
-    selected: ''
+    selected: '',
+    loading: false,
+    savedChanges: true
 }
 

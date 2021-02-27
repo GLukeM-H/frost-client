@@ -53,7 +53,7 @@ const AppBody = props => {
           <Grid container className={`${classes.defaultBody} ${classes[`${state}Body`]}`}>
             <Grid item className={classes.leftItem} md={2} xs={12}>left</Grid>
             <Grid item className={classes.middleItem} md={8} xs={12}>
-              {React.createElement((comp[props.rootComp] || props.rootComp), props.rootProps, props.rootInner)}
+              {React.createElement((comp[props.rootComp.comp] || props.rootComp.comp), props.rootComp.props, props.rootComp.inner)}
             </Grid>
             <Grid item className={classes.rightItem} md={2} xs={12}>right</Grid>
           </Grid>
@@ -65,16 +65,12 @@ const AppBody = props => {
 
 AppBody.propTypes = {
     getBody: PropTypes.func.isRequired,
-    rootComp: PropTypes.string.isRequired,
-    rootProps: PropTypes.object.isRequired,
-    rootInner: PropTypes.string.isRequired,
+    rootComp: PropTypes.object.isRequired,
     toolsOpen: PropTypes.bool.isRequired
 }
 
 const mapStateToProps = (state) => ({
-    rootComp: state.contentState.contentComp[ROOT_COMP].comp,
-    rootProps: state.contentState.contentComp[ROOT_COMP].props,
-    rootInner: state.contentState.contentComp[ROOT_COMP].inner,
+    rootComp: state.contentState.contentComp[ROOT_COMP],
     toolsOpen: state.navState.toolsOpen
 })
 

@@ -43,9 +43,9 @@ const EditButton = props => {
 
     return (
         <ButtonGroup variant="outlined" orientation="vertical" className={classes.buttonGroup} size="small" color="primary">
-            {props.name === 'Container' || <Button className={classes.button} onClick={() => null}><OpenWithIcon /></Button>}
+            {props.name === 'Container' ? null : <Button className={classes.button} onClick={() => null}><OpenWithIcon /></Button>}
             <Button className={classes.button} onClick={handleSelect}><MoreVertIcon /></Button>
-            {props.parentId === ROOT_COMP || <Button className={classes.button} onClick={handleDelete}><DeleteIcon /></Button>}
+            {props.parentId === ROOT_COMP ? null : <Button className={classes.button} onClick={handleDelete}><DeleteIcon /></Button>}
         </ButtonGroup>
     )
 

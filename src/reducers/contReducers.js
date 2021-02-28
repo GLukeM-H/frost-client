@@ -38,6 +38,10 @@ const contentReducer = produce((draft, action) => {
             moveComponent(draft, ...action.payload);
             draft.savedChanges = false;
             return
+        case "EDIT/SET_INNER":
+            draft.contentComp[action.payload.id].inner = action.payload.inner;
+            draft.savedChanges = false;
+            return
         case "EDIT/SELECTED_COMP":
             draft.selected = action.payload;
             return

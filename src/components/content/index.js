@@ -1,13 +1,7 @@
-import EmptyBlock from './EmptyBlock';
-import Container from './Container';
-import Row from './Row';
-import Col from './Col';
 import Grid from './Grid';
+import Paper from './Paper';
 
 export {
-    EmptyBlock,
-    Container,
-    Row,
-    Col,
-    Grid
+    Grid,
+    Paper
 }

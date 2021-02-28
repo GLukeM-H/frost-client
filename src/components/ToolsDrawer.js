@@ -15,6 +15,11 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 import PublishIcon from '@material-ui/icons/Publish';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import Paper from '@material-ui/core/Paper';
+import Collapse from '@material-ui/core/Collapse';
+import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 
 const useStyles = makeStyles(theme => ({
     drawer: {
@@ -36,16 +41,132 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: "transparent",
         width: "300px"
     },
+    collapse: {
+        backgroundColor: theme.palette.neutral.main,
+        padding: "10px"
+    },
+    textArea: {
+        width: "100%"
+    }
 }));
 
+function ContainerView(props) {
+    return (
+        <>
+            <List>
+                <ListItem>
+                    <Breadcrumbs aria-label="breadcrumb">
+                        <Link onClick={() => props.handleView('Component')}>Component</Link>
+                        <Typography color="textPrimary">Container</Typography>
+                    </Breadcrumbs>            
+                </ListItem>    
+            </List>
+            <Divider />
+            <List dense>
+                <ListItem button onClick={() => props.insertComp('Grid', { isContainer: false, xs: 2 })}>
+                    <ListItemText primary="Add Item" />
+                </ListItem>
+            </List>
+        </>
+    );
+}
+
+function ItemView(props) {
+    const classes = useStyles();
+    const [open, setOpen] = React.useState(false);
+    return (
+        <>
+            <List>
+                <ListItem>
+                    <Breadcrumbs aria-label="breadcrumb">
+                        <Link onClick={() => props.handleView('Component')}>Component</Link>
+                        <Typography color="textPrimary">Item</Typography>
+                    </Breadcrumbs>            
+                </ListItem>    
+            </List>
+            <Divider />
+            <List dense>
+                <ListItem button onClick={() => props.insertComp('Grid', { isContainer: true })}>
+                    <ListItemText primary="Add Container" />
+                </ListItem>
+                <ListItem button onClick={() => props.insertComp('Paper', {})}>
+                    <ListItemText primary="Add Paper" />
+                </ListItem>
+            </List>
+        </>
+    );
+}
+
+function ComponentView(props) {
+    return (
+        <>
+            <List>
+                <ListItem>
+                    <Breadcrumbs aria-label="breadcrumb">
+                        <Typography color="textPrimary">Component</Typography>
+                    </Breadcrumbs>            
+                </ListItem>    
+            </List>
+            <Divider />
+            <List dense>
+                <ListItem button>
+                    <ListItemText primary="Highlight Containers" />
+                </ListItem>
+                <ListItem button>
+                    <ListItemText primary="Highlight Items" />
+                </ListItem>
+                <ListItem button>
+                    <ListItemText primary="Start from scratch" />
+                </ListItem>
+            </List>
+        </>
+    );
+}
+
+function PaperView(props) {
+    const classes = useStyles();
+    const [open, setOpen] = React.useState(false);
+    return (
+        <>
+            <List>
+                <ListItem>
+                    <Breadcrumbs aria-label="breadcrumb">
+                        <Link onClick={() => props.handleView('Component')}>Component</Link>
+                        <Typography color="textPrimary">Paper</Typography>
+                    </Breadcrumbs>            
+                </ListItem>    
+            </List>
+            <Divider />
+            <List dense>
+                <ListItem button onClick={() => setOpen(!open)}>
+                    <ListItemText primary="Add Text" />
+                    {open ? <ExpandLess /> : <ExpandMore />}
+                </ListItem>
+                <Collapse in={open}>
+                    <Paper className={classes.collapse} elevation={0} square>
+                        <TextareaAutosize
+                            className={classes.textArea}
+                            rowsMin={4}
+                            placeholder="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repudiandae sint quibusdam doloremque quae hic vitae?"
+                            value={props.paperText}
+                            onChange={e => props.setInner(e.target.value)}
+                        />
+                    </Paper>
+                </Collapse>
+            </List>
+        </>
+    );
+}
 
 
-const ToolsDrawer = props => {
+
+function ToolsDrawer(props) {
     
     const classes = useStyles();
 
-    const handleView = view => {
+    const handleView = (view) => {
         props.setToolsView(view);
+        props.setSelectedComp('');
     }
 
     const handleClose = () => {
@@ -53,7 +174,7 @@ const ToolsDrawer = props => {
         props.toggleEditing();
     }
 
-    const handleClick = (compName, compProps) => {
+    const handleInsert = (compName, compProps) => {
         props.insertComp(compName, props.selected, null, compProps);
     }
 
@@ -61,38 +182,30 @@ const ToolsDrawer = props => {
         props.saveBody(props.contentComp, props.contentCompId);
     }
 
-    const view = {
-        Components: {
-            breadcrumb: ["Components"],
-            tools: [
-                <ListItem button key={0}>
-                    <ListItemText primary="Highlight Containers" />
-                </ListItem>,
-                <ListItem button key={1}>
-                    <ListItemText primary="Highlight Items" />
-                </ListItem>,
-                <ListItem button key={2}>
-                    <ListItemText primary="Start from scratch" />
-                </ListItem>
-            ]
-        },
-        Item: {
-            breadcrumb: ["Components", "Item"],
-            tools: [
-                <ListItem button key={0} onClick={() => handleClick('Grid', { isContainer: true })}>
-                    <ListItemText primary="Add Container" />
-                </ListItem>
-            ]
-        },
-        Container: {
-            breadcrumb: ["Components","Container"],
-            tools: [
-                <ListItem button key={1} onClick={() => handleClick('Grid', { isContainer: false, xs: 2 })}>
-                    <ListItemText primary="Add Item" />
-                </ListItem>
-            ]
-        },
+    const selected = props.contentComp[props.selected];
+    let view;
+    switch (selected?.comp){
+        case "Grid":
+            view = selected.props.isContainer ?
+                (<ContainerView handleView={handleView} insertComp={handleInsert} />) :
+                (<ItemView handleView={handleView} insertComp={handleInsert} />)
+            break;
+        case "Paper":
+            view = (
+                <PaperView
+                    handleView={handleView}
+                    paperText={selected.inner}
+                    setInner={text => props.setInner(props.selected, text)}
+                />
+            )
+            break;
+        default:
+            switch (props.toolsView){
+                default:
+                    view = (<ComponentView handleView={handleView} insertComp={handleInsert} />);
+            }
     }
+
 
     return (
         <Drawer className={classes.drawer} classes={{paper: classes.drawerPaper}} anchor="right" open={props.toolsOpen} variant="persistent">
@@ -102,22 +215,7 @@ const ToolsDrawer = props => {
                 </IconButton>
             </div>
             <Divider />
-            <List>
-                <ListItem>
-                    <Breadcrumbs aria-label="breadcrumb">
-                        {view[props.toolsView].breadcrumb.map((name, index) => {
-                            let last = view[props.toolsView].breadcrumb.length == index + 1;
-                            return  last ? (<Typography key={index} color="textPrimary">{name}</Typography>) : (
-                                <Link key={index} color="inherit" onClick={() => handleView(name)}>{name}</Link>
-                            ) 
-                        })}
-                    </Breadcrumbs>            
-                </ListItem>    
-            </List>
-            <Divider />
-            <List>
-                {view[props.toolsView].tools}
-            </List>
+                {view}
             <Button onClick={handleSave} color={props.savedChanges ? "primary" : "secondary"}><PublishIcon />&ensp;Save</Button>
         </Drawer>
     );
@@ -134,7 +232,9 @@ ToolsDrawer.propTypes = {
     saveBody: PropTypes.func.isRequired,
     savedChanges: PropTypes.bool.isRequired,
     contentComp: PropTypes.object.isRequired,
-    contentCompId: PropTypes.string.isRequired
+    contentCompId: PropTypes.string.isRequired,
+    setSelectedComp: PropTypes.func.isRequired,
+    setInner: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => ({
@@ -152,5 +252,7 @@ export default connect(mapStateToProps, {
     setToolsView: navActions.setToolsView,
     toggleEditing: contActions.toggleEditing,
     insertComp: contActions.insertComp,
-    saveBody: contActions.saveBody
+    saveBody: contActions.saveBody,
+    setSelectedComp: contActions.selectedComp,
+    setInner: contActions.setInner
 })(ToolsDrawer);

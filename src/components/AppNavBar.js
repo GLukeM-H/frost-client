@@ -114,10 +114,6 @@ const UserMenu = connect(null, {
 function AppNavBar(props) {
     const style = useStyles();
 
-    const toggleNav = () => {
-        props.toggleNav();
-    }
-
     return (
         <div className={style.appNav}>
             <AppBar position="static" color="transparent">

@@ -17,7 +17,7 @@ import Delete from '@material-ui/icons/Delete'
 
 const useStyles = makeStyles(theme => ({
     buttonGroup: {
-        backgroundColor: theme.palette.secondary.white,
+        backgroundColor: theme.palette.neutral.light,
         position: "absolute",
         width: "40px",
         right: -40,
@@ -26,64 +26,36 @@ const useStyles = makeStyles(theme => ({
     },
     button: {
         outline: "0px !important",
+        color: theme.palette.primary.main
+    },
+    deleteButton: {
+        outline: "0px !important",
         color: theme.palette.secondary.main
     }
 }))
 
 const EditButton = props => {
-    const classes = useStyles()
+    const classes = useStyles();
 
     const handleSelect = () => {
-        props.selectedComp(props.parentId)
-        props.setToolsView(props.name)
+        props.setSelectedComp(props.parentId);
     }
     const handleDelete = () => {
-        props.deleteComp(props.parentId)
+        props.deleteComp(props.parentId);
     }
 
     return (
         <ButtonGroup variant="outlined" orientation="vertical" className={classes.buttonGroup} size="small" color="primary">
             {props.name === 'Container' ? null : <Button className={classes.button} onClick={() => null}><OpenWithIcon /></Button>}
             <Button className={classes.button} onClick={handleSelect}><MoreVertIcon /></Button>
-            {props.parentId === ROOT_COMP ? null : <Button className={classes.button} onClick={handleDelete}><DeleteIcon /></Button>}
+            {props.parentId === ROOT_COMP ? null : <Button className={classes.deleteButton} onClick={handleDelete}><DeleteIcon /></Button>}
         </ButtonGroup>
     )
 
 }
 
-// class EditButton extends React.Component {
-
-//     handleSelect() {
-//         this.props.selectedComp(this.props.parentId);
-//         this.props.setToolsView(this.props.name);
-//     }
-
-//     handleDelete() {
-//         this.props.deleteComp(this.props.parentId)
-//     }
-
-//     render() {
-//         return (
-//             <Container>
-//                 <UncontrolledDropdown >
-//                     <DropdownToggle >
-//                         \
-//                     </DropdownToggle>
-//                     <DropdownMenu style={{textAlign: "center"}}>
-//                         <DropdownItem header style={{borderBottom: "3px solid ghostwhite"}}>{this.props.name}</DropdownItem>
-//                         <DropdownItem onClick={() => this.handleSelect()}>edit</DropdownItem>
-//                         {(this.props.parentId !== ROOT_COMP) && (<DropdownItem onClick={() => this.handleDelete()}>delete</DropdownItem>)}
-//                     </DropdownMenu>
-//                 </UncontrolledDropdown>
-//             </Container>
-//         );
-//     }
-// }
-
-
 EditButton.propTypes = {
-    setToolsView: PropTypes.func.isRequired,
-    selectedComp: PropTypes.func.isRequired,
+    setSelectedComp: PropTypes.func.isRequired,
     parentId: PropTypes.string.isRequired,
     childId: PropTypes.string,
     name: PropTypes.string.isRequired
@@ -96,6 +68,5 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps, {
     deleteComp: contActions.deleteComp,
-    selectedComp: contActions.selectedComp,
-    setToolsView: navActions.setToolsView
+    setSelectedComp: contActions.selectedComp,
 })(EditButton);

@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import ButtonGroup from '@material-ui/core/ButtonGroup'
 import Button from '@material-ui/core/Button'
 import DeleteIcon from '@material-ui/icons/Delete'
-import MoreVertIcon from '@material-ui/icons/MoreVert'
+import EditIcon from '@material-ui/icons/Edit';
 import OpenWithIcon from '@material-ui/icons/OpenWith'
 import {
     Container, Row, Col,
@@ -47,7 +47,7 @@ const EditButton = props => {
     return (
         <ButtonGroup variant="outlined" orientation="vertical" className={classes.buttonGroup} size="small" color="primary">
             {props.name === 'Container' ? null : <Button className={classes.button} onClick={() => null}><OpenWithIcon /></Button>}
-            <Button className={classes.button} onClick={handleSelect}><MoreVertIcon /></Button>
+            <Button className={classes.button} onClick={handleSelect}><EditIcon /></Button>
             {props.parentId === ROOT_COMP ? null : <Button className={classes.deleteButton} onClick={handleDelete}><DeleteIcon /></Button>}
         </ButtonGroup>
     )

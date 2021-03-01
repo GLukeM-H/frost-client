@@ -3,7 +3,7 @@ export const INIT_STATE = {
     contentComp: {
         [ROOT_COMP]: {
             comp: 'div',
-            inner: 'Loading page...',
+            inner: '',
             props: { key: ROOT_COMP, id: ROOT_COMP },
             childIds: [],
             parentId: null

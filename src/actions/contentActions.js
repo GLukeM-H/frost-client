@@ -3,6 +3,7 @@ import axios from 'axios';
 /*~~~~~ Body Actions ~~~~~*/
 export function getBody() {
     return dispatch => {
+
         dispatch(setBodyLoading());
         axios.get('/api/pages').then(res => 
             dispatch({

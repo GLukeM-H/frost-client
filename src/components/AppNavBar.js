@@ -21,7 +21,8 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 const useStyles = makeStyles(theme => ({
     appNav: {
       flexGrow: 1,
-      backdropFilter: "blur(10px)"
+      color: theme.palette.primary.dark,
+      backdropFilter: "blur(20px)"
     },
     menuButton: {
       marginRight: theme.spacing(2),
@@ -32,7 +33,7 @@ const useStyles = makeStyles(theme => ({
       textAlign: "start"
     },
     userMenu: {
-        color: "black",
+        color: theme.palette.primary.dark,
         outline: "0px !important",
         textTransform: "capitalize",
         fontSize: "1rem"

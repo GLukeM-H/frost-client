@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
 import Grid from '@material-ui/core/Grid';
 import EditButton from '../EditButton';
 import * as comp from './';
@@ -26,24 +27,16 @@ const useStyles = makeStyles(theme => ({
 
 const GridComp = props => {
     const classes = useStyles();
-    const isSelected = props.selected === props.id;
-
-    const applyClasses = () => {
-        let classNames = classes.default
-        if (props.editing) {
-            classNames += " " + (isSelected && classes.selected)
-            if (!props.children.length) {
-                classNames += " " + (props.isContainer ? classes.containerNoChild : classes.itemNoChild)
-            }
-        }
-        return classNames
-    }
 
     return (
         <Grid
             container={props.isContainer}
             item={!props.isContainer} 
-            className={applyClasses()}
+            className={clsx(classes.default, {
+                [classes.selected]: props.editing && (props.selected === props.id),
+                [classes.itemNoChild]: props.editing && !props.isContainer,
+                [classes.containerNoChild]: props.editing && props.isContainer
+            })}
             xs={props.xs}
         >
             {props.editing && <EditButton name={props.isContainer ? "Container" : "Item"} parentId={props.id}/>}

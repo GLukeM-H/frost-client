@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { navActions, contActions } from '../actions';
 import { makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -20,6 +21,18 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import Paper from '@material-ui/core/Paper';
 import Collapse from '@material-ui/core/Collapse';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+
 
 const useStyles = makeStyles(theme => ({
     drawer: {
@@ -47,6 +60,9 @@ const useStyles = makeStyles(theme => ({
     },
     textArea: {
         width: "100%"
+    },
+    tableContainer: {
+        overflow: "hidden"
     }
 }));
 
@@ -71,9 +87,34 @@ function ContainerView(props) {
     );
 }
 
+function RadioButtonsGroup() {
+    const [value, setValue] = React.useState('female');
+  
+    const handleChange = (event) => {
+      setValue(event.target.value);
+    };
+  
+    return (
+      <FormControl component="fieldset">
+        <RadioGroup row aria-label="gender" name="gender1" value={value} onChange={handleChange}>
+          {Array(12).fill().map((_ , i) => (
+              <FormControlLabel key={i} value={i+1} control={<Radio />} label={(i+1).toString()} />
+          ))}
+        </RadioGroup>
+      </FormControl>
+    );
+}
+
 function ItemView(props) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
+    const [size, setSize] = React.useState(4);
+  
+    const handleSizeChange = (event) => {
+      setSize(Number(event.target.value));
+    };
+
+    
     return (
         <>
             <List>
@@ -92,6 +133,37 @@ function ItemView(props) {
                 <ListItem button onClick={() => props.insertComp('Paper', {})}>
                     <ListItemText primary="Add Paper" />
                 </ListItem>
+                <ListItem button onClick={() => setOpen(!open)}>
+                    <ListItemText primary="Change Size" />
+                    {open ? <ExpandLess /> : <ExpandMore />}
+                </ListItem>
+                <Collapse in={open}>
+                    <TableContainer
+                        className={clsx(classes.collapse, classes.tableContainer)}
+                        component={Paper}
+                        elevation={0}
+                        square
+                    >
+                        <FormControl component="fieldset">
+                            <RadioGroup row value={size} onChange={handleSizeChange}>
+                                <TableBody>
+                                    {Array(4).fill(Array(3).fill()).map((row, i) => (
+                                        <TableRow key={i}>
+                                            {row.map((_, j) => (
+                                                <TableCell key={j} align="left">
+                                                    <FormControlLabel
+                                                        value={i*3+j+1} 
+                                                        control={<Radio />} 
+                                                        label={(i*3+j+1).toString()} />
+                                                </TableCell>
+                                            ))}
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </RadioGroup>
+                        </FormControl>
+                    </TableContainer>
+                </Collapse>
             </List>
         </>
     );

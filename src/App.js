@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: "ghostwhite",
   },
   app: {
-    textAlign: "center"
+    textAlign: "center",
   },
   navbarContainer: {
     position: "fixed",
@@ -37,7 +37,21 @@ const useStyles = makeStyles(theme => ({
     zIndex: 10
   },
   bodyItem: {
-    paddingTop: "100px"
+    marginTop: theme.mixins.toolbar.minHeight,
+    "@media (min-width:0px) and (orientation: landscape)": {
+      marginTop: theme.mixins.toolbar["@media (min-width:0px) and (orientation: landscape)"].minHeight
+    },
+    "@media (min-width:600px)": {
+      marginTop: theme.mixins.toolbar["@media (min-width:600px)"].minHeight
+    },
+    zIndex: 0
+  },
+  blurred: {
+    filter: "blur(10px)",
+    height: "70px",
+    width: "100%",
+    overflow: "hidden",
+    position: "fixed"
   }
 }));
 
@@ -51,8 +65,8 @@ function App() {
           <Grid item xs={12} className={classes.navbarContainer}>
             <AppNavBar/>
           </Grid>
-          <Grid item className={classes.bodyItem} xs={12}>    
-            <AppBody />
+          <Grid item className={classes.bodyItem} xs={12}>
+            <AppBody/>
           </Grid>
           <ToolsDrawer />
         </Grid>

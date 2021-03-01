@@ -7,6 +7,8 @@ import * as comp from './content';
 import { makeStyles } from '@material-ui/core/styles';
 import { Transition } from 'react-transition-group';
 import Grid from "@material-ui/core/Grid";
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const duration = 250;
 const drawerWidth = 300;
@@ -30,17 +32,31 @@ const useStyles = makeStyles(theme => ({
     transfrom: "translateX(0vw)"
   },
   leftItem: {
-    outline: "1px dashed black"
   },
   middleItem: {
-    outline: "1px dashed black"
+    outline: "1px dashed black",
+    display: "flex"
   },
   rightItem: {
-    outline: "1px dashed black"
+  },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: theme.palette.primary.light,
+    backgroundColor: 'rgba(0,0,0,0)'
   }
 }));
 
-const AppBody = props => {
+function LoadingBackdrop(props) {
+  const classes = useStyles();
+
+  return (
+      <Backdrop className={classes.backdrop} open={props.loading} transitionDuration={{enter: 300, exit: 300}}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
+  );
+}
+
+function AppBody(props) {
     const classes = useStyles();
 
     React.useEffect(() => {
@@ -48,17 +64,20 @@ const AppBody = props => {
     }, []); /* Loops forever without empty props for dependency (only should run once on mount) */
 
     return (
-      <Transition in={props.toolsOpen} timeout={duration}>
-        {state => (
-          <Grid container className={`${classes.defaultBody} ${classes[`${state}Body`]}`}>
-            <Grid item className={classes.leftItem} md={2} xs={12}>left</Grid>
-            <Grid item className={classes.middleItem} md={8} xs={12}>
-              {React.createElement((comp[props.rootComp.comp] || props.rootComp.comp), props.rootComp.props, props.rootComp.inner)}
+      <>
+        <Transition in={props.toolsOpen} timeout={duration}>
+          {state => (
+            <Grid container className={`${classes.defaultBody} ${classes[`${state}Body`]}`}>
+              <Grid item className={classes.leftItem} md={2} xs={12}>left</Grid>
+              <Grid item className={classes.middleItem} md={8} xs={12}>
+                {React.createElement((comp[props.rootComp.comp] || props.rootComp.comp), props.rootComp.props, props.rootComp.inner)}
+              </Grid>
+              <Grid item className={classes.rightItem} md={2} xs={12}>right</Grid>
             </Grid>
-            <Grid item className={classes.rightItem} md={2} xs={12}>right</Grid>
-          </Grid>
-        )}
-      </Transition>
+          )}
+        </Transition>
+        <LoadingBackdrop loading={props.loading} />
+      </>
     );
 }
 
@@ -66,12 +85,14 @@ const AppBody = props => {
 AppBody.propTypes = {
     getBody: PropTypes.func.isRequired,
     rootComp: PropTypes.object.isRequired,
-    toolsOpen: PropTypes.bool.isRequired
+    toolsOpen: PropTypes.bool.isRequired,
+    loading: PropTypes.bool.isRequired
 }
 
 const mapStateToProps = (state) => ({
     rootComp: state.contentState.contentComp[ROOT_COMP],
-    toolsOpen: state.navState.toolsOpen
+    toolsOpen: state.navState.toolsOpen,
+    loading: state.contentState.loading
 })
 
 export default connect(mapStateToProps, { getBody: contActions.getBody })(AppBody);

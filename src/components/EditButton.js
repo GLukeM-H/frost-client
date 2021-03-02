@@ -2,18 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { ROOT_COMP } from '../data/contReducerConstants'
-import { contActions, navActions } from '../actions'
+import { contActions } from '../actions'
 import { makeStyles } from '@material-ui/core/styles'
 import ButtonGroup from '@material-ui/core/ButtonGroup'
 import Button from '@material-ui/core/Button'
 import DeleteIcon from '@material-ui/icons/Delete'
 import EditIcon from '@material-ui/icons/Edit';
 import OpenWithIcon from '@material-ui/icons/OpenWith'
-import {
-    Container, Row, Col,
-    UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem,
-} from 'reactstrap';
-import Delete from '@material-ui/icons/Delete'
 
 const useStyles = makeStyles(theme => ({
     buttonGroup: {

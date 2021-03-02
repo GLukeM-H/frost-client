@@ -34,7 +34,10 @@ const useStyles = makeStyles(theme => ({
   navbarContainer: {
     position: "fixed",
     width: "100vw",
-    zIndex: 10
+    zIndex: theme.zIndex.appBar
+  },
+  drawer: {
+    zIndex: theme.zIndex.drawer
   },
   bodyItem: {
     marginTop: theme.mixins.toolbar.minHeight,
@@ -68,7 +71,7 @@ function App() {
           <Grid item className={classes.bodyItem} xs={12}>
             <AppBody/>
           </Grid>
-          <ToolsDrawer />
+          <ToolsDrawer className={classes.drawer} />
         </Grid>
       </div>
     </ThemeProvider>

@@ -10,18 +10,18 @@ import * as comp from './';
 const useStyles = makeStyles(theme => ({
     default: {
         padding: "10px",
-        position: "relative"
+        position: "relative",
+        display: "inline-flex",
+        flexGrow: 1
     },
     selected: {
         outline: "2px dashed lightblue"
     },
     itemNoChild: {
-        width: "25%",
-        height: "300px"
+        minHeight: "300px"
     },
     containerNoChild: {
-        width: "100%",
-        height: "320px"
+        minHeight: "320px"
     }
 }))
 
@@ -34,8 +34,8 @@ const GridComp = props => {
             item={!props.isContainer} 
             className={clsx(classes.default, {
                 [classes.selected]: props.editing && (props.selected === props.id),
-                [classes.itemNoChild]: props.editing && !props.isContainer,
-                [classes.containerNoChild]: props.editing && props.isContainer
+                [classes.itemNoChild]: props.editing && !props.children.length && !props.isContainer,
+                [classes.containerNoChild]: props.editing && !props.children.length && props.isContainer
             })}
             xs={props.xs}
         >

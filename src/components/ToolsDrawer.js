@@ -25,13 +25,7 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
+import Grid from '@material-ui/core/Grid';
 
 
 const useStyles = makeStyles(theme => ({
@@ -87,23 +81,6 @@ function ContainerView(props) {
     );
 }
 
-function RadioButtonsGroup() {
-    const [value, setValue] = React.useState('female');
-  
-    const handleChange = (event) => {
-      setValue(event.target.value);
-    };
-  
-    return (
-      <FormControl component="fieldset">
-        <RadioGroup row aria-label="gender" name="gender1" value={value} onChange={handleChange}>
-          {Array(12).fill().map((_ , i) => (
-              <FormControlLabel key={i} value={i+1} control={<Radio />} label={(i+1).toString()} />
-          ))}
-        </RadioGroup>
-      </FormControl>
-    );
-}
 
 function ItemView(props) {
     const classes = useStyles();
@@ -138,31 +115,27 @@ function ItemView(props) {
                     {open ? <ExpandLess /> : <ExpandMore />}
                 </ListItem>
                 <Collapse in={open}>
-                    <TableContainer
+                    <Paper
                         className={clsx(classes.collapse, classes.tableContainer)}
-                        component={Paper}
                         elevation={0}
                         square
                     >
                         <FormControl component="fieldset">
                             <RadioGroup row value={size} onChange={handleSizeChange}>
-                                <TableBody>
-                                    {Array(4).fill(Array(3).fill()).map((row, i) => (
-                                        <TableRow key={i}>
-                                            {row.map((_, j) => (
-                                                <TableCell key={j} align="left">
-                                                    <FormControlLabel
-                                                        value={i*3+j+1} 
-                                                        control={<Radio />} 
-                                                        label={(i*3+j+1).toString()} />
-                                                </TableCell>
-                                            ))}
-                                        </TableRow>
+                                <Grid container>
+                                    {Array(12).fill().map((_,i) => (
+                                        <Grid item key={i} xs={4} style={{textAlign: "start", paddingLeft: 25}}>
+                                            <FormControlLabel
+                                                value={i+1}
+                                                control={<Radio />}
+                                                label={(i+1).toString()}
+                                            />
+                                        </Grid>
                                     ))}
-                                </TableBody>
+                                </Grid>
                             </RadioGroup>
                         </FormControl>
-                    </TableContainer>
+                    </Paper>
                 </Collapse>
             </List>
         </>

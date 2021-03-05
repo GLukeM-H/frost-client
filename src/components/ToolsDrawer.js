@@ -211,7 +211,7 @@ function ToolsDrawer(props) {
 
     const handleView = (view) => {
         props.setToolsView(view);
-        props.setSelectedComp('');
+        props.setSelected('');
     }
 
     const handleClose = () => {
@@ -278,7 +278,7 @@ ToolsDrawer.propTypes = {
     savedChanges: PropTypes.bool.isRequired,
     contentComp: PropTypes.object.isRequired,
     contentCompId: PropTypes.string.isRequired,
-    setSelectedComp: PropTypes.func.isRequired,
+    setSelected: PropTypes.func.isRequired,
     setInner: PropTypes.func.isRequired
 }
 
@@ -298,6 +298,6 @@ export default connect(mapStateToProps, {
     toggleEditing: contActions.toggleEditing,
     insertComp: contActions.insertComp,
     saveBody: contActions.saveBody,
-    setSelectedComp: contActions.selectedComp,
+    setSelected: contActions.setSelected,
     setInner: contActions.setInner
 })(ToolsDrawer);

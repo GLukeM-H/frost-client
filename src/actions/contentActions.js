@@ -36,16 +36,30 @@ export function setBodyLoading() {
 }
 
 /*~~~~~ Edit Actions ~~~~~*/
-export function selectedComp(id) {
+export function setSelected(id) {
     return {
-        type: "EDIT/SELECTED_COMP",
+        type: "EDIT/SET_SELECTED",
+        payload: id
+    }
+}
+
+export function disableParent(id) {
+    return {
+        type: "EDIT/DISABLE_PARENT",
+        payload: id
+    }
+}
+
+export function enableParent(id) {
+    return {
+        type: "EDIT/ENABLE_PARENT",
         payload: id
     }
 }
 
 export function toggleEditing() {
     return dispatch => {
-        dispatch(selectedComp(''));
+        dispatch(setSelected(''));
         dispatch({type: "EDIT/TOGGLE"});
     }
 }

@@ -12,6 +12,8 @@ const navReducer = produce((draft, action) => {
         case "TOOLS/SET_VIEW":
             draft.toolsView = action.payload;
             return
+        default:
+            return
     }
 }, INIT_STATE);
 

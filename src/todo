@@ -1,5 +1,8 @@
-add backdrop to selected component
 redo breadcrumbs in tools drawer to include all of the ancestor components
+finish implementing cards
+add delete to tools drawer
+hide password in environment variables
+
+
 do away with edit button all together?
 use rightclick context menu when editing?
-finish implementing cards

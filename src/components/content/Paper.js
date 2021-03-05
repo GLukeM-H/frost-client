@@ -2,19 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
-import { contActions } from '../../actions';
-import EditButton from '../EditButton';
 import clsx from 'clsx';
 import Paper from "@material-ui/core/Paper";
 import Typography from '@material-ui/core/Typography';
-import Backdrop from '@material-ui/core/Backdrop';
+import Abstract from './Abstract';
 
 const useStyles = makeStyles(theme => ({
     default: {
+        maxWidth: "100%",
         padding: "10px",
         position: "relative",
         background: theme.palette.primary.main,
         color: theme.palette.primary.contrastText,
+        width: "100%"
     },
     selected: {
         zIndex: theme.zIndex.appBar + 2
@@ -31,20 +31,17 @@ const useStyles = makeStyles(theme => ({
 function PaperComp(props) {
     const classes = useStyles();
 
-    const handleClick = () => {
-        props.setSelectedComp('');
-    }
-
     return (
-        <>
-            <Backdrop open={props.selected === props.id} onClick={handleClick} className={classes.backdrop}/>
-            <Paper className={clsx(classes.default, {[classes.selected]: props.editing && (props.selected === props.id)})}>
-                {props.editing && <EditButton key={0} name={"Paper"} parentId={props.id}/>}
-                <Typography key={1} className={classes.typography} component="p">
-                    {props.inner}                
-                </Typography>
-            </Paper>
-        </>
+            <Abstract id={props.id}>
+                {({editButton, editHoverProps, selectedClass}) => (
+                    <Paper className={clsx(classes.default, selectedClass)} {...editHoverProps}>
+                        {editButton}
+                        <Typography className={classes.typography} component="p">
+                            {props.inner}                
+                        </Typography>
+                    </Paper>
+                )}
+            </Abstract>
     );
 
 }
@@ -52,18 +49,15 @@ function PaperComp(props) {
 PaperComp.propTypes = {
     id: PropTypes.string.isRequired,
     parentId: PropTypes.string,
-    editing: PropTypes.bool.isRequired,
-    selected: PropTypes.string,
     inner: PropTypes.string,
-    setSelectedComp: PropTypes.func.isRequired
+    editable: PropTypes.bool,
 }
 
 const mapStateToProps = (state, ownProps) => ({
     parentId: state.contentState.contentComp[ownProps.id].parentId,
-    editing: state.contentState.editing,
-    selected: state.contentState.selected,
     inner: state.contentState.contentComp[ownProps.id].inner,
+    editable: state.contentState.contentComp[ownProps.id].editable
 })
 
 
-export default connect(mapStateToProps, {setSelectedComp: contActions.selectedComp})(PaperComp);
+export default connect(mapStateToProps, {})(PaperComp);

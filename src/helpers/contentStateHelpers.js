@@ -50,4 +50,3 @@ export const moveComponent = (state, id, oldParentId, newParentId, index) => {
     state.contentComp[newParentId].childIds.splice(index,0,id);
     state.contentComp[id].parentId = newParentId;
 }
-

@@ -13,6 +13,7 @@ export const INIT_STATE = {
     editing: false,
     insertId: null,
     selected: '',
+    hoverDisabled: {},
     loading: false,
     savedChanges: true
 }

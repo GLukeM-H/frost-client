@@ -15,9 +15,9 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: theme.palette.neutral.light,
         position: "absolute",
         width: "40px",
-        right: -40,
+        zIndex: 100,
         top: 0,
-        zIndex: 100
+        right: 0,       
     },
     button: {
         outline: "0px !important",

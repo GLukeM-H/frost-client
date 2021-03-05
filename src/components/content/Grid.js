@@ -4,15 +4,18 @@ import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Grid from '@material-ui/core/Grid';
-import EditButton from '../EditButton';
 import * as comp from './';
+import Abstract from './Abstract';
 
 const useStyles = makeStyles(theme => ({
     default: {
+        backgroundColor: "inherit",
         padding: "10px",
         position: "relative",
         display: "inline-flex",
-        flexGrow: 1
+        flexGrow: 1,
+        minHeight: "10px",
+        minWidth: "10px"
     },
     selected: {
         outline: "2px dashed lightblue"
@@ -29,19 +32,24 @@ const GridComp = props => {
     const classes = useStyles();
 
     return (
-        <Grid
-            container={props.isContainer}
-            item={!props.isContainer} 
-            className={clsx(classes.default, {
-                [classes.selected]: props.editing && (props.selected === props.id),
-                [classes.itemNoChild]: props.editing && !props.children.length && !props.isContainer,
-                [classes.containerNoChild]: props.editing && !props.children.length && props.isContainer
-            })}
-            xs={props.xs}
-        >
-            {props.editing && <EditButton name={props.isContainer ? "Container" : "Item"} parentId={props.id}/>}
-            {props.children.map(child => React.createElement(comp[child.comp], child.props, child.inner))}                
-        </Grid>
+        <Abstract id={props.id}>
+            {({editButton, editHoverProps, selectedClass}) => (
+                <Grid
+                container={props.isContainer}
+                item={!props.isContainer} 
+                className={clsx(classes.default, selectedClass, {
+                    [classes.selected]: props.editing && (props.selected === props.id)
+                    // [classes.itemNoChild]: props.editing && !props.children.length && !props.isContainer,
+                    // [classes.containerNoChild]: props.editing && !props.children.length && props.isContainer
+                })}
+                xs={props.xs}
+                {...editHoverProps}
+            >  
+                {editButton}
+                {props.children.map(child => React.createElement(comp[child.comp], child.props, child.inner))}                
+            </Grid>
+        )}
+        </Abstract>
     );
 
 }

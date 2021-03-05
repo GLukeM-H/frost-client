@@ -20,6 +20,13 @@ const theme = createMuiTheme({
       main: "#e5e5ec",
       light: "#f8f8ff"
     }
+  },
+  overrides: {
+    MuiButton: {
+      root: {
+        minWidth: "20px",
+      }
+    },
   }
 });
 
@@ -41,11 +48,11 @@ const useStyles = makeStyles(theme => ({
   },
   bodyItem: {
     marginTop: theme.mixins.toolbar.minHeight,
-    "@media (min-width:0px) and (orientation: landscape)": {
-      marginTop: theme.mixins.toolbar["@media (min-width:0px) and (orientation: landscape)"].minHeight
+    [`${theme.breakpoints.up('xs')} and (orientation: landscape)`]: {
+      marginTop: theme.mixins.toolbar[`${theme.breakpoints.up('xs')} and (orientation: landscape)`].minHeight
     },
-    "@media (min-width:600px)": {
-      marginTop: theme.mixins.toolbar["@media (min-width:600px)"].minHeight
+    [theme.breakpoints.up('sm')]: {
+      marginTop: theme.mixins.toolbar[theme.breakpoints.up('sm')].minHeight
     },
     zIndex: 0
   },

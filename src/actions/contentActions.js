@@ -98,3 +98,10 @@ export function setInner(id,inner) {
         payload: {id, inner}
     }
 }
+
+export function setProps(id, props) {
+    return {
+        type: "EDIT/SET_PROPS",
+        payload: {id, props}
+    }
+}

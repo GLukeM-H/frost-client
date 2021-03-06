@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { navActions, contActions } from '../actions';
+import { navActions, contActions } from '../../actions';
 import { makeStyles } from '@material-ui/core/styles';
+import GridView from './GridView';
 import clsx from 'clsx';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
@@ -21,11 +22,7 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import Paper from '@material-ui/core/Paper';
 import Collapse from '@material-ui/core/Collapse';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import Grid from '@material-ui/core/Grid';
+import Slider from '@material-ui/core/Slider';
 
 
 const useStyles = makeStyles(theme => ({
@@ -50,13 +47,15 @@ const useStyles = makeStyles(theme => ({
     },
     collapse: {
         backgroundColor: theme.palette.neutral.main,
-        padding: "10px"
+        padding: theme.spacing(2)
     },
     textArea: {
         width: "100%"
     },
-    tableContainer: {
-        overflow: "hidden"
+    sizeCollapse: {
+        paddingTop: theme.spacing(3),
+        paddingRight: theme.spacing(3),
+        paddingLeft: theme.spacing(3)
     }
 }));
 
@@ -76,67 +75,6 @@ function ContainerView(props) {
                 <ListItem button onClick={() => props.insertComp('Grid', { isContainer: false, xs: 2 })}>
                     <ListItemText primary="Add Item" />
                 </ListItem>
-            </List>
-        </>
-    );
-}
-
-
-function ItemView(props) {
-    const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
-    const [size, setSize] = React.useState(4);
-  
-    const handleSizeChange = (event) => {
-      setSize(Number(event.target.value));
-    };
-
-    
-    return (
-        <>
-            <List>
-                <ListItem>
-                    <Breadcrumbs aria-label="breadcrumb">
-                        <Link onClick={() => props.handleView('Component')}>Component</Link>
-                        <Typography color="textPrimary">Item</Typography>
-                    </Breadcrumbs>            
-                </ListItem>    
-            </List>
-            <Divider />
-            <List dense>
-                <ListItem button onClick={() => props.insertComp('Grid', { isContainer: true })}>
-                    <ListItemText primary="Add Container" />
-                </ListItem>
-                <ListItem button onClick={() => props.insertComp('Paper', {})}>
-                    <ListItemText primary="Add Paper" />
-                </ListItem>
-                <ListItem button onClick={() => setOpen(!open)}>
-                    <ListItemText primary="Change Size" />
-                    {open ? <ExpandLess /> : <ExpandMore />}
-                </ListItem>
-                <Collapse in={open}>
-                    <Paper
-                        className={clsx(classes.collapse, classes.tableContainer)}
-                        elevation={0}
-                        square
-                    >
-                        <FormControl component="fieldset">
-                            <RadioGroup row value={size} onChange={handleSizeChange}>
-                                <Grid container>
-                                    {Array(12).fill().map((_,i) => (
-                                        <Grid item key={i} xs={4} style={{textAlign: "start", paddingLeft: 25}}>
-                                            <FormControlLabel
-                                                value={i+1}
-                                                control={<Radio />}
-                                                label={(i+1).toString()}
-                                            />
-                                        </Grid>
-                                    ))}
-                                </Grid>
-                            </RadioGroup>
-                        </FormControl>
-                    </Paper>
-                </Collapse>
             </List>
         </>
     );
@@ -204,7 +142,6 @@ function PaperView(props) {
 }
 
 
-
 function ToolsDrawer(props) {
     
     const classes = useStyles();
@@ -227,28 +164,37 @@ function ToolsDrawer(props) {
         props.saveBody(props.contentComp, props.contentCompId);
     }
 
-    const selected = props.contentComp[props.selected];
     let view;
-    switch (selected?.comp){
-        case "Grid":
-            view = selected.props.isContainer ?
-                (<ContainerView handleView={handleView} insertComp={handleInsert} />) :
-                (<ItemView handleView={handleView} insertComp={handleInsert} />)
-            break;
-        case "Paper":
-            view = (
-                <PaperView
-                    handleView={handleView}
-                    paperText={selected.inner}
-                    setInner={text => props.setInner(props.selected, text)}
-                />
-            )
-            break;
-        default:
-            switch (props.toolsView){
-                default:
-                    view = (<ComponentView handleView={handleView} insertComp={handleInsert} />);
-            }
+    if (props.selected) {
+        let id = props.selected;
+        let breadcrumbs = [];
+        while (id) {
+            breadcrumbs.unshift([ id, props.contentComp[id].comp])
+            id = props.contentComp[id].parentId;
+        }
+    
+        switch (props.contentComp[props.selected].comp){
+            case "Grid":
+                view = <GridView breadcrumbs={breadcrumbs} />
+                break;
+            case "Paper":
+                view = (
+                    <PaperView
+                        breadcrumbs={breadcrumbs}
+                        handleView={handleView}
+                        paperText={props.contentComp[props.selected].inner}
+                        setInner={text => props.setInner(props.selected, text)}
+                    />
+                )
+                break;
+            default:
+                view = (<ComponentView handleView={handleView} insertComp={handleInsert} />);
+        }
+    } else {
+        switch (props.toolsView) {
+            default:
+                view = (<ComponentView handleView={handleView} insertComp={handleInsert} />);
+        }
     }
 
 
@@ -261,6 +207,7 @@ function ToolsDrawer(props) {
             </div>
             <Divider />
                 {view}
+            <Divider />
             <Button onClick={handleSave} color={props.savedChanges ? "primary" : "secondary"}><PublishIcon />&ensp;Save</Button>
         </Drawer>
     );

@@ -1,7 +1,7 @@
 import React from 'react';
 import AppBody from './components/AppBody';
 import AppNavBar from './components/AppNavBar';
-import ToolsDrawer from './components/ToolsDrawer';
+import ToolsDrawer from './components/drawer';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import 'bootstrap/dist/css/bootstrap.min.css';

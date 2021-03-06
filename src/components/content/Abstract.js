@@ -6,9 +6,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 import Fade from '@material-ui/core/Fade';
+import Grow from '@material-ui/core/Grow';
 import Box from '@material-ui/core/Box';
 import Backdrop from '@material-ui/core/Backdrop';
+import Paper from '@material-ui/core/Paper';
+import Popper from '@material-ui/core/Popper';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -17,10 +21,15 @@ const useStyles = makeStyles(theme => ({
     button: {
         border: `1px solid ${theme.palette.primary.light}`,
         backgroundColor: theme.palette.neutral.light,
-        color: theme.palette.primary.main,
         "& :hover": {
             backgroundColor: theme.palette.neutral.dark
         }
+    },
+    edit: {
+        color: theme.palette.primary.main
+    },
+    delete: {
+        color: theme.palette.secondary.main
     },
     buttonBox: {
         position: "absolute",
@@ -55,30 +64,46 @@ function Abstract(props) {
             props.enableParent(props.id);
         }
     } : {};
-
-    const editButton = (              
-        <Fade in={editVisible && !props.hoverDisabled} timeout={300} unmountOnExit>
-            <Box className={classes.buttonBox}>
-                <Button
-                    variant="contained"
-                    size="small"
-                    className={classes.button}
-                    onClick={() => props.setSelected(props.id)}
-                >
-                    <EditIcon />
-                </Button>
-            </Box>
-        </Fade>
-    );
     
+    const editButton = props.selected ? (
+        <Button
+            variant="contained"
+            size="small"
+            className={clsx(classes.button, classes.delete)}
+            onClick={() => props.deleteComp(props.id)}
+        >
+            <DeleteIcon />
+        </Button>
+    ) : (
+        <Button
+            variant="contained"
+            size="small"
+            className={clsx(classes.button, classes.edit)}
+            onClick={() => props.setSelected(props.id)}
+        >
+            <EditIcon />
+        </Button>
+    );
+        
 
     return (
         <>
             <Backdrop open={props.selected} onClick={() => props.setSelected('')} className={classes.backdrop}/>
             {props.children({
-                editButton,
                 editHoverProps,
-                selectedClass: clsx({[classes.selected]: props.editing && props.selected})
+                selectedClass: clsx({[classes.selected]: props.editing && props.selected}),
+                editButton: (
+                    <Grow
+                        // style={{transformOrigin: "top right"}} //Bug shifts 1px without translate
+                        in={editVisible && !props.hoverDisabled}
+                        timeout={300}
+                        unmountOnExit
+                    >
+                        <Box className={classes.buttonBox}>
+                            {editButton}
+                        </Box>
+                    </Grow>
+                )
             })}
         </>
     )
@@ -99,13 +124,15 @@ const mapStateToProps = (state, ownProps) => ({
     hoverDisabled: Boolean(
         !state.contentState.editing ||
         (state.contentState.selected !== ownProps.id &&
-        (state.contentState.selected || state.contentState.hoverDisabled[ownProps.id]))
+            (state.contentState.selected ||
+                state.contentState.hoverDisabled[ownProps.id]))
     )
 })
 
 export default connect(mapStateToProps, {
     setSelected: contActions.setSelected,
     disableParent: contActions.disableParent,
-    enableParent: contActions.enableParent
+    enableParent: contActions.enableParent,
+    deleteComp: contActions.deleteComp
 })(Abstract);
 

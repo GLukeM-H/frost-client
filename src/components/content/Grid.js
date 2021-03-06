@@ -35,20 +35,20 @@ const GridComp = props => {
         <Abstract id={props.id}>
             {({editButton, editHoverProps, selectedClass}) => (
                 <Grid
-                container={props.isContainer}
-                item={!props.isContainer} 
-                className={clsx(classes.default, selectedClass, {
-                    [classes.selected]: props.editing && (props.selected === props.id)
-                    // [classes.itemNoChild]: props.editing && !props.children.length && !props.isContainer,
-                    // [classes.containerNoChild]: props.editing && !props.children.length && props.isContainer
-                })}
-                xs={props.xs}
-                {...editHoverProps}
-            >  
-                {editButton}
-                {props.children.map(child => React.createElement(comp[child.comp], child.props, child.inner))}                
-            </Grid>
-        )}
+                    container={props.isContainer}
+                    item={!props.isContainer} 
+                    className={clsx(classes.default, selectedClass, {
+                        [classes.selected]: props.editing && (props.selected === props.id)
+                        // [classes.itemNoChild]: props.editing && !props.children.length && !props.isContainer,
+                        // [classes.containerNoChild]: props.editing && !props.children.length && props.isContainer
+                    })}
+                    xs={props.xs}
+                    {...editHoverProps}
+                >  
+                    {editButton}
+                    {props.children.map(child => React.createElement(comp[child.comp], child.props, child.inner))}                
+                </Grid>
+            )}
         </Abstract>
     );
 
@@ -70,6 +70,7 @@ const mapStateToProps = (state, ownProps) => ({
     editing: state.contentState.editing,
     selected: state.contentState.selected,
     isContainer: state.contentState.contentComp[ownProps.id].props.isContainer,
+    isItem: state.contentState.contentComp[ownProps.id].props.isItem,
     xs: state.contentState.contentComp[ownProps.id].props.xs
 })
 

@@ -42,6 +42,13 @@ const contentReducer = produce((draft, action) => {
             draft.contentComp[action.payload.id].inner = action.payload.inner;
             draft.savedChanges = false;
             return
+        case "EDIT/SET_PROPS":
+            draft.contentComp[action.payload.id].props = {
+                ...draft.contentComp[action.payload.id].props,
+                ...action.payload.props
+            }
+            draft.savedChanges = false;
+            return
         case "EDIT/SET_SELECTED":
             draft.selected = action.payload;
             return

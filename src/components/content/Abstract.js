@@ -4,14 +4,14 @@ import { connect } from 'react-redux';
 import { contActions } from '../../actions'
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
+import {SwitchTransition} from 'react-transition-group';
 import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import Fade from '@material-ui/core/Fade';
 import Grow from '@material-ui/core/Grow';
+import Slide from '@material-ui/core/Slide';
 import Box from '@material-ui/core/Box';
 import Backdrop from '@material-ui/core/Backdrop';
-import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 
 const useStyles = makeStyles(theme => ({
@@ -21,9 +21,7 @@ const useStyles = makeStyles(theme => ({
     button: {
         border: `1px solid ${theme.palette.primary.light}`,
         backgroundColor: theme.palette.neutral.light,
-        "& :hover": {
-            backgroundColor: theme.palette.neutral.dark
-        }
+        transform: "translateY(100%)"
     },
     edit: {
         color: theme.palette.primary.main
@@ -32,13 +30,7 @@ const useStyles = makeStyles(theme => ({
         color: theme.palette.secondary.main
     },
     buttonBox: {
-        position: "absolute",
-        zIndex: theme.zIndex.appBar + 1,
-        top: 0,
-        right: 0,
-        "& :hover": {
-            color: theme.palette.neutral.light
-        }
+        transform: "translateX(-100%)"
     },
     selected: {
         position: "relative",
@@ -50,9 +42,15 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
+
 function Abstract(props) {
     const classes = useStyles();
     const [editVisible, setEditVisible] = React.useState(false);
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const buttonTimeout = 250;
+    React.useEffect(() => {
+        setAnchorEl(props.nodeRef.current);
+    }, [])
 
     const editHoverProps = props.editing ? {
         onMouseEnter: () => {
@@ -64,47 +62,65 @@ function Abstract(props) {
             props.enableParent(props.id);
         }
     } : {};
-    
-    const editButton = props.selected ? (
-        <Button
-            variant="contained"
-            size="small"
-            className={clsx(classes.button, classes.delete)}
-            onClick={() => props.deleteComp(props.id)}
-        >
-            <DeleteIcon />
-        </Button>
-    ) : (
-        <Button
-            variant="contained"
-            size="small"
-            className={clsx(classes.button, classes.edit)}
-            onClick={() => props.setSelected(props.id)}
-        >
-            <EditIcon />
-        </Button>
-    );
+
+    const handleSelect = () => {
+        props.setSelected(props.id);
+    }
+
+    const handleDelete = () => {
+        props.enableParent(props.id);
+        props.deleteComp(props.id);
+    }
+
         
 
     return (
         <>
+            <Popper
+                open={editVisible && !props.hoverDisabled}
+                anchorEl={anchorEl}
+                placement="right-start"
+                transition
+                {...editHoverProps}>
+                {({ TransitionProps }) => (
+                    <Box className={classes.buttonBox}>
+                        <Grow 
+                            {...TransitionProps}
+                            timeout={buttonTimeout}
+                            unmountOnExit
+                        >
+                            <SwitchTransition>
+                                <Grow
+                                    key={props.selected}
+                                    in={editVisible && !props.hoverDisabled}
+                                    style={{transformOrigin: "100% 0"}}
+                                    timeout={buttonTimeout}
+                                >
+                                    <Button
+                                        variant="contained"
+                                        size="small"
+                                        className={clsx(
+                                            classes.button,
+                                            {
+                                                [classes.delete]: props.selected,
+                                                [classes.edit]: !props.selected
+                                            }
+                                        )}
+                                        onClick={props.selected ? handleDelete : handleSelect}
+                                    >
+                                        {props.selected ? <DeleteIcon /> : <EditIcon />}
+                                    </Button>
+                                </Grow>
+                            </SwitchTransition>
+                        </Grow>
+                    </Box>
+                )}
+            </Popper>                    
             <Backdrop open={props.selected} onClick={() => props.setSelected('')} className={classes.backdrop}/>
-            {props.children({
-                editHoverProps,
-                selectedClass: clsx({[classes.selected]: props.editing && props.selected}),
-                editButton: (
-                    <Grow
-                        // style={{transformOrigin: "top right"}} //Bug shifts 1px without translate
-                        in={editVisible && !props.hoverDisabled}
-                        timeout={300}
-                        unmountOnExit
-                    >
-                        <Box className={classes.buttonBox}>
-                            {editButton}
-                        </Box>
-                    </Grow>
-                )
-            })}
+                {props.children({
+                    editHoverProps,
+                    selectedClass: clsx({[classes.selected]: props.editing && props.selected})
+                })}
         </>
     )
 
@@ -133,6 +149,7 @@ export default connect(mapStateToProps, {
     setSelected: contActions.setSelected,
     disableParent: contActions.disableParent,
     enableParent: contActions.enableParent,
-    deleteComp: contActions.deleteComp
+    deleteComp: contActions.deleteComp,
+    setInner: contActions.setInner
 })(Abstract);
 

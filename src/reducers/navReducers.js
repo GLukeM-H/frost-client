@@ -1,5 +1,5 @@
 import { produce } from 'immer';
-import { INIT_STATE } from '../data/navReducerConstants';
+import { INIT_STATE } from '../constants/navReducerConstants';
 
 const navReducer = produce((draft, action) => {
     switch (action.type) {

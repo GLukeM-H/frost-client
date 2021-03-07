@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { contActions } from '../actions';
-import { ROOT_COMP } from '../data/contReducerConstants';
+import { ROOT_COMP } from '../constants/contReducerConstants';
+import { DRAWER_WIDTH, DURATION } from '../constants/appBody';
 import * as comp from './content';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
@@ -10,21 +11,17 @@ import { Transition } from 'react-transition-group';
 import Grid from "@material-ui/core/Grid";
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
-const duration = 300;
-const drawerWidth = 300;
-
   
 const useStyles = makeStyles(theme => ({
   defaultBody: {
     transform: "translateX(0px)",
-    transition: `transform ${duration}ms cubic-bezier(.6,.01,.51,1.01)`
+    transition: `transform ${DURATION}ms cubic-bezier(.6,.01,.51,1.01)`
   },
   enteringBody: {
-    transform: `translateX(-${drawerWidth/2}px)`
+    transform: `translateX(-${DRAWER_WIDTH/2}px)`
   },
   enteredBody: {
-    transform: `translateX(-${drawerWidth/2}px)`
+    transform: `translateX(-${DRAWER_WIDTH/2}px)`
   },
   exitingBody: {
     transform: "translateX(0vw)"
@@ -67,7 +64,7 @@ function AppBody(props) {
 
     return (
       <>
-        <Transition in={props.toolsOpen} timeout={duration}>
+        <Transition in={props.toolsOpen} timeout={DURATION}>
           {state => (
             <Grid container className={clsx(classes.defaultBody, classes[`${state}Body`])}>
               <Grid item className={classes.leftItem} md={2} xs={12}>left</Grid>

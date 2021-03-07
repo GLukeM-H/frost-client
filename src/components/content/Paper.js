@@ -30,15 +30,17 @@ const useStyles = makeStyles(theme => ({
 
 function PaperComp(props) {
     const classes = useStyles();
+    const ref = React.createRef();
 
     return (
-            <Abstract id={props.id}>
-                {({editButton, editHoverProps, selectedClass}) => (
-                    <Paper className={clsx(classes.default, selectedClass)} {...editHoverProps}>
-                        {editButton}
-                        <Typography className={classes.typography} component="p">
-                            {props.inner}                
-                        </Typography>
+            <Abstract nodeRef={ref} id={props.id}>
+                {({editHoverProps, selectedClass}) => (
+                    <Paper ref={ref} className={clsx(classes.default, selectedClass)} {...editHoverProps}>
+                        {props.inner.map((paragraph, i) => (
+                            <Typography key={i} className={classes.typography} component="p">
+                                {paragraph ? paragraph : <br />}           
+                            </Typography>
+                        ))}
                     </Paper>
                 )}
             </Abstract>
@@ -49,14 +51,13 @@ function PaperComp(props) {
 PaperComp.propTypes = {
     id: PropTypes.string.isRequired,
     parentId: PropTypes.string,
-    inner: PropTypes.string,
-    editable: PropTypes.bool,
+    inner: PropTypes.array,
+    contentEditable: PropTypes.bool,
 }
 
 const mapStateToProps = (state, ownProps) => ({
     parentId: state.contentState.contentComp[ownProps.id].parentId,
-    inner: state.contentState.contentComp[ownProps.id].inner,
-    editable: state.contentState.contentComp[ownProps.id].editable
+    inner: state.contentState.contentComp[ownProps.id].inner.split('\n'),
 })
 
 

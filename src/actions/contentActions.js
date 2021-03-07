@@ -72,9 +72,12 @@ export function insertComp(compName, parentId, childId, props={}) {
 }
 
 export function deleteComp(id) {
-    return {
-        type: "EDIT/DELETE",
-        payload: id
+    return dispatch => {
+        dispatch(setSelected(''))
+        dispatch({
+            type: "EDIT/DELETE",
+            payload: id
+        })
     }
 }
 
@@ -103,5 +106,11 @@ export function setProps(id, props) {
     return {
         type: "EDIT/SET_PROPS",
         payload: {id, props}
+    }
+}
+
+export function toggleEditInner(id) {
+    return {
+        type: "EDIT/TOGGLE_EDIT_INNER"
     }
 }

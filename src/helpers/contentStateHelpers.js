@@ -1,4 +1,4 @@
-import { ROOT_COMP } from '../data/contReducerConstants';
+import { ROOT_COMP } from '../constants/contReducerConstants';
 
 export const newComponent = (state, compName, id, parentId, props) => {
     state.contentComp[id] = {

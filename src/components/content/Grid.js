@@ -30,11 +30,13 @@ const useStyles = makeStyles(theme => ({
 
 const GridComp = props => {
     const classes = useStyles();
+    const ref = React.createRef();
 
     return (
-        <Abstract id={props.id}>
-            {({editButton, editHoverProps, selectedClass}) => (
+        <Abstract nodeRef={ref} id={props.id}>
+            {({editHoverProps, selectedClass}) => (
                 <Grid
+                    ref={ref}
                     container={props.isContainer}
                     item={!props.isContainer} 
                     className={clsx(classes.default, selectedClass, {
@@ -44,8 +46,7 @@ const GridComp = props => {
                     })}
                     xs={props.xs}
                     {...editHoverProps}
-                >  
-                    {editButton}
+                >
                     {props.children.map(child => React.createElement(comp[child.comp], child.props, child.inner))}                
                 </Grid>
             )}

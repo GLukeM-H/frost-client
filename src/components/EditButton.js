@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { ROOT_COMP } from '../data/contReducerConstants'
+import { ROOT_COMP } from '../constants/contReducerConstants'
 import { contActions } from '../actions'
 import { makeStyles } from '@material-ui/core/styles'
 import ButtonGroup from '@material-ui/core/ButtonGroup'

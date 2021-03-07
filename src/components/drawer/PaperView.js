@@ -1,6 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { contActions } from '../../actions';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
@@ -15,8 +15,7 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Paper from '@material-ui/core/Paper';
 import Collapse from '@material-ui/core/Collapse';
-import Slider from '@material-ui/core/Slider';
-import { setSelected } from '../../actions/contentActions';
+import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 
 
 const useStyles = makeStyles(theme => ({
@@ -57,17 +56,12 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-
-function GridView(props) {
+function PaperView(props) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
-    const [size, setSize] = React.useState(4);
-  
-    const handleSizeChange = (event) => {
-      setSize(Number(event.target.value));
-    };
+    const setInner = inner => props.setInner(props.selected, inner);
+    const setProps = props => props.setProps(props.selected, props);
 
-    
     return (
         <>
             <List>
@@ -85,31 +79,18 @@ function GridView(props) {
             </List>
             <Divider />
             <List dense>
-                <ListItem button onClick={() => props.insertComp('Grid', { isContainer: true })}>
-                    <ListItemText primary="Add Container" />
-                </ListItem>
-                <ListItem button onClick={() => props.insertComp('Paper', {})}>
-                    <ListItemText primary="Add Paper" />
-                </ListItem>
                 <ListItem button onClick={() => setOpen(!open)}>
-                    <ListItemText primary="Change Size" />
+                    <ListItemText primary="Add Text" />
                     {open ? <ExpandLess /> : <ExpandMore />}
                 </ListItem>
                 <Collapse in={open}>
-                    <Paper
-                        className={clsx(classes.collapse, classes.sizeCollapse)}
-                        elevation={0}
-                        square
-                    >
-                        <Slider
-                            value={size}
-                            onChange={(e,v) => setSize(v)}
-                            defaultValue={4}
-                            step={1}
-                            marks
-                            min={1}
-                            max={12}
-                            valueLabelDisplay="auto"
+                    <Paper className={classes.collapse} elevation={0} square>
+                        <TextareaAutosize
+                            className={classes.textArea}
+                            rowsMin={4}
+                            placeholder="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repudiandae sint quibusdam doloremque quae hic vitae?"
+                            value={props.selectedInner}
+                            onChange={e => setInner(e.target.value)}
                         />
                     </Paper>
                 </Collapse>
@@ -119,21 +100,23 @@ function GridView(props) {
 }
 
 
-GridView.propTypes = {
-    insertComp: PropTypes.func.isRequired,
+PaperView.propTypes = {
     setSelected: PropTypes.func.isRequired,
+    insertComp: PropTypes.func.isRequired,
     setInner: PropTypes.func.isRequired,
-    setProps: PropTypes.func.isRequired,
-    breadcrumbs: PropTypes.array.isRequired
+    selected: PropTypes.string.isRequired,
+    setProps: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => ({
-    selected: state.contentState.selected
+    selected: state.contentState.selected,
+    selectedInner: state.contentState.contentComp[state.contentState.selected].inner
 })
 
+
 export default connect(mapStateToProps, {
+    insertComp: contActions.insertComp,
     setSelected: contActions.setSelected,
-    setProps: contActions.setProps,
     setInner: contActions.setInner,
-    insertComp: contActions.insertComp
-})(GridView);
+    setProps: contActions.setProps
+})(PaperView);

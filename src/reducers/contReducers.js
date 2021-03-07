@@ -6,7 +6,7 @@ import {
     newComponent
 } from '../helpers/contentStateHelpers';
 import { v4 as uuid } from 'uuid';
-import { ROOT_COMP, INIT_STATE } from '../data/contReducerConstants';
+import { ROOT_COMP, INIT_STATE } from '../constants/contReducerConstants';
 
 const contentReducer = produce((draft, action) => {
     switch (action.type) {

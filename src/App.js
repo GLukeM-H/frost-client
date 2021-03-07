@@ -11,14 +11,17 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: "#486d99"
+      main: "#486d99",
+      translucent: "rgba(72,109,153,0.7)"
     },
     secondary: {
       main: "#8c4f5a"
     },
     neutral: {
       main: "#e5e5ec",
-      light: "#f8f8ff"
+      light: "#f8f8ff",
+      translucent: "rgba(229,229,236,0.7)",
+      translucentLight: "rgba(248,248,255,0.7)"
     }
   },
   overrides: {

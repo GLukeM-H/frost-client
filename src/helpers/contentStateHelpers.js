@@ -29,7 +29,7 @@ export const insertComponent = (state, id, compName, parentId, childId, props) =
     newComponent(state, compName, id, parentId, props);
 }
 
-export const deleteComponent = (state, id) => {
+export function deleteComponent(state, id) {
     if (!state.contentComp[id]) {return}
     
     for (var i in state.contentComp[id].childIds) {
@@ -42,6 +42,12 @@ export const deleteComponent = (state, id) => {
     }
     
     delete state.contentComp[id];
+}
+
+export function deleteChildren(state, id) {
+    for (var i in state.contentComp[id].childIds) {
+        deleteComponent(state, state.contentComp[id].childIds[i])
+    }
 }
 
 export const moveComponent = (state, id, oldParentId, newParentId, index) => {

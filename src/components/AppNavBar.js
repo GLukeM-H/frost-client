@@ -22,8 +22,9 @@ const useStyles = makeStyles(theme => ({
     appNav: {
       flexGrow: 1,
       color: theme.palette.primary.dark,
-      backdropFilter: "blur(20px)",
-      backgroundColor: theme.palette.neutral.translucentLight
+      ...theme.mixins.navBackground
+    //   backdropFilter: "blur(20px)",
+    //   backgroundColor: theme.palette.neutral.translucentLight
     },
     menuButton: {
       marginRight: theme.spacing(2),
@@ -79,7 +80,7 @@ const UserMenu = connect(null, {
     }, [open]);
   
     return (
-        <React.Fragment>
+        <>
             <Button
                 ref={anchorRef}
                 aria-controls={open ? 'menu-list-grow' : undefined}
@@ -109,7 +110,7 @@ const UserMenu = connect(null, {
                     </Grow>
                 )}
             </Popper>
-        </React.Fragment>
+        </>
     );
 })
 

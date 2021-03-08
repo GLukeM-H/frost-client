@@ -2,6 +2,7 @@ import { produce } from 'immer';
 import {
     insertComponent,
     deleteComponent,
+    deleteChildren,
     moveComponent,
     newComponent
 } from '../helpers/contentStateHelpers';
@@ -15,7 +16,7 @@ const contentReducer = produce((draft, action) => {
                 draft.contentComp = action.payload[0].contentComp;
                 draft.contentCompId = action.payload[0]._id;
             } else {
-                newComponent(draft, 'Grid', ROOT_COMP, null, {isContainer: true});
+                newComponent(draft, 'Grid', ROOT_COMP, null, {container: true});
             }
             draft.loading = false;
             return
@@ -32,6 +33,10 @@ const contentReducer = produce((draft, action) => {
             return
         case "EDIT/DELETE":
             deleteComponent(draft, action.payload);
+            draft.savedChanges = false;
+            return
+        case "EDIT/DELETE_CHILDREN":
+            deleteChildren(draft, action.payload);
             draft.savedChanges = false;
             return
         case "EDIT/MOVE":

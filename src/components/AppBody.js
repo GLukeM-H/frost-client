@@ -11,39 +11,54 @@ import { Transition } from 'react-transition-group';
 import Grid from "@material-ui/core/Grid";
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Fade from '@material-ui/core/Fade';
   
-const useStyles = makeStyles(theme => ({
-  defaultBody: {
-    transform: "translateX(0px)",
-    transition: `transform ${DURATION}ms cubic-bezier(.6,.01,.51,1.01)`
-  },
-  enteringBody: {
-    transform: `translateX(-${DRAWER_WIDTH/2}px)`
-  },
-  enteredBody: {
-    transform: `translateX(-${DRAWER_WIDTH/2}px)`
-  },
-  exitingBody: {
-    transform: "translateX(0vw)"
-  },
-  exitedBody: {
-    transfrom: "translateX(0vw)"
-  },
-  leftItem: {
-  },
-  middleItem: {
-    outline: "1px dashed black",
-    display: "flex",
-  },
-  rightItem: {
-    flexGrow: 1
-  },
-  backdrop: {
-    zIndex: theme.zIndex.drawer + 1,
-    color: theme.palette.primary.light,
-    backgroundColor: 'rgba(0,0,0,0)'
+const useStyles = makeStyles(theme => {
+  const toolbar = theme.mixins.toolbar;
+  return { 
+    defaultBody: {
+      transform: "translateX(0px)",
+      transition: `transform ${DURATION}ms cubic-bezier(.6,.01,.51,1.01)`,
+      paddingTop: "1rem",
+      minHeight: `calc(100vh - ${toolbar.minHeight}px)`,
+      [`${theme.breakpoints.up('xs')} and (orientation: landscape)`]: {
+        minHeight: `calc(
+          100vh - ${toolbar[`${theme.breakpoints.up('xs')} and (orientation: landscape)`].minHeight}px
+        )`
+      },
+      [theme.breakpoints.up('sm')]: {
+        minHeight: `calc(100vh - ${toolbar[theme.breakpoints.up('sm')].minHeight}px)`
+      },
+    },
+    enteringBody: {
+      transform: `translateX(-${DRAWER_WIDTH/2}px)`
+    },
+    enteredBody: {
+      transform: `translateX(-${DRAWER_WIDTH/2}px)`
+    },
+    exitingBody: {
+      transform: "translateX(0vw)"
+    },
+    exitedBody: {
+      transfrom: "translateX(0vw)"
+    },
+    leftItem: {
+    },
+    middleItem: {
+      outline: "1px dashed black",
+      flexDirection: "columns",
+      height: "100%"
+    },
+    rightItem: {
+      flexGrow: 1
+    },
+    backdrop: {
+      zIndex: theme.zIndex.drawer + 1,
+      color: theme.palette.primary.light,
+      backgroundColor: 'rgba(0,0,0,0)'
+    }
   }
-}));
+});
 
 function LoadingBackdrop(props) {
   const classes = useStyles();
@@ -60,7 +75,7 @@ function AppBody(props) {
 
     React.useEffect(() => {
         props.getBody();
-    }, []); /* Loops forever without empty props for dependency (only should run once on mount) */
+    }, []);
 
     return (
       <>
@@ -68,9 +83,11 @@ function AppBody(props) {
           {state => (
             <Grid container className={clsx(classes.defaultBody, classes[`${state}Body`])}>
               <Grid item className={classes.leftItem} md={2} xs={12}>left</Grid>
-              <Grid item className={classes.middleItem} md={8} xs={12}>
-                {React.createElement((comp[props.rootComp.comp] || props.rootComp.comp), props.rootComp.props, props.rootComp.inner)}
-              </Grid>
+                <Fade in={!props.loading} timeout={DURATION}>
+                  <Grid item className={classes.middleItem} md={8} xs={12}>
+                      {React.createElement((comp[props.rootComp.comp] || props.rootComp.comp), {id: ROOT_COMP})}
+                  </Grid>
+                </Fade>
               <Grid item className={classes.rightItem} >right</Grid>
             </Grid>
           )}

@@ -4,28 +4,20 @@ import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Grid from '@material-ui/core/Grid';
-import * as comp from './';
+import * as Comp from './';
 import Abstract from './Abstract';
 
 const useStyles = makeStyles(theme => ({
     default: {
         backgroundColor: "inherit",
-        padding: "10px",
         position: "relative",
         display: "inline-flex",
-        flexGrow: 1,
-        minHeight: "10px",
-        minWidth: "10px"
+        minHeight: "20px",
+        minWidth: "20px"
     },
     selected: {
         outline: "2px dashed lightblue"
     },
-    itemNoChild: {
-        minHeight: "300px"
-    },
-    containerNoChild: {
-        minHeight: "320px"
-    }
 }))
 
 const GridComp = props => {
@@ -37,17 +29,15 @@ const GridComp = props => {
             {({editHoverProps, selectedClass}) => (
                 <Grid
                     ref={ref}
-                    container={props.isContainer}
-                    item={!props.isContainer} 
                     className={clsx(classes.default, selectedClass, {
-                        [classes.selected]: props.editing && (props.selected === props.id)
-                        // [classes.itemNoChild]: props.editing && !props.children.length && !props.isContainer,
-                        // [classes.containerNoChild]: props.editing && !props.children.length && props.isContainer
+                        [classes.selected]: props.editing && (props.selected === props.id),
+                        [classes.container]: props.container,
+                        [classes.item]: props.item
                     })}
-                    xs={props.xs}
+                    {...props.stateProps}
                     {...editHoverProps}
                 >
-                    {props.children.map(child => React.createElement(comp[child.comp], child.props, child.inner))}                
+                    {props.children.map(([id, compName]) => React.createElement(Comp[compName], {id, key: id}))}                
                 </Grid>
             )}
         </Abstract>
@@ -61,19 +51,19 @@ GridComp.propTypes = {
     parentId: PropTypes.string,
     editing: PropTypes.bool.isRequired,
     selected: PropTypes.string,
-    isContainer: PropTypes.bool.isRequired,
-    xs: PropTypes.number
+    stateProps: PropTypes.object
 }
 
-const mapStateToProps = (state, ownProps) => ({
-    children: state.contentState.contentComp[ownProps.id].childIds.map(id => state.contentState.contentComp[id]),
-    parentId: state.contentState.contentComp[ownProps.id].parentId,
-    editing: state.contentState.editing,
-    selected: state.contentState.selected,
-    isContainer: state.contentState.contentComp[ownProps.id].props.isContainer,
-    isItem: state.contentState.contentComp[ownProps.id].props.isItem,
-    xs: state.contentState.contentComp[ownProps.id].props.xs
-})
+const mapStateToProps = (state, ownProps) => {
+    const ownState = state.contentState.contentComp[ownProps.id];    
+    return {
+        stateProps: ownState.props,
+        children: ownState.childIds.map(id => [id, state.contentState.contentComp[id].comp]),
+        parentId: ownState.parentId,
+        editing: state.contentState.editing,
+        selected: state.contentState.selected
+    }
+}
 
 
 export default connect(mapStateToProps, {})(GridComp);

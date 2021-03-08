@@ -81,6 +81,13 @@ export function deleteComp(id) {
     }
 }
 
+export function deleteChildren(id) {
+    return {
+        type: "EDIT/DELETE_CHILDREN",
+        payload: id
+    }
+}
+
 export function moveComp(id, oldParent, newParent, index) {
     return {
         type: "EDIT/MOVE",

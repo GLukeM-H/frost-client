@@ -24,6 +24,18 @@ const theme = createMuiTheme({
       translucentLight: "rgba(248,248,255,0.7)"
     }
   },
+  mixins: {
+    navBackground: {
+      ...(CSS.supports('backdrop-filter', 'blur(20px)') ? {
+        backdropFilter: "blur(20px)",
+        backgroundColor: "rgba(248,248,255,0.7)"
+      } : {
+        backgroundColor: "ghostwhite"
+      }
+      
+      )
+    }
+  },
   overrides: {
     MuiButton: {
       root: {
@@ -40,24 +52,27 @@ const useStyles = makeStyles(theme => ({
   },
   app: {
     textAlign: "center",
+    position: "relative"
   },
   navbarContainer: {
     position: "fixed",
     width: "100vw",
-    zIndex: theme.zIndex.appBar
+    zIndex: theme.zIndex.appBar,
+    ...theme.mixins.navBackground
   },
   drawer: {
-    zIndex: theme.zIndex.drawer
+    zIndex: theme.zIndex.drawer,
+    ...theme.mixins.navBackground
   },
   bodyItem: {
+    zIndex: 0,
     marginTop: theme.mixins.toolbar.minHeight,
     [`${theme.breakpoints.up('xs')} and (orientation: landscape)`]: {
       marginTop: theme.mixins.toolbar[`${theme.breakpoints.up('xs')} and (orientation: landscape)`].minHeight
     },
     [theme.breakpoints.up('sm')]: {
       marginTop: theme.mixins.toolbar[theme.breakpoints.up('sm')].minHeight
-    },
-    zIndex: 0
+    }
   },
   blurred: {
     filter: "blur(10px)",

@@ -28,7 +28,6 @@ import Slider from '@material-ui/core/Slider';
 
 const useStyles = makeStyles(theme => ({
     drawer: {
-        backgroundColor: "ghostwhite",
         flexShrink: 0,
         paddingRight: "10px",
         paddingLeft: "10px"
@@ -39,11 +38,10 @@ const useStyles = makeStyles(theme => ({
         padding: theme.spacing(0, 1),
         // necessary for content to be below app bar
         ...theme.mixins.toolbar,
-        justifyContent: 'flex-start',
+        justifyContent: 'flex-start'
     },
     drawerPaper: {
-        backdropFilter: "blur(20px)",
-        backgroundColor: "transparent",
+        ...theme.mixins.navBackground,
         width: "300px"
     },
     collapse: {
@@ -59,27 +57,6 @@ const useStyles = makeStyles(theme => ({
         paddingLeft: theme.spacing(3)
     }
 }));
-
-// function ContainerView(props) {
-//     return (
-//         <>
-//             <List>
-//                 <ListItem>
-//                     <Breadcrumbs aria-label="breadcrumb">
-//                         <Link onClick={() => props.handleView('Component')}>Component</Link>
-//                         <Typography color="textPrimary">Container</Typography>
-//                     </Breadcrumbs>            
-//                 </ListItem>    
-//             </List>
-//             <Divider />
-//             <List dense>
-//                 <ListItem button onClick={() => props.insertComp('Grid', { isContainer: false, xs: 2 })}>
-//                     <ListItemText primary="Add Item" />
-//                 </ListItem>
-//             </List>
-//         </>
-//     );
-// }
 
 function ComponentView(props) {
     return (
@@ -106,42 +83,6 @@ function ComponentView(props) {
         </>
     );
 }
-
-// function PaperView(props) {
-//     const classes = useStyles();
-//     const [open, setOpen] = React.useState(false);
-//     return (
-//         <>
-//             <List>
-//                 <ListItem>
-//                     <Breadcrumbs aria-label="breadcrumb">
-//                         <Link onClick={() => props.handleView('Component')}>Component</Link>
-//                         <Typography color="textPrimary">Paper</Typography>
-//                     </Breadcrumbs>            
-//                 </ListItem>    
-//             </List>
-//             <Divider />
-//             <List dense>
-//                 <ListItem button onClick={() => setOpen(!open)}>
-//                     <ListItemText primary="Add Text" />
-//                     {open ? <ExpandLess /> : <ExpandMore />}
-//                 </ListItem>
-//                 <Collapse in={open}>
-//                     <Paper className={classes.collapse} elevation={0} square>
-//                         <TextareaAutosize
-//                             className={classes.textArea}
-//                             rowsMin={4}
-//                             placeholder="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repudiandae sint quibusdam doloremque quae hic vitae?"
-//                             value={props.paperText}
-//                             onChange={e => props.setInner(e.target.value)}
-//                         />
-//                     </Paper>
-//                 </Collapse>
-//             </List>
-//         </>
-//     );
-// }
-
 
 function ToolsDrawer(props) {
     

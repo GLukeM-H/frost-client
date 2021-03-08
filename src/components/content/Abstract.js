@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { contActions } from '../../actions'
+import { contActions } from '../../actions';
+import { ROOT_COMP } from '../../constants/contReducerConstants';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import {SwitchTransition} from 'react-transition-group';
@@ -9,7 +10,6 @@ import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Grow from '@material-ui/core/Grow';
-import Slide from '@material-ui/core/Slide';
 import Box from '@material-ui/core/Box';
 import Backdrop from '@material-ui/core/Backdrop';
 import Popper from '@material-ui/core/Popper';
@@ -68,8 +68,12 @@ function Abstract(props) {
     }
 
     const handleDelete = () => {
-        props.enableParent(props.id);
-        props.deleteComp(props.id);
+        if (props.id === ROOT_COMP) {
+            props.deleteChildren(props.id);
+        } else {
+            props.enableParent(props.id);
+            props.deleteComp(props.id);
+        }
     }
 
         
@@ -150,6 +154,7 @@ export default connect(mapStateToProps, {
     disableParent: contActions.disableParent,
     enableParent: contActions.enableParent,
     deleteComp: contActions.deleteComp,
+    deleteChildren: contActions.deleteChildren,
     setInner: contActions.setInner
 })(Abstract);
 

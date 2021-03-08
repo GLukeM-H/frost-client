@@ -16,7 +16,7 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import Paper from '@material-ui/core/Paper';
 import Collapse from '@material-ui/core/Collapse';
 import Slider from '@material-ui/core/Slider';
-import { setSelected } from '../../actions/contentActions';
+import { setProps } from '../../actions/contentActions';
 
 
 const useStyles = makeStyles(theme => ({
@@ -60,12 +60,47 @@ const useStyles = makeStyles(theme => ({
 
 function GridView(props) {
     const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
+    const [sizeOpen, setSizeOpen] = React.useState(false);
     const [size, setSize] = React.useState(4);
-  
+    const insertComp = (compName, compProps) => props.insertComp(compName, props.selected, null, compProps);
+    const setProps = compProps => props.setProps(props.selected, compProps);
+    
+    React.useEffect(() => {
+        if (!(props.stateProps.container || props.hasChildren)) {
+            setProps({container: true})
+        }
+    }, [props.hasChildren])
+
     const handleSizeChange = (event) => {
       setSize(Number(event.target.value));
     };
+
+    const handleAddItem = () => {
+        insertComp('Grid', {item: true, container: true, xs: 4});
+    }
+
+    const handleAddComp = (compName, compProps={}) => {
+        insertComp(compName, compProps);
+        setProps({container: false});
+    }
+    
+    //container item haschildren
+    /* add grid item
+    change size */
+
+    //container haschildren
+    /*add grid item */
+
+    //item haschildren
+    /*change size */
+
+    //container item nochildren
+    /*add grid item
+    change size
+    add components */
+
+    //container nochildren
+    /*add grid item */
 
     
     return (
@@ -85,34 +120,46 @@ function GridView(props) {
             </List>
             <Divider />
             <List dense>
-                <ListItem button onClick={() => props.insertComp('Grid', { isContainer: true })}>
-                    <ListItemText primary="Add Container" />
-                </ListItem>
-                <ListItem button onClick={() => props.insertComp('Paper', {})}>
-                    <ListItemText primary="Add Paper" />
-                </ListItem>
-                <ListItem button onClick={() => setOpen(!open)}>
-                    <ListItemText primary="Change Size" />
-                    {open ? <ExpandLess /> : <ExpandMore />}
-                </ListItem>
-                <Collapse in={open}>
-                    <Paper
-                        className={clsx(classes.collapse, classes.sizeCollapse)}
-                        elevation={0}
-                        square
-                    >
-                        <Slider
-                            value={size}
-                            onChange={(e,v) => setSize(v)}
-                            defaultValue={4}
-                            step={1}
-                            marks
-                            min={1}
-                            max={12}
-                            valueLabelDisplay="auto"
-                        />
-                    </Paper>
-                </Collapse>
+                {props.stateProps.container &&
+                    <>
+                        <ListItem key={0} button onClick={handleAddItem}>
+                            <ListItemText primary="Add Grid Item" />
+                        </ListItem>
+                    </>
+                }
+                {props.stateProps.item &&
+                    <>
+                        <ListItem button onClick={() => setSizeOpen(prevState => (!prevState))}>
+                        <ListItemText primary="Change Size" />
+                            {sizeOpen ? <ExpandLess /> : <ExpandMore />}
+                        </ListItem>
+                        <Collapse in={sizeOpen}>
+                            <Paper
+                                className={clsx(classes.collapse, classes.sizeCollapse)}
+                                elevation={0}
+                                square
+                            >
+                                <Slider
+                                    value={props.stateProps.xs}
+                                    onChange={(e,xs) => setProps({xs})}
+                                    defaultValue={4}
+                                    step={1}
+                                    marks
+                                    min={1}
+                                    max={12}
+                                    valueLabelDisplay="auto"
+                                />
+                            </Paper>
+                        </Collapse>
+                    </>
+                }
+                {props.stateProps.item && !props.hasChildren &&
+                    <>
+                        <ListItem button onClick={() => handleAddComp('Paper')}>
+                            <ListItemText primary="Add Paper" />
+                        </ListItem>
+                    </>
+                }
             </List>
         </>
     );
@@ -124,11 +171,15 @@ GridView.propTypes = {
     setSelected: PropTypes.func.isRequired,
     setInner: PropTypes.func.isRequired,
     setProps: PropTypes.func.isRequired,
-    breadcrumbs: PropTypes.array.isRequired
+    breadcrumbs: PropTypes.array.isRequired,
+    stateProps: PropTypes.object.isRequired,
+    hasChildren: PropTypes.bool.isRequired
 }
 
 const mapStateToProps = (state) => ({
-    selected: state.contentState.selected
+    selected: state.contentState.selected,
+    stateProps: state.contentState.contentComp[state.contentState.selected].props,
+    hasChildren: Boolean(state.contentState.contentComp[state.contentState.selected].childIds.length)
 })
 
 export default connect(mapStateToProps, {

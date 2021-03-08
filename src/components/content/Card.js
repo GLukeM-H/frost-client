@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
-import EditButton from '../EditButton';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
@@ -52,7 +51,6 @@ function CardComp(props) {
         <Card
             className={classNames}
         >
-            {props.editing && <EditButton name={props.isContainer ? "Container" : "Item"} parentId={props.id}/>}
             <CardHeader
                 title={props.title}
                 subheader={props.subheader}

@@ -1,8 +1,4 @@
-redo breadcrumbs in tools drawer to include all of the ancestor components (grid done)
-move drawer views into separate files
-use popper for edit button (using refs)
 finish implementing cards
-change edit button to delete button when selected
 hide password in environment variables
 
 

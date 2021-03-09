@@ -18,19 +18,23 @@ const useStyles = makeStyles(theme => ({
     root: {
         position: "relative",
     },
+    popper: {
+        width: 0
+    },
     button: {
         border: `1px solid ${theme.palette.primary.light}`,
         backgroundColor: theme.palette.neutral.light,
-        transform: "translateY(100%)"
+        width: "3rem"
     },
     edit: {
-        color: theme.palette.primary.main
+        color: theme.palette.primary.main,
     },
     delete: {
-        color: theme.palette.secondary.main
+        color: theme.palette.secondary.main,
     },
     buttonBox: {
-        transform: "translateX(-100%)"
+        position: "relative",
+        transform: "translateX(-3rem)"
     },
     selected: {
         position: "relative",
@@ -47,10 +51,35 @@ function Abstract(props) {
     const classes = useStyles();
     const [editVisible, setEditVisible] = React.useState(false);
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [deleteMounted, setDeleteMounted] = React.useState(false);
     const buttonTimeout = 250;
     React.useEffect(() => {
         setAnchorEl(props.nodeRef.current);
     }, [])
+
+    const buttons = [
+        {
+            icon: <EditIcon />,
+            growProps: {
+                in: editVisible && !props.hoverDisabled && !props.selected,
+                style: {
+                    transformOrigin: "100% 0",
+                    position: "absolute"
+                }
+            }
+        },
+        {
+            icon: <DeleteIcon />,
+            growProps: {
+                in: editVisible && !props.hoverDisabled && props.selected,
+                style: {
+                    transformOrigin: "100% 0",
+                    position: "absolute"
+                },
+            }
+        }
+    ]
+
 
     const editHoverProps = props.editing ? {
         onMouseEnter: () => {
@@ -76,55 +105,63 @@ function Abstract(props) {
         }
     }
 
+    const handleBackdropClick = () => {
+        setEditVisible(false);
+        props.setSelected('');
+    }
+
         
 
     return (
         <>
             <Popper
-                open={editVisible && !props.hoverDisabled}
+                open={props.editing}
+                className={classes.popper}
                 anchorEl={anchorEl}
                 placement="right-start"
                 transition
-                {...editHoverProps}>
-                {({ TransitionProps }) => (
-                    <Box className={classes.buttonBox}>
-                        <Grow 
-                            {...TransitionProps}
-                            timeout={buttonTimeout}
-                            unmountOnExit
-                        >
-                            <SwitchTransition>
-                                <Grow
-                                    key={props.selected}
-                                    in={editVisible && !props.hoverDisabled}
-                                    style={{transformOrigin: "100% 0"}}
-                                    timeout={buttonTimeout}
-                                >
-                                    <Button
-                                        variant="contained"
-                                        size="small"
-                                        className={clsx(
-                                            classes.button,
-                                            {
-                                                [classes.delete]: props.selected,
-                                                [classes.edit]: !props.selected
-                                            }
-                                        )}
-                                        onClick={props.selected ? handleDelete : handleSelect}
-                                    >
-                                        {props.selected ? <DeleteIcon /> : <EditIcon />}
-                                    </Button>
-                                </Grow>
-                            </SwitchTransition>
-                        </Grow>
+                {...editHoverProps}
+                >
+                    <Box className={classes.buttonBox} >
+                        {buttons.map((b,i) => (
+                            <Grow
+                                {...b.growProps}
+                                key={i}
+                                timeout={buttonTimeout}
+                                unmountOnExit
+                            >
+                                {/* <SwitchTransition>
+                                    <Grow
+                                        key={props.selected}
+                                        in={editVisible && !props.hoverDisabled}
+                                        style={{transformOrigin: "100% 0"}}
+                                        timeout={buttonTimeout}
+                                    > */}
+                                        <Button
+                                            variant="contained"
+                                            size="small"
+                                            className={clsx(
+                                                classes.button,
+                                                {
+                                                    [classes.delete]: props.selected,
+                                                    [classes.edit]: !props.selected
+                                                }
+                                            )}                                        
+                                            onClick={props.selected ? handleDelete : handleSelect}
+                                        >
+                                            {b.icon}
+                                        </Button>
+                                    {/* </Grow>
+                                </SwitchTransition> */}
+                            </Grow>
+                        ))}
                     </Box>
-                )}
             </Popper>                    
-            <Backdrop open={props.selected} onClick={() => props.setSelected('')} className={classes.backdrop}/>
-                {props.children({
-                    editHoverProps,
-                    selectedClass: clsx({[classes.selected]: props.editing && props.selected})
-                })}
+            <Backdrop open={props.selected} onClick={handleBackdropClick} className={classes.backdrop} {...editHoverProps}/>
+            {props.children({
+                editHoverProps,
+                selectedClass: clsx({[classes.selected]: props.editing && props.selected})
+            })}
         </>
     )
 

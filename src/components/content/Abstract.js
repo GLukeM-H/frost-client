@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { contActions } from '../../actions';
 import { ROOT_COMP } from '../../constants/contReducerConstants';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import {SwitchTransition} from 'react-transition-group';
 import Button from '@material-ui/core/Button';
@@ -32,12 +32,16 @@ const useStyles = makeStyles(theme => ({
     delete: {
         color: theme.palette.secondary.main,
     },
+    none: {
+        display: "none"
+    },
     buttonBox: {
-        position: "relative",
         transform: "translateX(-3rem)"
     },
+    grow: {
+        transformOrigin: "100%, 0"
+    },
     selected: {
-        position: "relative",
         zIndex: theme.zIndex.appBar
     },
     backdrop: {
@@ -46,51 +50,25 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-
-function Abstract(props) {
+const EditButton = connect((state, ownProps) => {
+    let enableHover = Boolean(
+            (ownProps.selected ||
+                !(state.contentState.selected ||
+                    state.contentState.hoverDisabled[ownProps.id]))
+    )
+    return {
+        k: ownProps.editVisible && enableHover ? (ownProps.selected ? 2 : 1) : 0
+    }
+},
+{
+    deleteComp: contActions.deleteComp,
+    deleteChildren: contActions.deleteChildren
+}
+)(props => {
+    const theme = useTheme();
     const classes = useStyles();
-    const [editVisible, setEditVisible] = React.useState(false);
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const [deleteMounted, setDeleteMounted] = React.useState(false);
-    const buttonTimeout = 250;
-    React.useEffect(() => {
-        setAnchorEl(props.nodeRef.current);
-    }, [])
-
-    const buttons = [
-        {
-            icon: <EditIcon />,
-            growProps: {
-                in: editVisible && !props.hoverDisabled && !props.selected,
-                style: {
-                    transformOrigin: "100% 0",
-                    position: "absolute"
-                }
-            }
-        },
-        {
-            icon: <DeleteIcon />,
-            growProps: {
-                in: editVisible && !props.hoverDisabled && props.selected,
-                style: {
-                    transformOrigin: "100% 0",
-                    position: "absolute"
-                },
-            }
-        }
-    ]
-
-
-    const editHoverProps = props.editing ? {
-        onMouseEnter: () => {
-            setEditVisible(true);
-            props.disableParent(props.id);
-        },
-        onMouseLeave: () => {
-            setEditVisible(false);
-            props.enableParent(props.id);
-        }
-    } : {};
+    const icons = [null, <EditIcon />, <DeleteIcon />]
+    const buttonTimeout = theme.transitions.duration.short;
 
     const handleSelect = () => {
         props.setSelected(props.id);
@@ -105,12 +83,57 @@ function Abstract(props) {
         }
     }
 
-    const handleBackdropClick = () => {
-        setEditVisible(false);
-        props.setSelected('');
-    }
+    return (
+        <Box className={classes.buttonBox} {...props.editHoverProps}>
+            <SwitchTransition>
+                <Grow
+                    key={props.k}
+                    style={{ transformOrigin: 'top right' }}
+                    timeout={props.k && buttonTimeout}
+                    unmountOnExit
+                >
+                    <Button
+                        variant="contained"
+                        size="small"
+                        className={clsx(
+                            {
+                                [classes.none]: props.k === 0,
+                                [classes.button]: props.k > 0,
+                                [classes.edit]: props.k === 1,
+                                [classes.delete]: props.k === 2,
+                                
+                            }
+                        )}                                        
+                        onClick={props.k === 2 ? handleDelete : handleSelect}
+                    >
+                        {icons[props.k]}
+                    </Button>
+                </Grow>
+            </SwitchTransition>
+        </Box>
+    )
+})
 
-        
+
+function Abstract(props) {
+    const classes = useStyles();
+    const [editVisible, setEditVisible] = React.useState(false);
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    
+    React.useEffect(() => {
+        setAnchorEl(props.nodeRef.current);
+    }, [])
+
+    const editHoverProps = props.editing ? {
+        onMouseEnter: () => {
+            setEditVisible(true);
+            props.disableParent(props.id);
+        },
+        onMouseLeave: () => {
+            setEditVisible(false);
+            props.enableParent(props.id);
+        }
+    } : {};
 
     return (
         <>
@@ -119,48 +142,20 @@ function Abstract(props) {
                 className={classes.popper}
                 anchorEl={anchorEl}
                 placement="right-start"
-                transition
-                {...editHoverProps}
-                >
-                    <Box className={classes.buttonBox} >
-                        {buttons.map((b,i) => (
-                            <Grow
-                                {...b.growProps}
-                                key={i}
-                                timeout={buttonTimeout}
-                                unmountOnExit
-                            >
-                                {/* <SwitchTransition>
-                                    <Grow
-                                        key={props.selected}
-                                        in={editVisible && !props.hoverDisabled}
-                                        style={{transformOrigin: "100% 0"}}
-                                        timeout={buttonTimeout}
-                                    > */}
-                                        <Button
-                                            variant="contained"
-                                            size="small"
-                                            className={clsx(
-                                                classes.button,
-                                                {
-                                                    [classes.delete]: props.selected,
-                                                    [classes.edit]: !props.selected
-                                                }
-                                            )}                                        
-                                            onClick={props.selected ? handleDelete : handleSelect}
-                                        >
-                                            {b.icon}
-                                        </Button>
-                                    {/* </Grow>
-                                </SwitchTransition> */}
-                            </Grow>
-                        ))}
-                    </Box>
+            >
+                <EditButton
+                    id={props.id}
+                    editVisible={editVisible}
+                    setSelected={props.setSelected}
+                    enableParent={props.enableParent}
+                    selected={props.selected}
+                    editHoverProps={editHoverProps}
+                />
             </Popper>                    
-            <Backdrop open={props.selected} onClick={handleBackdropClick} className={classes.backdrop} {...editHoverProps}/>
+            <Backdrop open={props.selected} onClick={() => props.setSelected('')} className={classes.backdrop} {...editHoverProps}/>
             {props.children({
                 editHoverProps,
-                selectedClass: clsx({[classes.selected]: props.editing && props.selected})
+                selectedClass: clsx({[classes.selected]: props.selected})
             })}
         </>
     )
@@ -170,20 +165,19 @@ function Abstract(props) {
 
 Abstract.propTypes = {
     id: PropTypes.string.isRequired,
+    nodeRef: PropTypes.object,
     selected: PropTypes.bool.isRequired,
     editing: PropTypes.bool.isRequired,
-    setSelected: PropTypes.func.isRequired
+    setSelected: PropTypes.func.isRequired,
+    disableParent: PropTypes.func.isRequired,
+    enableParent: PropTypes.func.isRequired,
+    deleteComp: PropTypes.func.isRequired,
+    deleteChildren: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state, ownProps) => ({
     editing: state.contentState.editing,
     selected: state.contentState.selected === ownProps.id,
-    hoverDisabled: Boolean(
-        !state.contentState.editing ||
-        (state.contentState.selected !== ownProps.id &&
-            (state.contentState.selected ||
-                state.contentState.hoverDisabled[ownProps.id]))
-    )
 })
 
 export default connect(mapStateToProps, {
@@ -192,6 +186,5 @@ export default connect(mapStateToProps, {
     enableParent: contActions.enableParent,
     deleteComp: contActions.deleteComp,
     deleteChildren: contActions.deleteChildren,
-    setInner: contActions.setInner
 })(Abstract);
 

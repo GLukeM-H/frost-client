@@ -11,7 +11,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import IconButton from '@material-ui/core/IconButton';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
@@ -38,11 +38,11 @@ const useStyles = makeStyles(theme => ({
         padding: theme.spacing(0, 1),
         // necessary for content to be below app bar
         ...theme.mixins.toolbar,
-        justifyContent: 'flex-start'
+        justifyContent: 'flex-end'
     },
     drawerPaper: {
         ...theme.mixins.navBackground,
-        width: "300px"
+        ...theme.mixins.drawer
     },
     collapse: {
         backgroundColor: theme.palette.neutral.main,
@@ -64,7 +64,7 @@ function ComponentView(props) {
             <List>
                 <ListItem>
                     <Breadcrumbs aria-label="breadcrumb">
-                        <Typography color="textPrimary">Component</Typography>
+                        <Typography color="textPrimary" variant="h6">Component</Typography>
                     </Breadcrumbs>            
                 </ListItem>    
             </List>
@@ -134,10 +134,16 @@ function ToolsDrawer(props) {
 
 
     return (
-        <Drawer className={classes.drawer} classes={{paper: classes.drawerPaper}} anchor="right" open={props.toolsOpen} variant="persistent">
+        <Drawer
+            className={classes.drawer}
+            classes={{paper: classes.drawerPaper}}
+            anchor="left"
+            open={props.toolsOpen}
+            variant="persistent"
+        >
             <div className={classes.drawerHeader}>
                 <IconButton onClick={handleClose}>
-                    <ChevronRightIcon />
+                    <ChevronLeftIcon />
                 </IconButton>
             </div>
             <Divider />

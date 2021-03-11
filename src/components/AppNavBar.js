@@ -16,40 +16,63 @@ import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Divider from '@material-ui/core/Divider';
+import clsx from 'clsx';
 
 /*~~~~~ Styles ~~~~~*/
-const useStyles = makeStyles(theme => ({
-    appNav: {
-      flexGrow: 1,
-      color: theme.palette.primary.dark,
-      ...theme.mixins.navBackground
-    //   backdropFilter: "blur(20px)",
-    //   backgroundColor: theme.palette.neutral.translucentLight
-    },
-    menuButton: {
-      marginRight: theme.spacing(2),
-      outline: "0px !important"
-    },
-    title: {
-      flexGrow: 1,
-      textAlign: "start"
-    },
-    userMenu: {
-        color: theme.palette.primary.dark,
-        outline: "0px !important",
-        textTransform: "capitalize",
-        fontSize: "1rem"
-    },
-    userPopper: {
-        backgroundColor: "ghostwhite"
+const useStyles = makeStyles(theme => {
+    const smBreakpoint = theme.breakpoints.up('sm');
+    const drawer = theme.mixins.drawer;
+    const transitions = theme.transitions;
+    const palette = theme.palette;
+    return {
+        appNav: {
+            flexGrow: 1,
+            color: palette.primary.dark,
+            ...theme.mixins.navBackground
+        },
+        // appBar: {
+        //     transition: transitions.create(['margin', 'width'], {
+        //         easing: transitions.easing.sharp,
+        //         duration: transitions.duration.leavingScreen,
+        //     })
+        // },
+        // appBarShift: {
+        //     width: `calc(100% - ${drawer[smBreakpoint].width}px)`,
+        //     marginLeft: drawer[smBreakpoint].width,
+        //     transition: transitions.create(['margin', 'width'], {
+        //         easing: transitions.easing.easeOut,
+        //         duration: transitions.duration.enteringScreen,
+        //     })
+        // },
+        menuButton: {
+        marginRight: theme.spacing(2),
+        outline: "0px !important"
+        },
+        title: {
+        flexGrow: 1,
+        textAlign: "start"
+        },
+        userMenu: {
+            color: palette.primary.dark,
+            outline: "0px !important",
+            textTransform: "capitalize",
+            fontSize: "1rem"
+        },
+        userPopper: {
+            backgroundColor: palette.neutral.light
+        }
     }
-}));
+});
 
 /*~~~~~ Components ~~~~~*/
-const UserMenu = connect(null, {
+const UserMenu = connect(state => ({
+    editing: state.contentState.editing,
+}),
+{
     toggleEditing: contActions.toggleEditing,
     toggleTools: navActions.toggleTools
-})((props) => {
+})(props => {
     const style = useStyles();
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef(null);
@@ -80,7 +103,9 @@ const UserMenu = connect(null, {
     }, [open]);
   
     return (
-        <>
+        <>  {props.editing && (
+                <Typography component="i">Editing</Typography>
+            )}
             <Button
                 ref={anchorRef}
                 aria-controls={open ? 'menu-list-grow' : undefined}
@@ -103,7 +128,16 @@ const UserMenu = connect(null, {
                                     <MenuItem onClick={handleClose}>Profile</MenuItem>
                                     <MenuItem onClick={handleClose}>My account</MenuItem>
                                     <MenuItem onClick={handleClose}>Logout</MenuItem>
-                                    <MenuItem onClick={handleEditing}>Edit Page</MenuItem>
+                                    <Divider />
+                                    {props.editing ? [
+                                            <MenuItem key={0} onClick={handleEditing}>
+                                                <Typography color="textPrimary">Save and Publish</Typography>
+                                            </MenuItem>,
+                                            <MenuItem key={1} onClick={handleEditing}>
+                                                <Typography color="textSecondary">Discard Changes</Typography>
+                                            </MenuItem>
+                                        ] : (<MenuItem onClick={handleEditing}>Edit Page</MenuItem>)
+                                    }
                                 </MenuList>
                             </ClickAwayListener>
                         </Paper>
@@ -115,16 +149,23 @@ const UserMenu = connect(null, {
 })
 
 function AppNavBar(props) {
-    const style = useStyles();
+    const classes = useStyles();
 
     return (
-        <div className={style.appNav}>
-            <AppBar position="static" color="transparent">
+        <div className={classes.appNav}>
+            <AppBar
+                position="static"
+                color="transparent"
+                // className={clsx(
+                //     classes.appBar,
+                //     {[classes.appBarShift]: props.toolsOpen}
+                // )}
+            >
                 <Toolbar>
-                    <IconButton className={style.menuButton} edge="start" color="inherit" aria-label="menu">
+                    <IconButton className={classes.menuButton} edge="start" color="inherit">
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" className={style.title}>
+                    <Typography variant="h5" className={classes.title}>
                         Spades
                     </Typography>
                     <UserMenu />
@@ -136,18 +177,15 @@ function AppNavBar(props) {
 
 AppNavBar.propTypes = {
     toggleNav: PropTypes.func.isRequired,
-    toggleTools: PropTypes.func.isRequired,
-    toggleEditing: PropTypes.func.isRequired,
     navIsOpen: PropTypes.bool.isRequired
 }
 
 const mapStateToProps = (state) => ({
-    navIsOpen: state.navState.navIsOpen
+    navIsOpen: state.navState.navIsOpen,
+    toolsOpen: state.navState.toolsOpen
 })
 
 
  export default connect(mapStateToProps, {
-     toggleNav: navActions.toggleNav,
-     toggleTools: navActions.toggleTools,
-     toggleEditing: contActions.toggleEditing
+     toggleNav: navActions.toggleNav
 })(AppNavBar);

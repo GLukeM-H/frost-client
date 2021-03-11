@@ -24,7 +24,8 @@ const useStyles = makeStyles(theme => ({
     button: {
         border: `1px solid ${theme.palette.primary.light}`,
         backgroundColor: theme.palette.neutral.light,
-        width: "3rem"
+        width: "3rem",
+        height: "2rem"
     },
     edit: {
         color: theme.palette.primary.main,
@@ -46,7 +47,14 @@ const useStyles = makeStyles(theme => ({
     },
     backdrop: {
         zIndex: theme.zIndex.appBar - 1,
-        width: "calc(100% - 300px / 2)"
+    },
+    backdropDrawerLeft: {
+        [theme.breakpoints.up('xs')]: {
+            transform: "0"
+          },
+        [theme.breakpoints.up('sm')]: {
+            transform: `translateX(calc(${theme.mixins.drawer[theme.breakpoints.up('sm')].width} / 2))`
+          }
     }
 }))
 
@@ -152,7 +160,14 @@ function Abstract(props) {
                     editHoverProps={editHoverProps}
                 />
             </Popper>                    
-            <Backdrop open={props.selected} onClick={() => props.setSelected('')} className={classes.backdrop} {...editHoverProps}/>
+            <Backdrop
+                open={props.selected}
+                onClick={() => props.setSelected('')}
+                className={clsx(
+                    classes.backdrop,
+                    {[classes.backdropDrawerLeft]: props.toolsOpen})}
+                {...editHoverProps}
+            />
             {props.children({
                 editHoverProps,
                 selectedClass: clsx({[classes.selected]: props.selected})
@@ -173,11 +188,13 @@ Abstract.propTypes = {
     enableParent: PropTypes.func.isRequired,
     deleteComp: PropTypes.func.isRequired,
     deleteChildren: PropTypes.func.isRequired,
+    toolsOpen: PropTypes.bool.isRequired
 }
 
 const mapStateToProps = (state, ownProps) => ({
     editing: state.contentState.editing,
     selected: state.contentState.selected === ownProps.id,
+    toolsOpen: state.navState.toolsOpen
 })
 
 export default connect(mapStateToProps, {

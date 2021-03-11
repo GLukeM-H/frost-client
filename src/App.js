@@ -25,6 +25,14 @@ const theme = createMuiTheme({
     }
   },
   mixins: {
+    drawer: {
+      ["@media (min-width:0px)"] : {
+        width: "100vw"
+      },
+      ["@media (min-width:600px)"] : {
+        width: "20rem"
+      }
+    },
     navBackground: {
       ...(CSS.supports('backdrop-filter', 'blur(20px)') ? {
         backdropFilter: "blur(20px)",
@@ -40,7 +48,7 @@ const theme = createMuiTheme({
     MuiButton: {
       root: {
         minWidth: "20px",
-      }
+      },
     },
   }
 });

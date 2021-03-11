@@ -110,9 +110,15 @@ function GridView(props) {
                     <Breadcrumbs>
                         {props.breadcrumbs.map(([id, comp]) => (
                             id === props.selected ? (
-                                <Typography key={id} color="textPrimary">{comp}</Typography>
+                                <Typography key={id} color="textPrimary" variant="h6">{comp}</Typography>
                             ) : (
-                                <Link key={id} className={classes.link} onClick={() => props.setSelected(id)}>{comp}</Link>
+                                <Link
+                                    key={id}
+                                    className={classes.link}
+                                    onClick={() => props.setSelected(id)}
+                                >
+                                    {comp}
+                                </Link>
                             )
                         ))}
                     </Breadcrumbs>

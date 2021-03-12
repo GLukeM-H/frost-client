@@ -19,7 +19,8 @@ const useStyles = makeStyles(theme => ({
         position: "relative",
     },
     popper: {
-        width: 0
+        width: 0,
+        direction: "rtl"
     },
     button: {
         border: `1px solid ${theme.palette.primary.light}`,
@@ -35,9 +36,6 @@ const useStyles = makeStyles(theme => ({
     },
     none: {
         display: "none"
-    },
-    buttonBox: {
-        transform: "translateX(-3rem)"
     },
     grow: {
         transformOrigin: "100%, 0"
@@ -92,7 +90,7 @@ const EditButton = connect((state, ownProps) => {
     }
 
     return (
-        <Box className={classes.buttonBox} {...props.editHoverProps}>
+        <Box {...props.editHoverProps}>
             <SwitchTransition>
                 <Grow
                     key={props.k}
@@ -150,6 +148,11 @@ function Abstract(props) {
                 className={classes.popper}
                 anchorEl={anchorEl}
                 placement="right-start"
+                modifiers={{
+                    flip: {
+                        enabled: false
+                    }
+                }}
             >
                 <EditButton
                     id={props.id}

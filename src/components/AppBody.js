@@ -18,10 +18,14 @@ const useStyles = makeStyles(theme => {
   const drawer = theme.mixins.drawer;
   const smBreakpoint = theme.breakpoints.up('sm');
   const xsBreakpoint = theme.breakpoints.up('xs');
+  const mdBreakpoint = theme.breakpoints.up('md');
   return { 
     defaultBody: {
-      transform: "translateX(0px)",
-      transition: `transform ${theme.transitions.duration.standard}ms cubic-bezier(.6,.01,.51,1.01)`,
+      display: "flex",
+      flexWrap: "wrap",
+      justifyContent: "center",
+      paddingLeft: "0",
+      transition: `padding-left ${theme.transitions.duration.standard}ms cubic-bezier(.6,.01,.51,1.01)`,
       paddingTop: "1rem",
       minHeight: `calc(100vh - ${toolbar.minHeight}px)`,
       [`${xsBreakpoint} and (orientation: landscape)`]: {
@@ -29,41 +33,53 @@ const useStyles = makeStyles(theme => {
           100vh - ${toolbar[`${xsBreakpoint} and (orientation: landscape)`].minHeight}px
         )`
       },
+      [mdBreakpoint]: {
+        flexWrap: "nowrap"
+      },
       [smBreakpoint]: {
-        minHeight: `calc(100vh - ${toolbar[smBreakpoint].minHeight}px)`
+        minHeight: `calc(100vh - ${toolbar[smBreakpoint].minHeight}px)`,
       },
     },
     enteringBody: {
-      [theme.breakpoints.up('xs')]: {
-        transform: "translateX(0)"
+      [xsBreakpoint]: {
+        width: "0"
       },
-      [smBreakpoint]: {
-        transform: `translateX(calc(${drawer[smBreakpoint].width} / 2))`
+      [mdBreakpoint]: {
+        width: `calc(${drawer[smBreakpoint].width})`
       }
     },
     enteredBody: {
-      [theme.breakpoints.up('xs')]: {
-        transform: "translateX(0)"
+      [xsBreakpoint]: {
+        width: "0"
       },
-      [smBreakpoint]: {
-        transform: `translateX(calc(${drawer[smBreakpoint].width} / 2))`
+      [mdBreakpoint]: {
+        width: `calc(${drawer[smBreakpoint].width})`
       }
     },
     exitingBody: {
-      transform: "translateX(0vw)"
+      width: "0"
     },
     exitedBody: {
-      transfrom: "translateX(0vw)"
+      width: "0"
+    },
+    grow: {
+      flexShrink: 0,
+      backgroundColor: "#0000ff",
+      transition: `width ${theme.transitions.duration.standard}ms cubic-bezier(.6,.01,.51,1.01)`,
     },
     leftItem: {
-      flexGrow: 1
+      backgroundColor: "#00ff00",
+      flexShrink: 1,
+      overflowX: "hidden"
     },
     middleItem: {
-      outline: "1px dashed black",
-      height: "100%"
+      height: "100%",
+      flexShrink: 0
     },
     rightItem: {
-      flexGrow: 1
+      backgroundColor: "#ff0000",
+      flexShrink: 1,
+      overflowX: "hidden"
     },
     backdrop: {
       zIndex: theme.zIndex.drawer + 1,
@@ -103,14 +119,17 @@ function AppBody(props) {
       <>
         <Transition in={props.toolsOpen} timeout={theme.transitions.duration.standard}>
           {state => (
-            <Grid container className={clsx(classes.defaultBody, classes[`${state}Body`])}>
+            <Grid container className={clsx(classes.defaultBody)}>
+              <Grid item className={clsx(classes.grow, classes[`${state}Body`])} />
               <Grid item className={classes.leftItem} md={2} xs={12}>left</Grid>
+              <Grid item className={classes.middleItem} md={8} xs={12}>
                 <Fade in={!props.loading} timeout={theme.transitions.duration.standard}>
-                  <Grid item className={classes.middleItem} md={8} xs={12}>
+                  <div>
                       {React.createElement((comp[props.rootComp.comp] || props.rootComp.comp), {id: ROOT_COMP})}
-                  </Grid>
+                  </div>
                 </Fade>
-              <Grid item className={classes.rightItem} >right</Grid>
+              </Grid>
+              <Grid item className={classes.rightItem} md={2} xs={12}>right</Grid>
             </Grid>
           )}
         </Transition>

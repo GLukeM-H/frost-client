@@ -47,7 +47,7 @@ const theme = createMuiTheme({
   overrides: {
     MuiButton: {
       root: {
-        minWidth: "20px",
+        minWidth: "2rem",
       },
     },
   }

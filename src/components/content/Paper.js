@@ -34,8 +34,9 @@ function PaperComp(props) {
 
     return (
             <Abstract nodeRef={ref} id={props.id}>
-                {({editHoverProps, selectedClass}) => (
+                {({editHoverProps, selectedClass, editButton}) => (
                     <Paper ref={ref} className={clsx(classes.default, selectedClass)} {...editHoverProps}>
+                        {editButton}
                         {props.inner.map((paragraph, i) => (
                             <Typography key={i} className={classes.typography} component="p">
                                 {paragraph ? paragraph : <br />}           

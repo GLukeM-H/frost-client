@@ -26,7 +26,7 @@ const GridComp = props => {
 
     return (
         <Abstract nodeRef={ref} id={props.id}>
-            {({editHoverProps, selectedClass}) => (
+            {({editHoverProps, selectedClass, editButton}) => (
                 <Grid
                     ref={ref}
                     className={clsx(classes.default, selectedClass, {
@@ -37,6 +37,7 @@ const GridComp = props => {
                     {...props.stateProps}
                     {...editHoverProps}
                 >
+                    {editButton}
                     {props.children.map(([id, compName]) => React.createElement(Comp[compName], {id, key: id}))}                
                 </Grid>
             )}

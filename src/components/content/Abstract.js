@@ -18,9 +18,11 @@ const useStyles = makeStyles(theme => ({
     root: {
         position: "relative",
     },
-    popper: {
-        width: 0,
-        direction: "rtl"
+    buttonBox: {
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        zIndex: theme.zIndex.appBar + 1
     },
     button: {
         border: `1px solid ${theme.palette.primary.light}`,
@@ -90,7 +92,7 @@ const EditButton = connect((state, ownProps) => {
     }
 
     return (
-        <Box {...props.editHoverProps}>
+        <Box className={classes.buttonBox}>
             <SwitchTransition>
                 <Grow
                     key={props.k}
@@ -143,26 +145,6 @@ function Abstract(props) {
 
     return (
         <>
-            <Popper
-                open={props.editing}
-                className={classes.popper}
-                anchorEl={anchorEl}
-                placement="right-start"
-                modifiers={{
-                    flip: {
-                        enabled: false
-                    }
-                }}
-            >
-                <EditButton
-                    id={props.id}
-                    editVisible={editVisible}
-                    setSelected={props.setSelected}
-                    enableParent={props.enableParent}
-                    selected={props.selected}
-                    editHoverProps={editHoverProps}
-                />
-            </Popper>                    
             <Backdrop
                 open={props.selected}
                 onClick={() => props.setSelected('')}
@@ -173,7 +155,17 @@ function Abstract(props) {
             />
             {props.children({
                 editHoverProps,
-                selectedClass: clsx({[classes.selected]: props.selected})
+                selectedClass: clsx({[classes.selected]: props.selected}),
+                editButton: props.editing && (
+                    <EditButton
+                        id={props.id}
+                        editVisible={editVisible}
+                        setSelected={props.setSelected}
+                        enableParent={props.enableParent}
+                        selected={props.selected}
+                        editHoverProps={editHoverProps}
+                    />
+                )
             })}
         </>
     )

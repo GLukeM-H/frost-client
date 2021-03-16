@@ -5,12 +5,20 @@ import axios from "axios";
 export function getBody() {
 	return (dispatch) => {
 		dispatch(setBodyLoading());
-		axios.get("/api/pages").then((res) =>
-			dispatch({
-				type: "BODY/GET",
-				payload: res.data,
+		axios
+			.get("/graphql", {
+				params: {
+					query: `{
+						user(username:"Luke")
+					}`,
+				},
 			})
-		);
+			.then((res) => {
+				dispatch({
+					type: "BODY/GET",
+					payload: res.data.data.user,
+				});
+			});
 	};
 }
 
@@ -22,14 +30,12 @@ export function saveBody(contentComp, contentCompId) {
 				if (contentCompId) {
 					axios.delete(`api/pages/${contentCompId}`).catch((e) => {
 						console.log(e);
-						alert(e);
 					});
 				}
 				dispatch({ type: "BODY/SAVE", payload: res.data._id });
 			})
 			.catch((e) => {
 				console.log(e);
-				alert(e);
 			});
 	};
 }

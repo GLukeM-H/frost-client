@@ -13,9 +13,9 @@ import { ROOT_COMP, INIT_STATE } from "../constants/contReducerConstants";
 const contentReducer = produce((draft, action) => {
 	switch (action.type) {
 		case "BODY/GET":
-			if (action.payload.length) {
-				draft.contentComp = action.payload[0].contentComp;
-				draft.contentCompId = action.payload[0]._id;
+			if (action.payload) {
+				draft.contentComp = action.payload.contentComp;
+				draft.contentCompId = action.payload._id;
 			} else {
 				newComponent(draft, "Grid", ROOT_COMP, null, { container: true });
 			}

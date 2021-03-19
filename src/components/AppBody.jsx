@@ -9,7 +9,6 @@ import Backdrop from "@material-ui/core/Backdrop";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Fade from "@material-ui/core/Fade";
 import { contActions } from "../actions";
-import { ROOT_COMP } from "../constants/contReducerConstants";
 import * as comp from "./content";
 
 const useStyles = makeStyles((theme) => {
@@ -28,11 +27,9 @@ const useStyles = makeStyles((theme) => {
 			paddingTop: "1rem",
 			minHeight: `calc(100vh - ${toolbar.minHeight}px)`,
 			[`${xsBreakpoint} and (orientation: landscape)`]: {
-				minHeight: `calc(
-          100vh - ${
-						toolbar[`${xsBreakpoint} and (orientation: landscape)`].minHeight
-					}px
-        )`,
+				minHeight: `calc(100vh - ${
+					toolbar[`${xsBreakpoint} and (orientation: landscape)`].minHeight
+				}px)`,
 			},
 			[mdBreakpoint]: {
 				flexWrap: "nowrap",
@@ -109,8 +106,8 @@ function LoadingBackdrop(props) {
 }
 
 LoadingBackdrop.propTypes = {
-	loading: PropTypes.bool.isRequired
-}
+	loading: PropTypes.bool.isRequired,
+};
 
 function AppBody(props) {
 	const theme = useTheme();
@@ -143,7 +140,7 @@ function AppBody(props) {
 								<div>
 									{React.createElement(
 										comp[props.rootComp.comp] || props.rootComp.comp,
-										{ id: ROOT_COMP }
+										{ id: props.rootComp._id }
 									)}
 								</div>
 							</Fade>
@@ -167,7 +164,7 @@ AppBody.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-	rootComp: state.contentState.contentComp[ROOT_COMP],
+	rootComp: state.contentState.contentComp[state.contentState.visageId],
 	toolsOpen: state.navState.toolsOpen,
 	loading: state.contentState.loading,
 });

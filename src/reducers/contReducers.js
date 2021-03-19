@@ -1,5 +1,5 @@
 import { produce } from "immer";
-import { v4 as uuid } from "uuid";
+import ObjectID from "bson-objectid";
 import {
 	insertComponent,
 	deleteComponent,
@@ -14,22 +14,22 @@ const contentReducer = produce((draft, action) => {
 	switch (action.type) {
 		case "BODY/GET":
 			if (action.payload) {
-				draft.contentComp = action.payload.contentComp;
-				draft.contentCompId = action.payload._id;
+				draft.contentComp = action.payload.content;
+				draft.visageId = action.payload._id;
 			} else {
 				newComponent(draft, "Grid", ROOT_COMP, null, { container: true });
 			}
 			draft.loading = false;
 			break;
 		case "BODY/SAVE":
-			draft.contentCompId = action.payload;
+			draft.visageId = action.payload._id;
 			draft.savedChanges = true;
 			break;
 		case "BODY/LOADING":
 			draft.loading = true;
 			break;
 		case "EDIT/INSERT":
-			insertComponent(draft, uuid(), ...action.payload);
+			insertComponent(draft, ObjectID().toString(), ...action.payload);
 			draft.savedChanges = false;
 			break;
 		case "EDIT/DELETE":

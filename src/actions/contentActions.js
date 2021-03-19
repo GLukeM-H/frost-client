@@ -5,37 +5,46 @@ import axios from "axios";
 export function getBody() {
 	return (dispatch) => {
 		dispatch(setBodyLoading());
+		const query = `{
+			users(filter:{ username: "Frost" }) {
+				visage {
+					_id
+					content
+				}
+			}
+		}`;
+
 		axios
-			.get("/graphql", {
-				params: {
-					query: `{
-						user(username:"Luke")
-					}`,
-				},
-			})
+			.post("/graphql", { query })
 			.then((res) => {
 				dispatch({
 					type: "BODY/GET",
-					payload: res.data.data.user,
+					payload: res.data.data.users[0].visage,
 				});
-			});
+			})
+			.catch((err) => console.log(err));
 	};
 }
 
-export function saveBody(contentComp, contentCompId) {
+export function saveBody(content, visageId) {
 	return (dispatch) => {
+		const query = `mutation updateVisage($visageId: ID!, $content: JSONObject){
+			updateVisage(id: $visageId, update:{ content: $content }) {
+				_id
+			}
+		}`;
+		const variables = { visageId, content };
+
 		axios
-			.post("api/pages", { contentComp, creator: "Luke" })
+			.post("/graphql", { query, variables })
 			.then((res) => {
-				if (contentCompId) {
-					axios.delete(`api/pages/${contentCompId}`).catch((e) => {
-						console.log(e);
-					});
-				}
-				dispatch({ type: "BODY/SAVE", payload: res.data._id });
+				dispatch({
+					type: "BODY/SAVE",
+					payload: res.data.data.updateVisage,
+				});
 			})
-			.catch((e) => {
-				console.log(e);
+			.catch((err) => {
+				console.log(err);
 			});
 	};
 }

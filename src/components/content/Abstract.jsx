@@ -70,6 +70,7 @@ const EditButton = connect(
 		);
 
 		return {
+			isRootComp: state.contentState.visageId === ownProps.id,
 			k: ownProps.editVisible && enableHover ? (ownProps.selected ? 2 : 1) : 0,
 		};
 	},
@@ -88,7 +89,7 @@ const EditButton = connect(
 	};
 
 	const handleDelete = () => {
-		if (props.id === ROOT_COMP) {
+		if (props.isRootComp) {
 			props.deleteChildren(props.id);
 		} else {
 			props.enableParent(props.id);

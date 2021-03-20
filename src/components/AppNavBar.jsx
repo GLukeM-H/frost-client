@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -74,9 +74,25 @@ const UserMenu = connect(
 		toggleTools: navActions.toggleTools,
 	}
 )((props) => {
+	const theme = useTheme();
 	const style = useStyles();
 	const [open, setOpen] = React.useState(false);
+	const [editVisible, setEditVisible] = React.useState(false);
 	const anchorRef = React.useRef(null);
+
+	React.useEffect(() => {
+		if (props.editing) {
+			setTimeout(
+				() => setEditVisible(true),
+				theme.transitions.duration.shortest
+			);
+		} else {
+			setTimeout(
+				() => setEditVisible(false),
+				theme.transitions.duration.shortest
+			);
+		}
+	}, [props.editing]);
 
 	const handleToggle = () => {
 		setOpen((prevState) => !prevState);
@@ -105,7 +121,6 @@ const UserMenu = connect(
 
 	return (
 		<>
-			{" "}
 			{props.editing && <Typography component="i">Editing</Typography>}
 			<Button
 				ref={anchorRef}
@@ -134,21 +149,16 @@ const UserMenu = connect(
 									<MenuItem onClick={handleClose}>My account</MenuItem>
 									<MenuItem onClick={handleClose}>Logout</MenuItem>
 									<Divider />
-									{props.editing ? (
-										[
-											<MenuItem key={0} onClick={handleEditing}>
-												<Typography color="textPrimary">
-													Save and Publish
-												</Typography>
-											</MenuItem>,
-											<MenuItem key={1} onClick={handleEditing}>
-												<Typography color="textSecondary">
-													Discard Changes
-												</Typography>
-											</MenuItem>,
-										]
+									{editVisible ? (
+										<MenuItem onClick={handleEditing}>
+											<Typography color="textSecondary">
+												Done Editing
+											</Typography>
+										</MenuItem>
 									) : (
-										<MenuItem onClick={handleEditing}>Edit Page</MenuItem>
+										<MenuItem onClick={handleEditing}>
+											<Typography color="textSecondary">Edit Visage</Typography>
+										</MenuItem>
 									)}
 								</MenuList>
 							</ClickAwayListener>

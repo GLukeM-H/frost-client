@@ -151,13 +151,20 @@ function ToolsDrawer(props) {
 			</div>
 			<Divider />
 			{view}
-			<Divider />
+			<Divider style={{ marginTop: "auto" }} />
 			<Button
 				onClick={handleSave}
 				color={props.savedChanges ? "primary" : "secondary"}
+				size="large"
 			>
-				<PublishIcon />
-				&ensp;Save
+				{props.savedChanges ? (
+					"Saved"
+				) : (
+					<>
+						<PublishIcon />
+						&ensp;Save
+					</>
+				)}
 			</Button>
 		</Drawer>
 	);

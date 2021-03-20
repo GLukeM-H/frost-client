@@ -38,11 +38,11 @@ const useStyles = makeStyles((theme) => ({
 		width: "300px",
 	},
 	collapse: {
-		backgroundColor: theme.palette.neutral.main,
+		backgroundColor: theme.palette.translucent.focus,
 		padding: theme.spacing(2),
 	},
 	textArea: {
-		width: "100%",
+		maxWidth: "100%",
 	},
 	sizeCollapse: {
 		paddingTop: theme.spacing(3),
@@ -94,7 +94,7 @@ function PaperView(props) {
 						<TextareaAutosize
 							className={classes.textArea}
 							rowsMin={4}
-							placeholder="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repudiandae sint quibusdam doloremque quae hic vitae?"
+							placeholder="Add text here."
 							value={props.selectedInner}
 							onChange={(e) => setInner(e.target.value)}
 						/>

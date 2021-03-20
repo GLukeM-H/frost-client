@@ -11,7 +11,6 @@ import Grow from "@material-ui/core/Grow";
 import Box from "@material-ui/core/Box";
 import Backdrop from "@material-ui/core/Backdrop";
 import { contActions } from "../../actions";
-import { ROOT_COMP } from "../../constants/contReducerConstants";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -46,17 +45,14 @@ const useStyles = makeStyles((theme) => ({
 	},
 	backdrop: {
 		zIndex: theme.zIndex.appBar - 1,
-	},
-	backdropDrawerLeft: {
 		[theme.breakpoints.up("xs")]: {
-			transform: "0",
+			marginLeft: "0",
 		},
 		[theme.breakpoints.up("sm")]: {
-			transform: `translateX(calc(${
-				theme.mixins.drawer[theme.breakpoints.up("sm")].width
-			} / 2))`,
+			marginLeft: `${theme.mixins.drawer[theme.breakpoints.up("sm")].width}`,
 		},
 	},
+	backdropDrawerLeft: {},
 }));
 
 const EditButton = connect(
@@ -131,11 +127,11 @@ function Abstract(props) {
 
 	const editHoverProps = props.editing
 		? {
-				onMouseEnter: () => {
+				onMouseEnter() {
 					setEditVisible(true);
 					props.disableParent(props.id);
 				},
-				onMouseLeave: () => {
+				onMouseLeave() {
 					setEditVisible(false);
 					props.enableParent(props.id);
 				},

@@ -15,7 +15,11 @@ const userTheme = createMuiTheme({
 	palette: {
 		primary: {
 			main: "#486d99",
-			translucent: "rgba(72,109,153,0.7)",
+			translucent: {
+				main: "rgba(72,109,153,0.2)",
+				dark: "rgba(72,109,153,0.5)",
+				light: "rgba(72,109,153,0.075)",
+			},
 		},
 		secondary: {
 			main: "#8c4f5a",
@@ -23,18 +27,22 @@ const userTheme = createMuiTheme({
 		neutral: {
 			main: "#e5e5ec",
 			light: "#f8f8ff",
-			translucent: "rgba(229,229,236,0.7)",
-			translucentLight: "rgba(248,248,255,0.7)",
+		},
+		translucent: {
+			main: "rgba(0,0,0,0.2)",
+			hover: "rgba(0,0,0,0.04)",
+			focus: "rgba(0,0,0,0.08)",
 		},
 	},
 	mixins: {
 		drawer: {
-			// ["@media (min-width:0px)"] : {
-			width: "100vw",
-			// },
 			/* eslint-disable no-useless-computed-key */
+			["@media (min-width:0px)"]: {
+				width: "100vw",
+			},
 			["@media (min-width:600px)"]: {
 				width: "20rem",
+				height: "100vh",
 			},
 		},
 		navBackground: {

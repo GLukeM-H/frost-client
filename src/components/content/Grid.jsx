@@ -12,8 +12,8 @@ const useStyles = makeStyles(() => ({
 		backgroundColor: "inherit",
 		position: "relative",
 		display: "inline-flex",
-		minHeight: "20px",
-		minWidth: "20px",
+		minHeight: "2rem",
+		minWidth: "3rem",
 	},
 	selected: {
 		outline: "2px dashed lightblue",
@@ -22,7 +22,6 @@ const useStyles = makeStyles(() => ({
 
 const GridComp = (props) => {
 	const classes = useStyles();
-
 	return (
 		<Abstract id={props.id}>
 			{({ editHoverProps, selectedClass, editButton }) => (

@@ -1,4 +1,3 @@
 finish implementing cards
-hide password in environment variables
-fix user menu transition
 anchor tools drawer to bottom on xs breakpoint, left on md breakpoint
+finish implementing height options

@@ -3,42 +3,30 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import Link from "@material-ui/core/Link";
-import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
-import ExpandLess from "@material-ui/icons/ExpandLess";
-import ExpandMore from "@material-ui/icons/ExpandMore";
-import Paper from "@material-ui/core/Paper";
-import Collapse from "@material-ui/core/Collapse";
-import Slider from "@material-ui/core/Slider";
+import {
+	FormControl,
+	InputLabel,
+	Select,
+	Slider,
+	TextField,
+	List,
+	ListItem,
+	ListItemText,
+	MenuItem,
+	Breadcrumbs,
+	Link,
+	Typography,
+	Divider,
+	Paper,
+	Collapse,
+	Grid,
+} from "@material-ui/core";
+import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import { contActions } from "../../actions";
 
 const useStyles = makeStyles((theme) => ({
-	drawer: {
-		backgroundColor: "ghostwhite",
-		flexShrink: 0,
-		paddingRight: "10px",
-		paddingLeft: "10px",
-	},
-	drawerHeader: {
-		display: "flex",
-		alignItems: "center",
-		padding: theme.spacing(0, 1),
-		// necessary for content to be below app bar
-		...theme.mixins.toolbar,
-		justifyContent: "flex-start",
-	},
-	drawerPaper: {
-		backdropFilter: "blur(20px)",
-		backgroundColor: "transparent",
-		width: "300px",
-	},
 	collapse: {
-		backgroundColor: theme.palette.neutral.main,
+		backgroundColor: theme.palette.translucent.focus,
 		padding: theme.spacing(2),
 	},
 	textArea: {
@@ -52,15 +40,73 @@ const useStyles = makeStyles((theme) => ({
 	link: {
 		cursor: "pointer",
 	},
+	formControl: {
+		margin: theme.spacing(1),
+		width: "100%",
+	},
 }));
+
+// function parseHeight(str) {
+// 	return str.match(/\d+|\D+/g);
+// }
+/* eslint-disable react/prop-types */
+function HeightOptions(props) {
+	const classes = useStyles();
+	const [units, setUnits] = React.useState(props.height?.match(/\D+/g)[0]);
+	const [minValue, setMinValue] = React.useState(0);
+
+	switch (units) {
+		case "auto":
+			break;
+		default:
+			break;
+	}
+
+	return (
+		<ListItem>
+			<Grid container justify="space-around">
+				<Grid item xs={5}>
+					<FormControl className={classes.formControl}>
+						<TextField
+							label="Value"
+							type="number"
+							minValue={0}
+							InputLabelProps={{
+								shrink: true,
+							}}
+							disabled={units === "auto"}
+						/>
+					</FormControl>
+				</Grid>
+				<Grid item xs={5}>
+					<FormControl className={classes.formControl}>
+						<InputLabel id="unit-input-label">Units</InputLabel>
+						<Select
+							labelId="unit-input-label"
+							value={units}
+							onChange={(e) => setUnits(e.target.value)}
+						>
+							<MenuItem value="px">px</MenuItem>
+							<MenuItem value="rem">rem</MenuItem>
+							<MenuItem value="%">%</MenuItem>
+							<MenuItem value="auto">auto</MenuItem>
+						</Select>
+					</FormControl>
+				</Grid>
+			</Grid>
+		</ListItem>
+	);
+}
 
 function GridView(props) {
 	const classes = useStyles();
 	const [sizeOpen, setSizeOpen] = React.useState(false);
-	const [size, setSize] = React.useState(4);
-	const insertComp = (compName, compProps) =>
+	const insertComp = (compName, compProps) => {
 		props.insertComp(compName, props.selected, null, compProps);
-	const setProps = (compProps) => props.setProps(props.selected, compProps);
+	};
+	const setProps = (compProps) => {
+		props.setProps(props.selected, compProps);
+	};
 
 	React.useEffect(() => {
 		if (!(props.stateProps.container || props.hasChildren)) {
@@ -68,12 +114,8 @@ function GridView(props) {
 		}
 	}, [props.hasChildren]);
 
-	const handleSizeChange = (event) => {
-		setSize(Number(event.target.value));
-	};
-
 	const handleAddItem = () => {
-		insertComp("Grid", { item: true, container: true, xs: 4 });
+		insertComp("Grid", { item: true, container: true, xs: 12 });
 	};
 
 	const handleAddComp = (compName, compProps = {}) => {
@@ -124,10 +166,48 @@ function GridView(props) {
 			</List>
 			<Divider />
 			<List dense>
+				<HeightOptions height={props.stateProps.style?.height} />
 				{props.stateProps.container && (
 					<>
-						<ListItem key={0} button onClick={handleAddItem}>
+						<ListItem button onClick={handleAddItem}>
 							<ListItemText primary="Add Grid Item" />
+						</ListItem>
+						<ListItem>
+							<FormControl className={classes.formControl}>
+								<InputLabel id="align-items-input-label">
+									Align Items
+								</InputLabel>
+								<Select
+									labelId="align-items-input-label"
+									value={props.stateProps.alignItems}
+									onChange={(e) => setProps({ alignItems: e.target.value })}
+								>
+									<MenuItem value="stretch">Stretch</MenuItem>
+									<MenuItem value="center">Center</MenuItem>
+									<MenuItem value="flex-start">Start</MenuItem>
+									<MenuItem value="flex-end">End</MenuItem>
+									<MenuItem value="baseline">Baseline</MenuItem>
+								</Select>
+							</FormControl>
+						</ListItem>
+						<ListItem>
+							<FormControl className={classes.formControl}>
+								<InputLabel id="align-content-input-label">
+									Align Content
+								</InputLabel>
+								<Select
+									labelId="align-content-input-label"
+									value={props.stateProps.alignContent}
+									onChange={(e) => setProps({ alignContent: e.target.value })}
+								>
+									<MenuItem value="stretch">Stretch</MenuItem>
+									<MenuItem value="center">Center</MenuItem>
+									<MenuItem value="flex-start">Start</MenuItem>
+									<MenuItem value="flex-end">End</MenuItem>
+									<MenuItem value="space-between">Space Between</MenuItem>
+									<MenuItem value="space-around">Space Around</MenuItem>
+								</Select>
+							</FormControl>
 						</ListItem>
 					</>
 				)}

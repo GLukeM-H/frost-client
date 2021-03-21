@@ -3,24 +3,25 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
-import Drawer from "@material-ui/core/Drawer";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import IconButton from "@material-ui/core/IconButton";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import Link from "@material-ui/core/Link";
-import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
-import Button from "@material-ui/core/Button";
-import PublishIcon from "@material-ui/icons/Publish";
-import ExpandLess from "@material-ui/icons/ExpandLess";
-import ExpandMore from "@material-ui/icons/ExpandMore";
-import Paper from "@material-ui/core/Paper";
-import Collapse from "@material-ui/core/Collapse";
-import TextareaAutosize from "@material-ui/core/TextareaAutosize";
-import Slider from "@material-ui/core/Slider";
+import {
+	Drawer,
+	List,
+	ListItem,
+	ListItemText,
+	IconButton,
+	Breadcrumbs,
+	Typography,
+	Divider,
+	Button,
+	Box,
+	useMediaQuery,
+	useTheme,
+} from "@material-ui/core";
+import {
+	ChevronLeft as ChevronLeftIcon,
+	KeyboardArrowDown as KeyboardArrowDownIcon,
+	Publish as PublishIcon,
+} from "@material-ui/icons";
 import { navActions, contActions } from "../../actions";
 import GridView from "./GridView";
 import PaperView from "./PaperView";
@@ -31,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
 		paddingRight: "10px",
 		paddingLeft: "10px",
 	},
-	drawerHeader: {
+	leftButton: {
 		display: "flex",
 		alignItems: "center",
 		padding: theme.spacing(0, 1),
@@ -39,9 +40,32 @@ const useStyles = makeStyles((theme) => ({
 		...theme.mixins.toolbar,
 		justifyContent: "flex-end",
 	},
+	downButton: {
+		backgroundColor: theme.palette.neutral.main,
+		position: "absolute",
+		top: 0,
+		left: "50%",
+		transform: "translate(-50%, -50%)",
+		borderRadius: "50%",
+		zIndex: 1,
+	},
 	drawerPaper: {
 		...theme.mixins.navBackground,
 		...theme.mixins.drawer,
+		overflowY: "visible",
+	},
+	mainBox: {
+		/* eslint-disable no-useless-computed-key */
+		// ["& ::-webkit-scrollbar-track"]: {
+		// 	backgroundColor: "black",
+		// },
+		[theme.breakpoints.up("xs")]: {
+			overflowY: "scroll",
+		},
+		[theme.breakpoints.up("md")]: {
+			overflowY: "auto",
+		},
+		height: "100%",
 	},
 	collapse: {
 		backgroundColor: theme.palette.neutral.main,
@@ -86,7 +110,9 @@ function ComponentView(props) {
 }
 
 function ToolsDrawer(props) {
+	const theme = useTheme();
 	const classes = useStyles();
+	const mdBreakpoint = useMediaQuery(theme.breakpoints.up("md"));
 
 	const handleView = (view) => {
 		props.setToolsView(view);
@@ -140,17 +166,24 @@ function ToolsDrawer(props) {
 		<Drawer
 			className={classes.drawer}
 			classes={{ paper: classes.drawerPaper }}
-			anchor="left"
+			anchor={mdBreakpoint ? "left" : "bottom"}
 			open={props.toolsOpen}
 			variant="persistent"
 		>
-			<div className={classes.drawerHeader}>
+			<div
+				className={clsx({
+					[classes.leftButton]: mdBreakpoint,
+					[classes.downButton]: !mdBreakpoint,
+				})}
+			>
 				<IconButton onClick={handleClose}>
-					<ChevronLeftIcon />
+					{mdBreakpoint ? <ChevronLeftIcon /> : <KeyboardArrowDownIcon />}
 				</IconButton>
 			</div>
-			<Divider />
-			{view}
+			<Box className={classes.mainBox}>
+				<Divider />
+				{view}
+			</Box>
 			<Divider style={{ marginTop: "auto" }} />
 			<Button
 				onClick={handleSave}

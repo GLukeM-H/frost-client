@@ -48,8 +48,8 @@ const useStyles = makeStyles((theme) => ({
 		[theme.breakpoints.up("xs")]: {
 			marginLeft: "0",
 		},
-		[theme.breakpoints.up("sm")]: {
-			marginLeft: `${theme.mixins.drawer[theme.breakpoints.up("sm")].width}`,
+		[theme.breakpoints.up("md")]: {
+			marginLeft: `${theme.mixins.drawer[theme.breakpoints.up("md")].width}`,
 		},
 	},
 	backdropDrawerLeft: {},

@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => {
 				width: "0",
 			},
 			[mdBreakpoint]: {
-				width: `calc(${drawer[smBreakpoint].width})`,
+				width: `calc(${drawer[mdBreakpoint].width})`,
 			},
 		},
 		enteredBody: {
@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => {
 				width: "0",
 			},
 			[mdBreakpoint]: {
-				width: `calc(${drawer[smBreakpoint].width})`,
+				width: `calc(${drawer[mdBreakpoint].width})`,
 			},
 		},
 		exitingBody: {

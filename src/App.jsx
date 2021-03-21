@@ -38,9 +38,10 @@ const userTheme = createMuiTheme({
 		drawer: {
 			/* eslint-disable no-useless-computed-key */
 			["@media (min-width:0px)"]: {
+				height: "40vh",
 				width: "100vw",
 			},
-			["@media (min-width:600px)"]: {
+			["@media (min-width:960px)"]: {
 				width: "20rem",
 				height: "100vh",
 			},

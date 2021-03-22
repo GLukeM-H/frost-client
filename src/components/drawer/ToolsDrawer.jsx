@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import {
 	Drawer,
@@ -22,66 +21,13 @@ import {
 	KeyboardArrowDown as KeyboardArrowDownIcon,
 	Publish as PublishIcon,
 } from "@material-ui/icons";
+import { Scrollbars } from "react-custom-scrollbars";
 import { navActions, contActions } from "../../actions";
+import useStyles from "./styles";
 import GridView from "./GridView";
 import PaperView from "./PaperView";
 
-const useStyles = makeStyles((theme) => ({
-	drawer: {
-		flexShrink: 0,
-		paddingRight: "10px",
-		paddingLeft: "10px",
-	},
-	leftButton: {
-		display: "flex",
-		alignItems: "center",
-		padding: theme.spacing(0, 1),
-		// necessary for content to be below app bar
-		...theme.mixins.toolbar,
-		justifyContent: "flex-end",
-	},
-	downButton: {
-		backgroundColor: theme.palette.neutral.main,
-		position: "absolute",
-		top: 0,
-		left: "50%",
-		transform: "translate(-50%, -50%)",
-		borderRadius: "50%",
-		zIndex: 1,
-	},
-	drawerPaper: {
-		...theme.mixins.navBackground,
-		...theme.mixins.drawer,
-		overflowY: "visible",
-	},
-	mainBox: {
-		/* eslint-disable no-useless-computed-key */
-		// ["& ::-webkit-scrollbar-track"]: {
-		// 	backgroundColor: "black",
-		// },
-		[theme.breakpoints.up("xs")]: {
-			overflowY: "scroll",
-		},
-		[theme.breakpoints.up("md")]: {
-			overflowY: "auto",
-		},
-		height: "100%",
-	},
-	collapse: {
-		backgroundColor: theme.palette.neutral.main,
-		padding: theme.spacing(2),
-	},
-	textArea: {
-		width: "100%",
-	},
-	sizeCollapse: {
-		paddingTop: theme.spacing(3),
-		paddingRight: theme.spacing(3),
-		paddingLeft: theme.spacing(3),
-	},
-}));
-
-function ComponentView(props) {
+function ComponentView() {
 	return (
 		<>
 			<List>
@@ -165,25 +111,25 @@ function ToolsDrawer(props) {
 	return (
 		<Drawer
 			className={classes.drawer}
-			classes={{ paper: classes.drawerPaper }}
+			classes={{ paper: classes.mainPaper }}
 			anchor={mdBreakpoint ? "left" : "bottom"}
 			open={props.toolsOpen}
 			variant="persistent"
 		>
-			<div
+			<Box
 				className={clsx({
-					[classes.leftButton]: mdBreakpoint,
+					[classes.headerButtonLeft]: mdBreakpoint,
 					[classes.downButton]: !mdBreakpoint,
 				})}
 			>
 				<IconButton onClick={handleClose}>
 					{mdBreakpoint ? <ChevronLeftIcon /> : <KeyboardArrowDownIcon />}
 				</IconButton>
-			</div>
-			<Box className={classes.mainBox}>
-				<Divider />
-				{view}
 			</Box>
+			<Divider />
+			<Scrollbars hideTracksWhenNotNeeded autoHide>
+				{view}
+			</Scrollbars>
 			<Divider style={{ marginTop: "auto" }} />
 			<Button
 				onClick={handleSave}

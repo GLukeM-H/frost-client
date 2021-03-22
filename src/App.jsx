@@ -8,7 +8,6 @@ import {
 import AppBody from "./components/AppBody";
 import AppNavBar from "./components/AppNavBar";
 import ToolsDrawer from "./components/drawer";
-// import 'bootstrap/dist/css/bootstrap.min.css';
 import "./App.css";
 
 const userTheme = createMuiTheme({
@@ -36,12 +35,11 @@ const userTheme = createMuiTheme({
 	},
 	mixins: {
 		drawer: {
-			/* eslint-disable no-useless-computed-key */
-			["@media (min-width:0px)"]: {
+			"@media (min-width:0px)": {
 				height: "40vh",
 				width: "100vw",
 			},
-			["@media (min-width:960px)"]: {
+			"@media (min-width:960px)": {
 				width: "20rem",
 				height: "100vh",
 			},

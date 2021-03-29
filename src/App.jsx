@@ -8,6 +8,7 @@ import {
 import AppBody from "./components/AppBody";
 import AppNavBar from "./components/AppNavBar";
 import ToolsDrawer from "./components/drawer";
+import Login from "./components/Login";
 import "./App.css";
 
 const userTheme = createMuiTheme({
@@ -115,7 +116,7 @@ function App() {
 						<AppNavBar />
 					</Grid>
 					<Grid item className={classes.bodyItem} xs={12}>
-						<AppBody />
+						<Login />
 					</Grid>
 					<ToolsDrawer className={classes.drawer} />
 				</Grid>

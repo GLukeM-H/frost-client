@@ -9,7 +9,7 @@ import Backdrop from "@material-ui/core/Backdrop";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Fade from "@material-ui/core/Fade";
 import { contActions } from "../actions";
-import * as comp from "./content";
+import * as comp from "./visage";
 
 const useStyles = makeStyles((theme) => {
 	const { toolbar, drawer } = theme.mixins;

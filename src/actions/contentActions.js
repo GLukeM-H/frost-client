@@ -6,7 +6,7 @@ export function getBody() {
 	return (dispatch) => {
 		dispatch(setBodyLoading());
 		const query = `{
-			users(filter:{ username: "Frost" }) {
+			users(filter:{ username: "aleph" }) {
 				visage {
 					_id
 					content

@@ -2,11 +2,11 @@
 import axios from "axios";
 
 /* ~~~~~ Body Actions ~~~~~ */
-export function getBody() {
+export function getBody(username) {
 	return (dispatch) => {
 		dispatch(setBodyLoading());
-		const query = `{
-			users(filter:{ username: "aleph" }) {
+		const query = `query users($username: String!){
+			users(filter:{ username: $username }) {
 				visage {
 					_id
 					content
@@ -15,7 +15,7 @@ export function getBody() {
 		}`;
 
 		axios
-			.post("/graphql", { query })
+			.post("/graphql", { query, variables: { username } })
 			.then((res) => {
 				dispatch({
 					type: "BODY/GET",

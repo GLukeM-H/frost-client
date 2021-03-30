@@ -8,8 +8,9 @@ import Grid from "@material-ui/core/Grid";
 import Backdrop from "@material-ui/core/Backdrop";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Fade from "@material-ui/core/Fade";
-import { contActions } from "../actions";
+import { contActions, authActions } from "../actions";
 import * as comp from "./visage";
+import Login from "./Login";
 
 const useStyles = makeStyles((theme) => {
 	const { toolbar, drawer } = theme.mixins;
@@ -109,13 +110,30 @@ LoadingBackdrop.propTypes = {
 	loading: PropTypes.bool.isRequired,
 };
 
+const Visage = connect((state) => ({
+	rootComp: state.contentState.contentComp[state.contentState.visageId],
+}))((props) => (
+	<div>
+		{React.createElement(comp[props.rootComp.comp] || props.rootComp.comp, {
+			id: props.rootComp._id,
+		})}
+	</div>
+));
+
+Visage.propTypes = {
+	loading: PropTypes.bool,
+	rootComp: PropTypes.object,
+};
+
 function AppBody(props) {
 	const theme = useTheme();
 	const classes = useStyles();
 
 	React.useEffect(() => {
-		props.getBody();
-	}, []);
+		if (props.username) {
+			props.getBody(props.username);
+		}
+	}, [props.username]);
 
 	return (
 		<>
@@ -137,12 +155,7 @@ function AppBody(props) {
 								in={!props.loading}
 								timeout={theme.transitions.duration.standard}
 							>
-								<div>
-									{React.createElement(
-										comp[props.rootComp.comp] || props.rootComp.comp,
-										{ id: props.rootComp._id }
-									)}
-								</div>
+								{props.username ? <Visage /> : <Login />}
 							</Fade>
 						</Grid>
 						<Grid item className={classes.rightItem} md={2} xs={12}>
@@ -156,17 +169,21 @@ function AppBody(props) {
 	);
 }
 
+AppBody.defaultProps = {
+	username: null,
+};
+
 AppBody.propTypes = {
 	getBody: PropTypes.func.isRequired,
-	rootComp: PropTypes.object.isRequired,
 	toolsOpen: PropTypes.bool.isRequired,
 	loading: PropTypes.bool.isRequired,
+	username: PropTypes.string,
 };
 
 const mapStateToProps = (state) => ({
-	rootComp: state.contentState.contentComp[state.contentState.visageId],
 	toolsOpen: state.navState.toolsOpen,
 	loading: state.contentState.loading,
+	username: state.authState.username,
 });
 
 export default connect(mapStateToProps, { getBody: contActions.getBody })(

@@ -1,5 +1,4 @@
 /* eslint-disable no-param-reassign, no-use-before-define */
-import { ROOT_COMP } from "../constants/contReducerConstants";
 
 export const newComponent = (state, compName, id, parentId, props) => {
 	state.contentComp[id] = {
@@ -28,7 +27,7 @@ export const insertComponent = (
 		index = state.contentComp[parentId].childIds.indexOf(childId);
 	} else {
 		if (!parentId) {
-			parentId = ROOT_COMP;
+			parentId = state.visageId;
 		}
 		index = state.contentComp[parentId].childIds.length;
 	}
@@ -43,9 +42,6 @@ export function deleteComponent(state, id) {
 	}
 
 	deleteChildren(state, id);
-	// state.contentComp[id].childIds.forEach((childId) => {
-	// 	deleteComponent(state, childId);
-	// });
 
 	const { parentId } = state.contentComp[id];
 	if (parentId) {

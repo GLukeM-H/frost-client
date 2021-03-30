@@ -1,11 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import axios from "axios";
 import { Paper, Typography, Grid, TextField, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { contActions } from "../actions";
+import { authActions } from "../actions";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
 	paper: {
 		padding: "2em 1em 2em 1em",
 	},
@@ -14,27 +15,13 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function Login() {
+function Login(props) {
 	const classes = useStyles();
 	const [username, setUsername] = React.useState("");
 	const [password, setPassword] = React.useState("");
 
 	const handleSubmit = () => {
-		const query = `
-            mutation login($username: String!, $password: String!){
-                login(username: $username, password: $password) {
-                    token,
-                    error
-                }
-            }
-        `;
-		axios
-			.post("/graphql", { query, variables: { username, password } })
-			.then((res) => {
-				// error check
-				// Load visage
-				console.log(res.data.data.login);
-			});
+		props.login(username, password);
 	};
 
 	return (
@@ -57,6 +44,7 @@ function Login() {
 								label="Username"
 								color="primary"
 								value={username}
+								error={Boolean(props.error)}
 								onChange={(e) => setUsername(e.target.value)}
 							/>
 						</Grid>
@@ -66,6 +54,7 @@ function Login() {
 								label="Password"
 								color="primary"
 								value={password}
+								error={Boolean(props.error)}
 								onChange={(e) => setPassword(e.target.value)}
 							/>
 						</Grid>
@@ -85,4 +74,17 @@ function Login() {
 	);
 }
 
-export default Login;
+Login.defaultProps = {
+	error: null,
+};
+
+Login.propTypes = {
+	login: PropTypes.func.isRequired,
+	error: PropTypes.string,
+};
+
+const mapStateToProps = (state) => ({
+	error: state.authState.error,
+});
+
+export default connect(mapStateToProps, { login: authActions.login })(Login);

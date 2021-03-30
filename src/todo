@@ -1,6 +1,7 @@
 finish implementing cards
 add justify options for grid containers
 add scrollbar component
+add register
 add jwt auth
 
 put redux store in web worker?

@@ -1,7 +1,10 @@
 finish implementing cards
 add justify options for grid containers
 add scrollbar component
-add register
 add jwt auth
+change paperView add text to multiline textField
+improve error handling when registering user
+
+Fix DeprecationWarning: Mongoose: `findOneAndUpdate()` and `findOneAndDelete()` without the `useFindAndModify` option set to false are deprecated. See: https://mongoosejs.com/docs/deprecations.html#findandmodify
 
 put redux store in web worker?

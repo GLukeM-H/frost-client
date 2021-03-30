@@ -8,7 +8,7 @@ import Grid from "@material-ui/core/Grid";
 import Backdrop from "@material-ui/core/Backdrop";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Fade from "@material-ui/core/Fade";
-import { contActions, authActions } from "../actions";
+import { contActions } from "../actions";
 import * as comp from "./visage";
 import Login from "./Login";
 

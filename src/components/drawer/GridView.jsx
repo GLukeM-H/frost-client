@@ -18,10 +18,8 @@ import {
 	Typography,
 	Divider,
 	Paper,
-	Box,
 	Collapse,
 	Grid,
-	StepLabel,
 } from "@material-ui/core";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import { useTheme } from "@material-ui/core/styles";
@@ -142,63 +140,61 @@ const WidthOptions = connect((state) => {
 
 	return (
 		<>
-			{props.item && [
-				<ListItem
-					key="toggle-collapse"
-					button
-					onClick={() => setOpen((prevState) => !prevState)}
-				>
-					<ListItemText primary="Width" />
-					{open ? <ExpandLess /> : <ExpandMore />}
-				</ListItem>,
-				<Collapse key="collapse" in={open}>
-					<Paper
-						className={clsx(classes.collapse, classes.sizeCollapse)}
-						elevation={0}
-						square
-					>
-						{breakpoints.keys.map((key) => (
-							<div key={key}>
-								<Grid container justify="center" alignItems="center">
-									<Grid item>
-										<Checkbox
-											color="primary"
-											checked={Boolean(props[key])}
-											onChange={(e) =>
-												props.setProps({ [key]: e.target.checked && 12 })
-											}
-										/>
-									</Grid>
-									<Grid item>
-										<Typography variant="subtitle2">
-											{key.toUpperCase()} Breakpoint{" "}
-											<Typography component="span" variant="caption">
-												{viewWidth === key && "(current view width)"}
+			{props.item && (
+				<>
+					<ListItem button onClick={() => setOpen((prevState) => !prevState)}>
+						<ListItemText primary="Width" />
+						{open ? <ExpandLess /> : <ExpandMore />}
+					</ListItem>
+					<Collapse in={open}>
+						<Paper
+							className={clsx(classes.collapse, classes.sizeCollapse)}
+							elevation={0}
+							square
+						>
+							{breakpoints.keys.map((key) => (
+								<div key={key}>
+									<Grid container justify="center" alignItems="center">
+										<Grid item>
+											<Checkbox
+												color="primary"
+												checked={Boolean(props[key])}
+												onChange={(e) =>
+													props.setProps({ [key]: e.target.checked && 12 })
+												}
+											/>
+										</Grid>
+										<Grid item>
+											<Typography variant="subtitle2">
+												{key.toUpperCase()} Breakpoint{" "}
+												<Typography component="span" variant="caption">
+													{viewWidth === key && "(current view width)"}
+												</Typography>
 											</Typography>
-										</Typography>
+										</Grid>
 									</Grid>
-								</Grid>
-								<Slider
-									value={props[key] || 0}
-									onChange={(e, value) => props.setProps({ [key]: value })}
-									defaultValue={4}
-									step={1}
-									marks
-									min={1}
-									max={12}
-									valueLabelDisplay="auto"
-									disabled={!props[key]}
-								/>
-								{key === "xl" || (
-									<Divider
-										style={{ marginBottom: "1rem", marginTop: "0.5rem" }}
+									<Slider
+										value={props[key] || 0}
+										onChange={(e, value) => props.setProps({ [key]: value })}
+										defaultValue={4}
+										step={1}
+										marks
+										min={1}
+										max={12}
+										valueLabelDisplay="auto"
+										disabled={!props[key]}
 									/>
-								)}
-							</div>
-						))}
-					</Paper>
-				</Collapse>,
-			]}
+									{key === "xl" || (
+										<Divider
+											style={{ marginBottom: "1rem", marginTop: "0.5rem" }}
+										/>
+									)}
+								</div>
+							))}
+						</Paper>
+					</Collapse>
+				</>
+			)}
 		</>
 	);
 });
@@ -213,10 +209,103 @@ WidthOptions.propTypes = {
 	setProps: PropTypes.func.isRequired,
 };
 
+// ~~~~~~~~~~ Align and Justify ~~~~~~~~~~
+
+const AlignAndJustify = connect((state) => {
+	const compProps =
+		state.contentState.contentComp[state.contentState.selected].props;
+	return {
+		justify: compProps.justify,
+		alignContent: compProps.alignContent,
+		alignItems: compProps.alignItems,
+		container: compProps.container,
+	};
+})((props) => {
+	const classes = useStyles();
+	const [open, setOpen] = React.useState(false);
+
+	return (
+		<>
+			{props.container && (
+				<>
+					<ListItem
+						key="toggle-collapse"
+						button
+						onClick={() => setOpen((prevState) => !prevState)}
+					>
+						<ListItemText primary="Align and Justify" />
+						{open ? <ExpandLess /> : <ExpandMore />}
+					</ListItem>
+					<Collapse in={open}>
+						<ListItem>
+							<FormControl className={classes.formControl}>
+								<InputLabel id="align-items-input-label">
+									Align Items
+								</InputLabel>
+								<Select
+									labelId="align-items-input-label"
+									value={props.alignItems || ""}
+									onChange={(e) =>
+										props.setProps({ alignItems: e.target.value })
+									}
+								>
+									<MenuItem value="stretch">Stretch</MenuItem>
+									<MenuItem value="flex-start">Start</MenuItem>
+									<MenuItem value="flex-end">End</MenuItem>
+									<MenuItem value="center">Center</MenuItem>
+									<MenuItem value="baseline">Baseline</MenuItem>
+								</Select>
+							</FormControl>
+						</ListItem>
+						<ListItem>
+							<FormControl className={classes.formControl}>
+								<InputLabel id="align-content-input-label">
+									Align Content
+								</InputLabel>
+								<Select
+									labelId="align-content-input-label"
+									value={props.alignContent || ""}
+									onChange={(e) =>
+										props.setProps({ alignContent: e.target.value })
+									}
+								>
+									<MenuItem value="stretch">Stretch</MenuItem>
+									<MenuItem value="flex-start">Start</MenuItem>
+									<MenuItem value="flex-end">End</MenuItem>
+									<MenuItem value="center">Center</MenuItem>
+									<MenuItem value="space-between">Space Between</MenuItem>
+									<MenuItem value="space-around">Space Around</MenuItem>
+								</Select>
+							</FormControl>
+						</ListItem>
+						<ListItem>
+							<FormControl className={classes.formControl}>
+								<InputLabel id="justify-input-label">Justify</InputLabel>
+								<Select
+									labelId="justify-input-label"
+									value={props.justify || ""}
+									onChange={(e) => props.setProps({ justify: e.target.value })}
+								>
+									<MenuItem value="flex-start">Start</MenuItem>
+									<MenuItem value="flex-end">End</MenuItem>
+									<MenuItem value="center">Center</MenuItem>
+									<MenuItem value="space-between">Space Between</MenuItem>
+									<MenuItem value="space-around">Space Around</MenuItem>
+									<MenuItem value="space-evenly">Space Evenly</MenuItem>
+								</Select>
+							</FormControl>
+						</ListItem>
+					</Collapse>
+				</>
+			)}
+		</>
+	);
+});
+
 // ~~~~~~~~~~ Tools View ~~~~~~~~~~
 function GridView(props) {
 	const classes = useStyles();
-	const [sizeOpen, setSizeOpen] = React.useState(false);
+	// const [sizeOpen, setSizeOpen] = React.useState(false);
 	const insertComp = (compName, compProps) => {
 		props.insertComp(compName, props.selected, null, compProps);
 	};
@@ -293,79 +382,14 @@ function GridView(props) {
 					}
 				/>
 				<WidthOptions setProps={setProps} />
+				<AlignAndJustify setProps={setProps} />
 				{props.stateProps.container && (
 					<>
 						<ListItem button onClick={handleAddItem}>
 							<ListItemText primary="Add Grid Item" />
 						</ListItem>
-						<ListItem>
-							<FormControl className={classes.formControl}>
-								<InputLabel id="align-items-input-label">
-									Align Items
-								</InputLabel>
-								<Select
-									labelId="align-items-input-label"
-									value={props.stateProps.alignItems || ""}
-									onChange={(e) => setProps({ alignItems: e.target.value })}
-								>
-									<MenuItem value="stretch">Stretch</MenuItem>
-									<MenuItem value="center">Center</MenuItem>
-									<MenuItem value="flex-start">Start</MenuItem>
-									<MenuItem value="flex-end">End</MenuItem>
-									<MenuItem value="baseline">Baseline</MenuItem>
-								</Select>
-							</FormControl>
-						</ListItem>
-						<ListItem>
-							<FormControl className={classes.formControl}>
-								<InputLabel id="align-content-input-label">
-									Align Content
-								</InputLabel>
-								<Select
-									labelId="align-content-input-label"
-									value={props.stateProps.alignContent || ""}
-									onChange={(e) => setProps({ alignContent: e.target.value })}
-								>
-									<MenuItem value="stretch">Stretch</MenuItem>
-									<MenuItem value="center">Center</MenuItem>
-									<MenuItem value="flex-start">Start</MenuItem>
-									<MenuItem value="flex-end">End</MenuItem>
-									<MenuItem value="space-between">Space Between</MenuItem>
-									<MenuItem value="space-around">Space Around</MenuItem>
-								</Select>
-							</FormControl>
-						</ListItem>
 					</>
 				)}
-				{/* {props.stateProps.item && (
-					<>
-						<ListItem
-							button
-							onClick={() => setSizeOpen((prevState) => !prevState)}
-						>
-							<ListItemText primary="Change Size" />
-							{sizeOpen ? <ExpandLess /> : <ExpandMore />}
-						</ListItem>
-						<Collapse in={sizeOpen}>
-							<Paper
-								className={clsx(classes.collapse, classes.sizeCollapse)}
-								elevation={0}
-								square
-							>
-								<Slider
-									value={props.stateProps.xs}
-									onChange={(e, xs) => setProps({ xs })}
-									defaultValue={4}
-									step={1}
-									marks
-									min={1}
-									max={12}
-									valueLabelDisplay="auto"
-								/>
-							</Paper>
-						</Collapse>
-					</>
-				)} */}
 				{props.stateProps.item && !props.hasChildren && (
 					<>
 						<ListItem button onClick={() => handleAddComp("Paper")}>

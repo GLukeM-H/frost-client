@@ -12,7 +12,7 @@ import {
 	Divider,
 	Paper,
 	Collapse,
-	TextareaAutosize,
+	TextField,
 } from "@material-ui/core";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import { contActions } from "../../actions";
@@ -60,9 +60,9 @@ function PaperView(props) {
 				</ListItem>
 				<Collapse in={open}>
 					<Paper className={classes.collapse} elevation={0} square>
-						<TextareaAutosize
+						<TextField
 							className={classes.textArea}
-							rowsMin={4}
+							multiline
 							placeholder="Add text here."
 							value={props.selectedInner}
 							onChange={(e) => setInner(e.target.value)}
@@ -76,7 +76,6 @@ function PaperView(props) {
 
 PaperView.propTypes = {
 	setSelected: PropTypes.func.isRequired,
-	// insertComp: PropTypes.func.isRequired,
 	setInner: PropTypes.func.isRequired,
 	selected: PropTypes.string.isRequired,
 	setProps: PropTypes.func.isRequired,
@@ -91,7 +90,6 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-	// insertComp: contActions.insertComp,
 	setSelected: contActions.setSelected,
 	setInner: contActions.setInner,
 	setProps: contActions.setProps,

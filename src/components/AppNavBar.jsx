@@ -15,7 +15,7 @@ import Paper from "@material-ui/core/Paper";
 import Popper from "@material-ui/core/Popper";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Divider from "@material-ui/core/Divider";
-import { navActions, contActions } from "../actions";
+import { navActions, contActions, authActions } from "../actions";
 
 /* ~~~~~ Styles ~~~~~ */
 const useStyles = makeStyles((theme) => {
@@ -68,10 +68,15 @@ const useStyles = makeStyles((theme) => {
 const UserMenu = connect(
 	(state) => ({
 		editing: state.contentState.editing,
+		username: state.authState.username,
+		loggedIn: Boolean(state.authState.token),
 	}),
 	{
 		toggleEditing: contActions.toggleEditing,
+		setEditing: contActions.setEditing,
 		toggleTools: navActions.toggleTools,
+		setTools: navActions.setTools,
+		logout: authActions.logout,
 	}
 )((props) => {
 	const theme = useTheme();
@@ -95,7 +100,7 @@ const UserMenu = connect(
 	}, [props.editing]);
 
 	const handleToggle = () => {
-		setOpen((prevState) => !prevState);
+		setOpen((prevState) => !prevState && props.loggedIn);
 	};
 
 	const handleClose = (event) => {
@@ -108,6 +113,13 @@ const UserMenu = connect(
 		props.toggleTools();
 		props.toggleEditing();
 		setOpen(false);
+	};
+
+	const handleLogout = () => {
+		setOpen(false);
+		props.setEditing(false);
+		props.setTools(false);
+		props.logout();
 	};
 
 	// return focus to the button when we transitioned from !open -> open
@@ -130,7 +142,7 @@ const UserMenu = connect(
 				className={style.userMenu}
 			>
 				<AccountCircleIcon />
-				Luke
+				{props.username}
 			</Button>
 			<Popper
 				open={open}
@@ -145,21 +157,15 @@ const UserMenu = connect(
 						<Paper className={style.userPopper}>
 							<ClickAwayListener onClickAway={handleClose}>
 								<MenuList autoFocusItem={open} id="menu-list-grow">
-									<MenuItem onClick={handleClose}>Profile</MenuItem>
-									<MenuItem onClick={handleClose}>My account</MenuItem>
-									<MenuItem onClick={handleClose}>Logout</MenuItem>
-									<Divider />
 									{editVisible ? (
-										<MenuItem onClick={handleEditing}>
-											<Typography color="textSecondary">
-												Done Editing
-											</Typography>
-										</MenuItem>
+										<MenuItem onClick={handleEditing}>Done Editing</MenuItem>
 									) : (
-										<MenuItem onClick={handleEditing}>
-											<Typography color="textSecondary">Edit Visage</Typography>
-										</MenuItem>
+										<MenuItem onClick={handleEditing}>Edit Visage</MenuItem>
 									)}
+									<Divider />
+									<MenuItem onClick={handleLogout}>
+										<Typography color="textSecondary">Logout</Typography>
+									</MenuItem>
 								</MenuList>
 							</ClickAwayListener>
 						</Paper>

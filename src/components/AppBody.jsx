@@ -130,10 +130,10 @@ function AppBody(props) {
 	const classes = useStyles();
 
 	React.useEffect(() => {
-		if (props.username) {
-			props.getBody(props.username);
+		if (props.loggedIn) {
+			props.getBody();
 		}
-	}, [props.username]);
+	}, [props.loggedIn]);
 
 	return (
 		<>
@@ -155,7 +155,7 @@ function AppBody(props) {
 								in={!props.loading}
 								timeout={theme.transitions.duration.standard}
 							>
-								{props.username ? <Visage /> : <Login />}
+								{props.loggedIn ? <Visage /> : <Login />}
 							</Fade>
 						</Grid>
 						<Grid item className={classes.rightItem} md={2} xs={12}>
@@ -169,21 +169,17 @@ function AppBody(props) {
 	);
 }
 
-AppBody.defaultProps = {
-	username: null,
-};
-
 AppBody.propTypes = {
 	getBody: PropTypes.func.isRequired,
 	toolsOpen: PropTypes.bool.isRequired,
 	loading: PropTypes.bool.isRequired,
-	username: PropTypes.string,
+	loggedIn: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
 	toolsOpen: state.navState.toolsOpen,
 	loading: state.contentState.loading,
-	username: state.authState.username,
+	loggedIn: Boolean(state.authState.token),
 });
 
 export default connect(mapStateToProps, { getBody: contActions.getBody })(

@@ -71,6 +71,9 @@ const contentReducer = produce((draft, action) => {
 		case "EDIT/TOGGLE":
 			draft.editing = !draft.editing;
 			break;
+		case "EDIT/SET_EDITING":
+			draft.editing = action.payload;
+			break;
 		default:
 	}
 }, INIT_STATE);

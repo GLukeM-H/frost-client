@@ -53,7 +53,7 @@ export function login(username, password) {
 				dispatch({
 					type: "USER/LOGIN",
 					payload: {
-						token,
+						token: token.toString(),
 						username: user.username,
 					},
 				});

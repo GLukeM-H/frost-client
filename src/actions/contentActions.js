@@ -2,27 +2,31 @@
 import axios from "axios";
 
 /* ~~~~~ Body Actions ~~~~~ */
-export function getBody(username) {
-	return (dispatch) => {
+export function getBody() {
+	return async (dispatch, getState) => {
 		dispatch(setBodyLoading());
-		const query = `query users($username: String!){
-			users(filter:{ username: $username }) {
-				visage {
+		const query = `query{
+			viewer{
+				visage{
 					_id
 					content
 				}
 			}
 		}`;
+		const headers = {
+			Authorization: `Bearer ${getState().authState.token}`,
+		};
 
-		axios
-			.post("/graphql", { query, variables: { username } })
-			.then((res) => {
-				dispatch({
-					type: "BODY/GET",
-					payload: res.data.data.users[0].visage,
-				});
-			})
-			.catch((err) => console.log(err));
+		try {
+			const res = await axios.post("/graphql", { query }, { headers });
+			dispatch({
+				type: "BODY/GET",
+				payload: res.data.data.viewer.visage,
+			});
+		} catch (err) {
+			// eslint-disable-next-line
+			console.log(err);
+		}
 	};
 }
 
@@ -44,6 +48,7 @@ export function saveBody(content, visageId) {
 				});
 			})
 			.catch((err) => {
+				// eslint-disable-next-line
 				console.log(err);
 			});
 	};
@@ -81,6 +86,13 @@ export function toggleEditing() {
 	return (dispatch) => {
 		dispatch(setSelected(""));
 		dispatch({ type: "EDIT/TOGGLE" });
+	};
+}
+
+export function setEditing(editing) {
+	return (dispatch) => {
+		dispatch(setSelected(""));
+		dispatch({ type: "EDIT/SET_EDITING", payload: editing });
 	};
 }
 

@@ -9,6 +9,9 @@ const navReducer = produce((draft, action) => {
 		case "TOOLS/TOGGLE":
 			draft.toolsOpen = !draft.toolsOpen;
 			break;
+		case "TOOLS/SET_TOOLS":
+			draft.toolsOpen = action.payload;
+			break;
 		case "TOOLS/SET_VIEW":
 			draft.toolsView = action.payload;
 			break;

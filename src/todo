@@ -1,8 +1,7 @@
 finish implementing cards
-add justify options for grid containers
 add scrollbar component
-add jwt auth
 improve error handling when registering user (use console.assert maybe?)
+Get username on refresh
 
 Fix DeprecationWarning: Mongoose: `findOneAndUpdate()` and `findOneAndDelete()` without the `useFindAndModify` option set to false are deprecated. See: https://mongoosejs.com/docs/deprecations.html#findandmodify
 

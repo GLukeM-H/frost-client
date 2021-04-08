@@ -8,10 +8,33 @@ import {
 	newComponent,
 } from "../helpers/contentStateHelpers";
 
-import { ROOT_COMP, INIT_STATE } from "../constants/contReducerConstants";
+import ROOT_COMP from "../constants/contReducerConstants";
+
+const INIT_STATE = {
+	contentComp: {
+		[ROOT_COMP]: {
+			comp: "div",
+			inner: "",
+			props: { key: ROOT_COMP, id: ROOT_COMP },
+			childIds: [],
+			parentId: null,
+		},
+	},
+	visageId: ROOT_COMP,
+	editing: false,
+	insertId: null,
+	selected: "",
+	hoverDisabled: {},
+	loading: false,
+	savedChanges: true,
+	error: "",
+};
 
 const contentReducer = produce((draft, action) => {
 	switch (action.type) {
+		case "BODY/ERROR":
+			draft.error = action.payload;
+			break;
 		case "BODY/GET":
 			if (action.payload) {
 				draft.contentComp = action.payload.content;
@@ -27,6 +50,9 @@ const contentReducer = produce((draft, action) => {
 			break;
 		case "BODY/LOADING":
 			draft.loading = true;
+			break;
+		case "BODY/RESET":
+			Object.assign(draft, INIT_STATE);
 			break;
 		case "EDIT/INSERT":
 			insertComponent(draft, ObjectID().toString(), ...action.payload);

@@ -6,6 +6,9 @@ const navReducer = produce((draft, action) => {
 		case "NAV/TOGGLE":
 			draft.navIsOpen = !draft.navIsOpen;
 			break;
+		case "NAV/RESET":
+			Object.assign(draft, INIT_STATE);
+			break;
 		case "TOOLS/TOGGLE":
 			draft.toolsOpen = !draft.toolsOpen;
 			break;

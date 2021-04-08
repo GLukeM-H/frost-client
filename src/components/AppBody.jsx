@@ -8,7 +8,7 @@ import Grid from "@material-ui/core/Grid";
 import Backdrop from "@material-ui/core/Backdrop";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Fade from "@material-ui/core/Fade";
-import { contActions } from "../actions";
+import { contActions, authActions } from "../actions";
 import * as comp from "./visage";
 import Login from "./Login";
 
@@ -135,6 +135,12 @@ function AppBody(props) {
 		}
 	}, [props.loggedIn]);
 
+	React.useEffect(() => {
+		if (props.tokenExpired) {
+			props.resetUser();
+		}
+	}, [props.tokenExpired]);
+
 	return (
 		<>
 			<Transition
@@ -171,17 +177,21 @@ function AppBody(props) {
 
 AppBody.propTypes = {
 	getBody: PropTypes.func.isRequired,
+	resetUser: PropTypes.func.isRequired,
 	toolsOpen: PropTypes.bool.isRequired,
 	loading: PropTypes.bool.isRequired,
 	loggedIn: PropTypes.bool.isRequired,
+	tokenExpired: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
 	toolsOpen: state.navState.toolsOpen,
 	loading: state.contentState.loading,
 	loggedIn: Boolean(state.authState.token),
+	tokenExpired: state.contentState.error === "TokenExpiredError",
 });
 
-export default connect(mapStateToProps, { getBody: contActions.getBody })(
-	AppBody
-);
+export default connect(mapStateToProps, {
+	getBody: contActions.getBody,
+	resetUser: authActions.resetUser,
+})(AppBody);

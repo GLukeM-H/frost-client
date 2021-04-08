@@ -2,6 +2,19 @@
 import axios from "axios";
 
 /* ~~~~~ Body Actions ~~~~~ */
+export function resetBody() {
+	return {
+		type: "BODY/RESET",
+	};
+}
+
+export function errorBody(err) {
+	return {
+		type: "BODY/ERROR",
+		payload: err.toString(),
+	};
+}
+
 export function getBody() {
 	return async (dispatch, getState) => {
 		dispatch(setBodyLoading());
@@ -23,9 +36,10 @@ export function getBody() {
 				type: "BODY/GET",
 				payload: res.data.data.viewer.visage,
 			});
-		} catch (err) {
-			// eslint-disable-next-line
-			console.log(err);
+		} catch (e) {
+			const err = e.response?.data.error || e;
+			dispatch(resetBody());
+			dispatch(errorBody(err));
 		}
 	};
 }
@@ -48,8 +62,7 @@ export function saveBody(content, visageId) {
 				});
 			})
 			.catch((err) => {
-				// eslint-disable-next-line
-				console.log(err);
+				dispatch(errorBody(err));
 			});
 	};
 }

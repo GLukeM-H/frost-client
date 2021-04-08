@@ -1,6 +1,12 @@
 /* eslint-disable no-use-before-define */
 import axios from "axios";
 
+export function resetUser() {
+	return {
+		type: "USER/RESET",
+	};
+}
+
 export function authError(err) {
 	return {
 		type: "USER/ERROR",
@@ -66,11 +72,8 @@ export function login(username, password) {
 }
 
 export function logout() {
-	return (dispatch) => {
-		authError(null);
-		dispatch({
-			type: "USER/LOGOUT",
-		});
+	return {
+		type: "USER/LOGOUT",
 	};
 }
 

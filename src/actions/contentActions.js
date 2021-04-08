@@ -17,12 +17,14 @@ export function errorBody(err) {
 
 export function getBody() {
 	return async (dispatch, getState) => {
-		dispatch(setBodyLoading());
+		dispatch(setBodyLoading(true));
 		const query = `query{
 			viewer{
+				username
 				visage{
 					_id
 					content
+					name
 				}
 			}
 		}`;
@@ -31,16 +33,18 @@ export function getBody() {
 		};
 
 		try {
-			const res = await axios.post("/graphql", { query }, { headers });
+			const { visage, username } = (
+				await axios.post("/graphql", { query }, { headers })
+			).data.data.viewer;
 			dispatch({
 				type: "BODY/GET",
-				payload: res.data.data.viewer.visage,
+				payload: visage,
 			});
+			dispatch({ type: "USER/SET_USERNAME", payload: username });
 		} catch (e) {
-			const err = e.response?.data.error || e;
-			dispatch(resetBody());
-			dispatch(errorBody(err));
+			dispatch(errorBody(e.response?.data.error || e));
 		}
+		dispatch(setBodyLoading(false));
 	};
 }
 
@@ -67,9 +71,10 @@ export function saveBody(content, visageId) {
 	};
 }
 
-export function setBodyLoading() {
+export function setBodyLoading(loading) {
 	return {
 		type: "BODY/LOADING",
+		payload: loading,
 	};
 }
 

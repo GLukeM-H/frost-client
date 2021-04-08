@@ -39,17 +39,17 @@ const contentReducer = produce((draft, action) => {
 			if (action.payload) {
 				draft.contentComp = action.payload.content;
 				draft.visageId = action.payload._id;
+				draft.visageName = action.payload.name;
 			} else {
 				newComponent(draft, "Grid", ROOT_COMP, null, { container: true });
 			}
-			draft.loading = false;
 			break;
 		case "BODY/SAVE":
 			draft.visageId = action.payload._id;
 			draft.savedChanges = true;
 			break;
 		case "BODY/LOADING":
-			draft.loading = true;
+			draft.loading = action.payload;
 			break;
 		case "BODY/RESET":
 			Object.assign(draft, INIT_STATE);

@@ -20,6 +20,9 @@ const authReducer = produce((draft, action) => {
 			localStorage.removeItem("token");
 			Object.assign(draft, { ...INIT_STATE, token: null });
 			break;
+		case "USER/SET_USERNAME":
+			draft.username = action.payload;
+			break;
 		default:
 	}
 }, INIT_STATE);

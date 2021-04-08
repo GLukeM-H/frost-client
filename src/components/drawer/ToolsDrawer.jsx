@@ -27,14 +27,14 @@ import useStyles from "./styles";
 import GridView from "./GridView";
 import PaperView from "./PaperView";
 
-function ComponentView() {
+function ComponentView(props) {
 	return (
 		<>
 			<List>
 				<ListItem>
 					<Breadcrumbs aria-label="breadcrumb">
 						<Typography color="textPrimary" variant="h6">
-							Component
+							{props.visageName}
 						</Typography>
 					</Breadcrumbs>
 				</ListItem>
@@ -54,6 +54,10 @@ function ComponentView() {
 		</>
 	);
 }
+
+ComponentView.propTypes = {
+	visageName: PropTypes.string.isRequired,
+};
 
 function ToolsDrawer(props) {
 	const theme = useTheme();
@@ -95,16 +99,12 @@ function ToolsDrawer(props) {
 				view = <PaperView breadcrumbs={breadcrumbs} />;
 				break;
 			default:
-				view = (
-					<ComponentView handleView={handleView} insertComp={handleInsert} />
-				);
+				view = <ComponentView visageName={props.visageName} />;
 		}
 	} else {
 		switch (props.toolsView) {
 			default:
-				view = (
-					<ComponentView handleView={handleView} insertComp={handleInsert} />
-				);
+				view = <ComponentView visageName={props.visageName} />;
 		}
 	}
 
@@ -160,6 +160,7 @@ ToolsDrawer.propTypes = {
 	savedChanges: PropTypes.bool.isRequired,
 	contentComp: PropTypes.object.isRequired,
 	visageId: PropTypes.string.isRequired,
+	visageName: PropTypes.string.isRequired,
 	setSelected: PropTypes.func.isRequired,
 	selected: PropTypes.string.isRequired,
 };
@@ -171,6 +172,7 @@ const mapStateToProps = (state) => ({
 	savedChanges: state.contentState.savedChanges,
 	contentComp: state.contentState.contentComp,
 	visageId: state.contentState.visageId,
+	visageName: state.contentState.visageName,
 });
 
 export default connect(mapStateToProps, {

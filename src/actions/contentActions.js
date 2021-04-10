@@ -49,13 +49,19 @@ export function getBody() {
 }
 
 export function saveBody(content, visageId) {
-	return (dispatch) => {
-		const query = `mutation updateVisage($visageId: ID!, $content: JSONObject){
-			updateVisage(id: $visageId, update:{ content: $content }) {
-				_id
+	return (dispatch, getState) => {
+		const query = `
+			mutation updateVisage($visageId: ID!, $content: JSONObject, $visageName: String!){
+				updateVisage(id: $visageId, update:{ content: $content, name: $visageName}) {
+					_id
+				}
 			}
-		}`;
-		const variables = { visageId, content };
+		`;
+		const variables = {
+			visageId,
+			content,
+			visageName: getState().contentState.visageName,
+		};
 
 		axios
 			.post("/graphql", { query, variables })
@@ -83,6 +89,15 @@ export function setSelected(id) {
 	return {
 		type: "EDIT/SET_SELECTED",
 		payload: id,
+	};
+}
+
+export function setVisageName(name) {
+	return (dispatch) => {
+		dispatch({
+			type: "EDIT/SET_VISAGE_NAME",
+			payload: name,
+		});
 	};
 }
 

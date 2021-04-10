@@ -22,7 +22,7 @@ function PaperView(props) {
 	const classes = useStyles();
 	const [open, setOpen] = React.useState(false);
 	const setInner = (inner) => props.setInner(props.selected, inner);
-	const setProps = (stateProps) => props.setProps(props.selected, stateProps);
+	// const setProps = (stateProps) => props.setProps(props.selected, stateProps);
 
 	return (
 		<>
@@ -78,7 +78,7 @@ PaperView.propTypes = {
 	setSelected: PropTypes.func.isRequired,
 	setInner: PropTypes.func.isRequired,
 	selected: PropTypes.string.isRequired,
-	setProps: PropTypes.func.isRequired,
+	// setProps: PropTypes.func.isRequired,
 	breadcrumbs: PropTypes.array.isRequired,
 	selectedInner: PropTypes.string.isRequired,
 };
@@ -92,5 +92,5 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
 	setSelected: contActions.setSelected,
 	setInner: contActions.setInner,
-	setProps: contActions.setProps,
+	// setProps: contActions.setProps,
 })(PaperView);

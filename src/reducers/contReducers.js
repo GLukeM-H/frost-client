@@ -21,6 +21,7 @@ const INIT_STATE = {
 		},
 	},
 	visageId: ROOT_COMP,
+	visageName: "",
 	editing: false,
 	insertId: null,
 	selected: "",
@@ -53,6 +54,10 @@ const contentReducer = produce((draft, action) => {
 			break;
 		case "BODY/RESET":
 			Object.assign(draft, INIT_STATE);
+			break;
+		case "EDIT/SET_VISAGE_NAME":
+			draft.visageName = action.payload;
+			draft.savedChanges = false;
 			break;
 		case "EDIT/INSERT":
 			insertComponent(draft, ObjectID().toString(), ...action.payload);

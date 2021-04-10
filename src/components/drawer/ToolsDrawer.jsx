@@ -11,6 +11,9 @@ import {
 	Breadcrumbs,
 	Typography,
 	Divider,
+	Collapse,
+	TextField,
+	Paper,
 	Button,
 	Box,
 	useMediaQuery,
@@ -20,6 +23,8 @@ import {
 	ChevronLeft as ChevronLeftIcon,
 	KeyboardArrowDown as KeyboardArrowDownIcon,
 	Publish as PublishIcon,
+	ExpandLess,
+	ExpandMore,
 } from "@material-ui/icons";
 import { Scrollbars } from "react-custom-scrollbars";
 import { navActions, contActions } from "../../actions";
@@ -27,7 +32,17 @@ import useStyles from "./styles";
 import GridView from "./GridView";
 import PaperView from "./PaperView";
 
-function ComponentView(props) {
+const ComponentView = connect(
+	(state) => ({
+		visageName: state.contentState.visageName,
+	}),
+	{
+		setVisageName: contActions.setVisageName,
+	}
+)((props) => {
+	const classes = useStyles();
+	const [visageNameOpen, setVisageNameOpen] = React.useState(false);
+
 	return (
 		<>
 			<List>
@@ -41,19 +56,26 @@ function ComponentView(props) {
 			</List>
 			<Divider />
 			<List dense>
-				<ListItem button>
-					<ListItemText primary="Highlight Containers" />
+				<ListItem
+					button
+					onClick={() => setVisageNameOpen((prevState) => !prevState)}
+				>
+					<ListItemText primary="Change Visage Name" />
+					{visageNameOpen ? <ExpandLess /> : <ExpandMore />}
 				</ListItem>
-				<ListItem button>
-					<ListItemText primary="Highlight Items" />
-				</ListItem>
-				<ListItem button>
-					<ListItemText primary="Start from scratch" />
-				</ListItem>
+				<Collapse in={visageNameOpen}>
+					<Paper className={classes.collapse} elevation={0} square>
+						<TextField
+							className={classes.textArea}
+							value={props.visageName}
+							onChange={(e) => props.setVisageName(e.target.value)}
+						/>
+					</Paper>
+				</Collapse>
 			</List>
 		</>
 	);
-}
+});
 
 ComponentView.propTypes = {
 	visageName: PropTypes.string.isRequired,
@@ -64,18 +86,9 @@ function ToolsDrawer(props) {
 	const classes = useStyles();
 	const mdBreakpoint = useMediaQuery(theme.breakpoints.up("md"));
 
-	const handleView = (view) => {
-		props.setToolsView(view);
-		props.setSelected("");
-	};
-
 	const handleClose = () => {
 		props.toggleTools();
 		props.toggleEditing();
-	};
-
-	const handleInsert = (compName, compProps) => {
-		props.insertComp(compName, props.selected, null, compProps);
 	};
 
 	const handleSave = () => {
@@ -153,15 +166,12 @@ ToolsDrawer.propTypes = {
 	toolsOpen: PropTypes.bool.isRequired,
 	toolsView: PropTypes.string.isRequired,
 	toggleTools: PropTypes.func.isRequired,
-	setToolsView: PropTypes.func.isRequired,
 	toggleEditing: PropTypes.func.isRequired,
-	insertComp: PropTypes.func.isRequired,
 	saveBody: PropTypes.func.isRequired,
 	savedChanges: PropTypes.bool.isRequired,
 	contentComp: PropTypes.object.isRequired,
 	visageId: PropTypes.string.isRequired,
 	visageName: PropTypes.string.isRequired,
-	setSelected: PropTypes.func.isRequired,
 	selected: PropTypes.string.isRequired,
 };
 

@@ -320,7 +320,12 @@ function GridView(props) {
 	}, [props.hasChildren]);
 
 	const handleAddItem = () => {
-		insertComp("Grid", { item: true, container: true, xs: 12 });
+		insertComp("Grid", {
+			item: true,
+			container: true,
+			xs: 12,
+			style: { minHeight: "6rem" },
+		});
 	};
 
 	const handleAddComp = (compName, compProps = {}) => {

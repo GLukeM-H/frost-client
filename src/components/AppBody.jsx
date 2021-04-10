@@ -67,7 +67,6 @@ const useStyles = makeStyles((theme) => {
 			transition: `width ${theme.transitions.duration.standard}ms cubic-bezier(.6,.01,.51,1.01)`,
 		},
 		leftItem: {
-			backgroundColor: "#00ff00",
 			flexShrink: 1,
 			overflowX: "hidden",
 		},
@@ -76,7 +75,6 @@ const useStyles = makeStyles((theme) => {
 			flexShrink: 0,
 		},
 		rightItem: {
-			backgroundColor: "#ff0000",
 			flexShrink: 1,
 			overflowX: "hidden",
 		},
@@ -153,9 +151,7 @@ function AppBody(props) {
 							item
 							className={clsx(classes.grow, classes[`${state}Body`])}
 						/>
-						<Grid item className={classes.leftItem} md={2} xs={12}>
-							left
-						</Grid>
+						<Grid item className={classes.leftItem} md={2} xs={12} />
 						<Grid item className={classes.middleItem} md={8} xs={12}>
 							<Fade
 								in={!props.loading}
@@ -164,9 +160,7 @@ function AppBody(props) {
 								{props.loggedIn ? <Visage /> : <Login />}
 							</Fade>
 						</Grid>
-						<Grid item className={classes.rightItem} md={2} xs={12}>
-							right
-						</Grid>
+						<Grid item className={classes.rightItem} md={2} xs={12} />
 					</Grid>
 				)}
 			</Transition>

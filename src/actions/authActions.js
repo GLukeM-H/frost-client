@@ -72,8 +72,9 @@ export function login(username, password) {
 }
 
 export function logout() {
-	return {
-		type: "USER/LOGOUT",
+	return (dispatch) => {
+		dispatch({ type: "USER/LOGOUT" });
+		dispatch({ type: "BODY/RESET" });
 	};
 }
 
@@ -95,8 +96,8 @@ export function register(username, password) {
 
 			const { addUser } = res.data.data;
 			if (addUser) {
-				dispatch(createVisage(addUser._id, username));
-				dispatch(login(username, password));
+				await dispatch(createVisage(addUser._id, username));
+				await dispatch(login(username, password));
 			}
 			dispatch(authError(addUser ? "" : "Failed to register user"));
 		} catch (err) {

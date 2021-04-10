@@ -16,8 +16,9 @@ const useStyles = makeStyles(() => ({
 		minHeight: "2rem",
 		minWidth: "3rem",
 	},
-	selected: {
-		outline: "2px dashed lightblue",
+	editing: {
+		border: `1px solid lightblue`,
+		borderRadius: "5px",
 	},
 }));
 
@@ -28,7 +29,7 @@ const GridComp = (props) => {
 			{({ editHoverProps, selectedClass, editButton }) => (
 				<Grid
 					className={clsx(classes.default, selectedClass, {
-						[classes.selected]: props.editing && props.selected === props.id,
+						[classes.editing]: props.editing,
 						[classes.container]: props.stateProps.container,
 						[classes.item]: props.stateProps.item,
 					})}
@@ -54,7 +55,6 @@ GridComp.propTypes = {
 	children: PropTypes.array.isRequired,
 	parentId: PropTypes.string,
 	editing: PropTypes.bool.isRequired,
-	selected: PropTypes.string.isRequired,
 	stateProps: PropTypes.object.isRequired,
 };
 
@@ -68,7 +68,6 @@ const mapStateToProps = (state, ownProps) => {
 		]),
 		parentId: ownState.parentId,
 		editing: state.contentState.editing,
-		selected: state.contentState.selected,
 	};
 };
 

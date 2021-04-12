@@ -66,7 +66,7 @@ const EditButton = connect(
 		);
 
 		return {
-			isRootComp: state.contentState.visageId === ownProps.id,
+			isRootComp: state.contentState.rootId === ownProps.id,
 			k: ownProps.editVisible && enableHover ? (ownProps.selected ? 2 : 1) : 0,
 		};
 	},

@@ -63,7 +63,6 @@ const useStyles = makeStyles((theme) => {
 		},
 		grow: {
 			flexShrink: 0,
-			backgroundColor: "#0000ff",
 			transition: `width ${theme.transitions.duration.standard}ms cubic-bezier(.6,.01,.51,1.01)`,
 		},
 		leftItem: {
@@ -86,7 +85,7 @@ const useStyles = makeStyles((theme) => {
 	};
 });
 
-function LoadingBackdrop(props) {
+const LoadingBackdrop = (props) => {
 	const theme = useTheme();
 	const classes = useStyles();
 
@@ -102,14 +101,14 @@ function LoadingBackdrop(props) {
 			<CircularProgress color="inherit" />
 		</Backdrop>
 	);
-}
+};
 
 LoadingBackdrop.propTypes = {
 	loading: PropTypes.bool.isRequired,
 };
 
 const Visage = connect((state) => ({
-	rootComp: state.contentState.contentComp[state.contentState.visageId],
+	rootComp: state.contentState.contentComp[state.contentState.rootId],
 }))((props) => (
 	<div>
 		{React.createElement(comp[props.rootComp.comp] || props.rootComp.comp, {
@@ -119,7 +118,6 @@ const Visage = connect((state) => ({
 ));
 
 Visage.propTypes = {
-	loading: PropTypes.bool,
 	rootComp: PropTypes.object,
 };
 
@@ -128,9 +126,7 @@ function AppBody(props) {
 	const classes = useStyles();
 
 	React.useEffect(() => {
-		if (props.loggedIn) {
-			props.getBody();
-		}
+		props.getBody();
 	}, [props.loggedIn]);
 
 	React.useEffect(() => {
@@ -157,13 +153,14 @@ function AppBody(props) {
 								in={!props.loading}
 								timeout={theme.transitions.duration.standard}
 							>
-								{props.loggedIn ? <Visage /> : <Login />}
+								<Visage />
 							</Fade>
 						</Grid>
 						<Grid item className={classes.rightItem} md={2} xs={12} />
 					</Grid>
 				)}
 			</Transition>
+			{props.displayLogin && <Login />}
 			<LoadingBackdrop loading={props.loading} />
 		</>
 	);
@@ -175,6 +172,7 @@ AppBody.propTypes = {
 	toolsOpen: PropTypes.bool.isRequired,
 	loading: PropTypes.bool.isRequired,
 	loggedIn: PropTypes.bool.isRequired,
+	displayLogin: PropTypes.bool.isRequired,
 	tokenExpired: PropTypes.bool.isRequired,
 };
 
@@ -182,6 +180,7 @@ const mapStateToProps = (state) => ({
 	toolsOpen: state.navState.toolsOpen,
 	loading: state.contentState.loading,
 	loggedIn: Boolean(state.authState.token),
+	displayLogin: state.contentState.displayLogin,
 	tokenExpired: state.contentState.error === "TokenExpiredError",
 });
 

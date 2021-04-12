@@ -15,8 +15,57 @@ export function errorBody(err) {
 	};
 }
 
+// function createVisage(visage) {
+// 	return async () => {
+// 		const query = `
+// 			mutation addVisage($visage: VisageFields!) {
+// 				addVisage(visage: $visage) {
+// 					_id
+// 				}
+// 			}
+// 		`;
+
+// 		const { data, error } = (
+// 			await axios.post("/graphql", {
+// 				query,
+// 				variables: { visage },
+// 			})
+// 		).data;
+// 		if (!data.addVisage || error) {
+// 			console.log("Could not add Visage");
+// 		}
+// 	};
+// }
+
+export function getDefaultBody() {
+	return async (dispatch) => {
+		dispatch(setBodyLoading(true));
+		const query = `
+			query{
+				visage(id: "605435d7a9469248bc1486d3") {
+					rootId
+					content
+					name
+				}
+			}
+		`;
+
+		try {
+			const { visage } = (await axios.post("/graphql", { query })).data.data;
+			dispatch({ type: "BODY/GET", payload: visage });
+			dispatch({ type: "BODY/SET_SAVED_CHANGES", payload: false });
+		} catch (e) {
+			dispatch(errorBody(e));
+		}
+		return dispatch(setBodyLoading(false));
+	};
+}
+
 export function getBody() {
 	return async (dispatch, getState) => {
+		const { token } = getState().authState;
+		if (!token) return dispatch(getDefaultBody());
+
 		dispatch(setBodyLoading(true));
 		const query = `query{
 			viewer{
@@ -25,11 +74,12 @@ export function getBody() {
 					_id
 					content
 					name
+					rootId
 				}
 			}
 		}`;
 		const headers = {
-			Authorization: `Bearer ${getState().authState.token}`,
+			Authorization: `Bearer ${token}`,
 		};
 
 		try {
@@ -44,36 +94,37 @@ export function getBody() {
 		} catch (e) {
 			dispatch(errorBody(e.response?.data.error || e));
 		}
-		dispatch(setBodyLoading(false));
+		return dispatch(setBodyLoading(false));
 	};
 }
 
-export function saveBody(content, visageId) {
-	return (dispatch, getState) => {
+export function saveBody() {
+	return async (dispatch, getState) => {
+		const { contentComp, visageId, visageName } = getState().contentState;
+		if (!getState().authState.token) return dispatch(setDisplayLogin(true));
 		const query = `
-			mutation updateVisage($visageId: ID!, $content: JSONObject, $visageName: String!){
-				updateVisage(id: $visageId, update:{ content: $content, name: $visageName}) {
+			mutation updateVisage($visageId: ID!, $contentComp: JSONObject, $visageName: String!){
+				updateVisage(id: $visageId, update:{ content: $contentComp, name: $visageName}) {
 					_id
 				}
 			}
 		`;
 		const variables = {
 			visageId,
-			content,
-			visageName: getState().contentState.visageName,
+			contentComp,
+			visageName,
 		};
-
-		axios
-			.post("/graphql", { query, variables })
-			.then((res) => {
-				dispatch({
-					type: "BODY/SAVE",
-					payload: res.data.data.updateVisage,
-				});
-			})
-			.catch((err) => {
-				dispatch(errorBody(err));
+		try {
+			const { updateVisage } = (
+				await axios.post("/graphql", { query, variables })
+			).data.data;
+			return dispatch({
+				type: "BODY/SAVE",
+				payload: updateVisage,
 			});
+		} catch (err) {
+			return dispatch(errorBody(err));
+		}
 	};
 }
 
@@ -81,6 +132,13 @@ export function setBodyLoading(loading) {
 	return {
 		type: "BODY/LOADING",
 		payload: loading,
+	};
+}
+
+export function setDisplayLogin(isVisible) {
+	return {
+		type: "BODY/SET_DISPLAY_LOGIN",
+		payload: isVisible,
 	};
 }
 

@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import {
+	Modal,
 	Paper,
 	Typography,
 	Grid,
@@ -10,14 +11,21 @@ import {
 	Link,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { authActions } from "../actions";
+import { authActions, contActions } from "../actions";
 
 const useStyles = makeStyles(() => ({
 	paper: {
+		width: "100%",
 		padding: "2em 1em 2em 1em",
 	},
 	container: {
-		marginTop: "5rem",
+		position: "absolute",
+		top: "50%",
+		left: "50%",
+		transform: "translate(-50%, -50%)",
+	},
+	item: {
+		textAlign: "center",
 	},
 	link: {
 		cursor: "pointer",
@@ -45,11 +53,23 @@ function Login(props) {
 	};
 
 	return (
-		<Grid container className={classes.container} justify="center">
-			<Grid item xs={9} sm={7} md={5} lg={3}>
+		<Modal
+			open={props.displayLogin}
+			onClose={() => props.setDisplayLogin(false)}
+		>
+			<Grid
+				container
+				item
+				xs={9}
+				sm={7}
+				md={5}
+				lg={3}
+				className={classes.container}
+				justify="center"
+			>
 				<Paper className={classes.paper} elevation={3}>
 					<Grid container direction="column" spacing={3} justify="center">
-						<Grid item>
+						<Grid item className={classes.item}>
 							{registering ? (
 								<>
 									<Typography
@@ -88,7 +108,7 @@ function Login(props) {
 								</>
 							)}
 						</Grid>
-						<Grid item>
+						<Grid item className={classes.item}>
 							<TextField
 								variant="outlined"
 								label="Username"
@@ -98,7 +118,7 @@ function Login(props) {
 								onChange={(e) => setUsername(e.target.value)}
 							/>
 						</Grid>
-						<Grid item>
+						<Grid item className={classes.item}>
 							<TextField
 								variant="outlined"
 								label="Password"
@@ -110,7 +130,7 @@ function Login(props) {
 							/>
 						</Grid>
 						{registering && (
-							<Grid item>
+							<Grid item className={classes.item}>
 								<TextField
 									variant="outlined"
 									label="Confirm Password"
@@ -122,7 +142,7 @@ function Login(props) {
 								/>
 							</Grid>
 						)}
-						<Grid item>
+						<Grid item className={classes.item}>
 							<Button
 								color="primary"
 								variant="contained"
@@ -134,7 +154,7 @@ function Login(props) {
 					</Grid>
 				</Paper>
 			</Grid>
-		</Grid>
+		</Modal>
 	);
 }
 
@@ -145,14 +165,18 @@ Login.defaultProps = {
 Login.propTypes = {
 	login: PropTypes.func.isRequired,
 	register: PropTypes.func.isRequired,
+	setDisplayLogin: PropTypes.func.isRequired,
+	displayLogin: PropTypes.bool.isRequired,
 	error: PropTypes.string,
 };
 
 const mapStateToProps = (state) => ({
+	displayLogin: state.contentState.displayLogin,
 	error: state.authState.error,
 });
 
 export default connect(mapStateToProps, {
 	login: authActions.login,
 	register: authActions.register,
+	setDisplayLogin: contActions.setDisplayLogin,
 })(Login);

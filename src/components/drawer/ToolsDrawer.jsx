@@ -92,7 +92,7 @@ function ToolsDrawer(props) {
 	};
 
 	const handleSave = () => {
-		props.saveBody(props.contentComp, props.visageId);
+		props.saveBody();
 	};
 
 	let view;
@@ -170,7 +170,6 @@ ToolsDrawer.propTypes = {
 	saveBody: PropTypes.func.isRequired,
 	savedChanges: PropTypes.bool.isRequired,
 	contentComp: PropTypes.object.isRequired,
-	visageId: PropTypes.string.isRequired,
 	visageName: PropTypes.string.isRequired,
 	selected: PropTypes.string.isRequired,
 };
@@ -181,7 +180,6 @@ const mapStateToProps = (state) => ({
 	selected: state.contentState.selected,
 	savedChanges: state.contentState.savedChanges,
 	contentComp: state.contentState.contentComp,
-	visageId: state.contentState.visageId,
 	visageName: state.contentState.visageName,
 });
 

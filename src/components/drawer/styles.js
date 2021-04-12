@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
 		...theme.mixins.navBackground,
 		...theme.mixins.drawer,
 		overflowY: "visible",
+		// backgroundColor: "#aeaeff"
 	},
 	drawerPaper: {
 		backdropFilter: "blur(20px)",

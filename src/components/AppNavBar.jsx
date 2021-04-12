@@ -1,27 +1,28 @@
 import React from "react";
 import { connect } from "react-redux";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import MenuList from "@material-ui/core/MenuList";
-import MenuItem from "@material-ui/core/MenuItem";
-import Typography from "@material-ui/core/Typography";
-import MenuIcon from "@material-ui/icons/Menu";
-import Grow from "@material-ui/core/Grow";
-import Paper from "@material-ui/core/Paper";
-import Popper from "@material-ui/core/Popper";
-import ClickAwayListener from "@material-ui/core/ClickAwayListener";
-import Divider from "@material-ui/core/Divider";
+import {
+	AppBar,
+	Toolbar,
+	Button,
+	IconButton,
+	MenuList,
+	MenuItem,
+	Typography,
+	Grow,
+	Paper,
+	Popper,
+	ClickAwayListener,
+	Divider,
+} from "@material-ui/core";
+import {
+	AccountCircle as AccountCircleIcon,
+	Menu as MenuIcon,
+} from "@material-ui/icons";
 import { navActions, contActions, authActions } from "../actions";
 
 /* ~~~~~ Styles ~~~~~ */
 const useStyles = makeStyles((theme) => {
-	// const smBreakpoint = theme.breakpoints.up("sm");
-	// const { drawer } = theme.mixins;
-	// const transitions = theme.transitions;
 	const { palette } = theme;
 
 	return {
@@ -30,20 +31,6 @@ const useStyles = makeStyles((theme) => {
 			color: palette.primary.dark,
 			...theme.mixins.navBackground,
 		},
-		// appBar: {
-		//     transition: transitions.create(['margin', 'width'], {
-		//         easing: transitions.easing.sharp,
-		//         duration: transitions.duration.leavingScreen,
-		//     })
-		// },
-		// appBarShift: {
-		//     width: `calc(100% - ${drawer[smBreakpoint].width}px)`,
-		//     marginLeft: drawer[smBreakpoint].width,
-		//     transition: transitions.create(['margin', 'width'], {
-		//         easing: transitions.easing.easeOut,
-		//         duration: transitions.duration.enteringScreen,
-		//     })
-		// },
 		menuButton: {
 			marginRight: theme.spacing(2),
 			outline: "0px !important",
@@ -76,6 +63,7 @@ const UserMenu = connect(
 		setEditing: contActions.setEditing,
 		toggleTools: navActions.toggleTools,
 		setTools: navActions.setTools,
+		setDisplayLogin: contActions.setDisplayLogin,
 		logout: authActions.logout,
 	}
 )((props) => {
@@ -100,7 +88,7 @@ const UserMenu = connect(
 	}, [props.editing]);
 
 	const handleToggle = () => {
-		setOpen((prevState) => !prevState && props.loggedIn);
+		setOpen((prevState) => !prevState);
 	};
 
 	const handleClose = (event) => {
@@ -120,6 +108,11 @@ const UserMenu = connect(
 		props.setEditing(false);
 		props.setTools(false);
 		props.logout();
+	};
+
+	const handleLogin = () => {
+		setOpen(false);
+		props.setDisplayLogin(true);
 	};
 
 	// return focus to the button when we transitioned from !open -> open
@@ -163,9 +156,15 @@ const UserMenu = connect(
 										<MenuItem onClick={handleEditing}>Edit Visage</MenuItem>
 									)}
 									<Divider />
-									<MenuItem onClick={handleLogout}>
-										<Typography color="textSecondary">Logout</Typography>
-									</MenuItem>
+									{props.loggedIn ? (
+										<MenuItem onClick={handleLogout}>
+											<Typography color="textSecondary">Logout</Typography>
+										</MenuItem>
+									) : (
+										<MenuItem onClick={handleLogin}>
+											<Typography color="textSecondary">Login</Typography>
+										</MenuItem>
+									)}
 								</MenuList>
 							</ClickAwayListener>
 						</Paper>

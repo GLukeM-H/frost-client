@@ -1,9 +1,7 @@
 finish implementing cards
 add scrollbar component
 create error reducer
-Edit visageName from ComponentView
-
-When saving:
-DeprecationWarning: Mongoose: `findOneAndUpdate()` and `findOneAndDelete()` without the `useFindAndModify` option set to false are deprecated. See: https://mongoosejs.com/docs/deprecations.html#findandmodify
+create default visage for non authorized users
+convert contentState.hoverDisabled to map
 
 put redux store in web worker?

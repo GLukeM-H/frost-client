@@ -5,30 +5,30 @@ import {
 	deleteComponent,
 	deleteChildren,
 	moveComponent,
-	newComponent,
 } from "../helpers/contentStateHelpers";
 
-import ROOT_COMP from "../constants/contReducerConstants";
-
+const ROOT_ID = ObjectID();
 const INIT_STATE = {
-	contentComp: {
-		[ROOT_COMP]: {
-			comp: "div",
-			inner: "",
-			props: { key: ROOT_COMP, id: ROOT_COMP },
-			childIds: [],
-			parentId: null,
-		},
-	},
-	visageId: ROOT_COMP,
+	visageId: "",
 	visageName: "",
+	rootId: ROOT_ID,
 	editing: false,
 	insertId: null,
 	selected: "",
 	hoverDisabled: {},
 	loading: false,
 	savedChanges: true,
+	displayLogin: false,
 	error: "",
+	contentComp: {
+		[ROOT_ID]: {
+			comp: "div",
+			inner: "",
+			props: { key: ROOT_ID, id: ROOT_ID },
+			childIds: [],
+			parentId: null,
+		},
+	},
 };
 
 const contentReducer = produce((draft, action) => {
@@ -37,20 +37,23 @@ const contentReducer = produce((draft, action) => {
 			draft.error = action.payload;
 			break;
 		case "BODY/GET":
-			if (action.payload) {
-				draft.contentComp = action.payload.content;
-				draft.visageId = action.payload._id;
-				draft.visageName = action.payload.name;
-			} else {
-				newComponent(draft, "Grid", ROOT_COMP, null, { container: true });
-			}
+			draft.contentComp = action.payload.content;
+			draft.rootId = action.payload.rootId;
+			draft.visageId = action.payload._id;
+			draft.visageName = action.payload.name;
 			break;
 		case "BODY/SAVE":
 			draft.visageId = action.payload._id;
 			draft.savedChanges = true;
 			break;
+		case "BODY/SET_SAVED_CHANGES":
+			draft.savedChanges = action.payload;
+			break;
 		case "BODY/LOADING":
 			draft.loading = action.payload;
+			break;
+		case "BODY/SET_DISPLAY_LOGIN":
+			draft.displayLogin = action.payload;
 			break;
 		case "BODY/RESET":
 			Object.assign(draft, INIT_STATE);

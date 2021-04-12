@@ -14,23 +14,32 @@ export function authError(err) {
 	};
 }
 
-function createVisage(ownerId, username) {
-	return async (dispatch) => {
+function addVisage(ownerId, username) {
+	return async (dispatch, getState) => {
+		const { rootId, contentComp: content } = getState().contentState;
 		const query = `
-			mutation addVisage($ownerId: ID!, $name: String!) {
-				addVisage(ownerId: $ownerId, name: $name) {
+			mutation addVisage($visage: VisageFields!) {
+				addVisage(visage: $visage) {
 					_id
 				}
 			}
 		`;
 
-		const res = await axios.post("/graphql", {
-			query,
-			variables: { ownerId, name: `${username}'s Visage` },
-		});
-		const { addVisage } = res.data.data;
-		if (!addVisage) {
-			dispatch(authError("Could not add Visage"));
+		try {
+			const { data } = (
+				await axios.post("/graphql", {
+					query,
+					variables: {
+						visage: { ownerId, rootId, content, name: `${username}'s Visage` },
+					},
+				})
+			).data;
+			if (data.addVisage) {
+				dispatch({ type: "BODY/SET_SAVED_CHANGES", payload: true });
+			}
+			return dispatch(authError(data.addVisage ? "" : "Could not add Visage"));
+		} catch (e) {
+			return dispatch(authError(e.toString()));
 		}
 	};
 }
@@ -43,18 +52,25 @@ export function login(username, password) {
                     token,
                     error,
                     user {
+						_id
                         username
+						visage{
+							_id
+							content
+							name
+							rootId
+						}
                     }
                 }
             }
         `;
-
 		try {
-			const res = await axios.post("/graphql", {
-				query,
-				variables: { username, password },
-			});
-			const { token, error, user } = res.data.data.login;
+			const { token, error, user } = (
+				await axios.post("/graphql", {
+					query,
+					variables: { username, password },
+				})
+			).data.data.login;
 			if (!error) {
 				dispatch({
 					type: "USER/LOGIN",
@@ -63,10 +79,23 @@ export function login(username, password) {
 						username: user.username,
 					},
 				});
+				dispatch({ type: "BODY/SET_DISPLAY_LOGIN", payload: false });
+
+				if (user.visage) {
+					dispatch({
+						type: "BODY/GET",
+						payload: {
+							...user.visage,
+						},
+					});
+					dispatch({ type: "BODY/SET_SAVED_CHANGES", payload: true });
+				} else {
+					dispatch(addVisage(user._id, user.username));
+				}
 			}
-			dispatch(authError(error));
+			return dispatch(authError(error));
 		} catch (err) {
-			dispatch(authError(err.toString()));
+			return dispatch(authError(err.toString()));
 		}
 	};
 }
@@ -89,19 +118,20 @@ export function register(username, password) {
             }
         `;
 		try {
-			const res = await axios.post("/graphql", {
-				query,
-				variables: { username, password },
-			});
+			const { addUser } = (
+				await axios.post("/graphql", {
+					query,
+					variables: { username, password },
+				})
+			).data.data;
 
-			const { addUser } = res.data.data;
 			if (addUser) {
-				await dispatch(createVisage(addUser._id, username));
-				await dispatch(login(username, password));
+				dispatch(addVisage(addUser._id, username));
+				dispatch(login(username, password));
 			}
-			dispatch(authError(addUser ? "" : "Failed to register user"));
+			return dispatch(authError(addUser ? "" : "Failed to register user"));
 		} catch (err) {
-			dispatch(authError(err.toString()));
+			return dispatch(authError(err.toString()));
 		}
 	};
 }

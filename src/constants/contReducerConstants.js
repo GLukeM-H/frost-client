@@ -1,3 +1,2 @@
-const ROOT_COMP = "loadingComp";
-
-export default ROOT_COMP;
+/* eslint-disable import/prefer-default-export */
+export const ROOT_COMP = "loadingComp";

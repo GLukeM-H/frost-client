@@ -1,4 +1,11 @@
 import { produce } from "immer";
+import {
+	USER_ERROR,
+	USER_LOGIN,
+	USER_LOGOUT,
+	USER_RESET,
+	USER_SET_USERNAME,
+} from "../constants/actionTypes";
 
 const INIT_STATE = {
 	username: null,
@@ -8,19 +15,19 @@ const INIT_STATE = {
 
 const authReducer = produce((draft, action) => {
 	switch (action.type) {
-		case "USER/ERROR":
+		case USER_ERROR:
 			draft.error = action.payload;
 			break;
-		case "USER/LOGIN":
+		case USER_LOGIN:
 			localStorage.setItem("token", action.payload.token);
 			Object.assign(draft, action.payload);
 			break;
-		case "USER/LOGOUT":
-		case "USER/RESET":
+		case USER_LOGOUT:
+		case USER_RESET:
 			localStorage.removeItem("token");
 			Object.assign(draft, { ...INIT_STATE, token: null });
 			break;
-		case "USER/SET_USERNAME":
+		case USER_SET_USERNAME:
 			draft.username = action.payload;
 			break;
 		default:

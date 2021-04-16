@@ -1,21 +1,29 @@
+import {
+	NAV_RESET,
+	NAV_TOGGLE,
+	TOOLS_SET_TOOLS,
+	TOOLS_SET_VIEW,
+	TOOLS_TOGGLE,
+} from "../constants/actionTypes";
+
 export const resetNav = () => ({
-	type: "NAV/RESET",
+	type: NAV_RESET,
 });
 
 export const toggleNav = () => ({
-	type: "NAV/TOGGLE",
+	type: NAV_TOGGLE,
 });
 
 export const toggleTools = () => ({
-	type: "TOOLS/TOGGLE",
+	type: TOOLS_TOGGLE,
 });
 
 export const setTools = (open) => ({
-	type: "TOOLS/SET_TOOLS",
+	type: TOOLS_SET_TOOLS,
 	payload: open,
 });
 
 export const setToolsView = (payload) => ({
-	type: "TOOLS/SET_VIEW",
+	type: TOOLS_SET_VIEW,
 	payload,
 });

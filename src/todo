@@ -1,7 +1,9 @@
 finish implementing cards
 add scrollbar component
-create error reducer
-create default visage for non authorized users
+improve error handling in actions
 convert contentState.hoverDisabled to map
 
+need workaround for touch controls when editing on mobile
+
+add component schema to help input validation?
 put redux store in web worker?

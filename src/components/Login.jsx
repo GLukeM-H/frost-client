@@ -11,7 +11,7 @@ import {
 	Link,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { authActions, contActions } from "../actions";
+import { authActions, contActions, errActions } from "../actions";
 
 const useStyles = makeStyles(() => ({
 	paper: {
@@ -52,6 +52,16 @@ function Login(props) {
 		}
 	};
 
+	const handleSwitchRegister = () => {
+		setRegistering(true);
+		props.setLoginErr(null);
+	};
+
+	const handleSwitchLogin = () => {
+		setRegistering(false);
+		props.setLoginErr(null);
+	};
+
 	return (
 		<Modal
 			open={props.displayLogin}
@@ -80,10 +90,7 @@ function Login(props) {
 										Register
 									</Typography>
 									<Typography>
-										<Link
-											className={classes.link}
-											onClick={() => setRegistering(false)}
-										>
+										<Link className={classes.link} onClick={handleSwitchLogin}>
 											Have an account? Login here.
 										</Link>
 									</Typography>
@@ -100,7 +107,7 @@ function Login(props) {
 									<Typography>
 										<Link
 											className={classes.link}
-											onClick={() => setRegistering(true)}
+											onClick={handleSwitchRegister}
 										>
 											No account? Register here.
 										</Link>
@@ -114,7 +121,7 @@ function Login(props) {
 								label="Username"
 								color="primary"
 								value={username}
-								error={Boolean(props.error)}
+								error={props.loginError}
 								onChange={(e) => setUsername(e.target.value)}
 							/>
 						</Grid>
@@ -125,7 +132,7 @@ function Login(props) {
 								color="primary"
 								type="password"
 								value={password}
-								error={passwordError}
+								error={props.loginError}
 								onChange={(e) => setPassword(e.target.value)}
 							/>
 						</Grid>
@@ -158,25 +165,23 @@ function Login(props) {
 	);
 }
 
-Login.defaultProps = {
-	error: null,
-};
-
 Login.propTypes = {
 	login: PropTypes.func.isRequired,
 	register: PropTypes.func.isRequired,
 	setDisplayLogin: PropTypes.func.isRequired,
+	setLoginErr: PropTypes.func.isRequired,
 	displayLogin: PropTypes.bool.isRequired,
-	error: PropTypes.string,
+	loginError: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
 	displayLogin: state.contentState.displayLogin,
-	error: state.authState.error,
+	loginError: Boolean(state.errorState.login),
 });
 
 export default connect(mapStateToProps, {
 	login: authActions.login,
 	register: authActions.register,
 	setDisplayLogin: contActions.setDisplayLogin,
+	setLoginErr: errActions.setLoginErr,
 })(Login);

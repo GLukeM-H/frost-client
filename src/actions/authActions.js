@@ -1,22 +1,37 @@
 /* eslint-disable no-use-before-define */
 import axios from "axios";
+import {
+	BODY_GET,
+	BODY_RESET,
+	BODY_SET_DISPLAY_LOGIN,
+	BODY_SET_SAVED_CHANGES,
+	ERROR_LOGIN,
+	USER_ERROR,
+	USER_LOGIN,
+	USER_LOGOUT,
+	USER_RESET,
+} from "../constants/actionTypes";
 
 export function resetUser() {
 	return {
-		type: "USER/RESET",
+		type: USER_RESET,
 	};
 }
 
 export function authError(err) {
 	return {
-		type: "USER/ERROR",
+		type: USER_ERROR,
 		payload: err,
 	};
 }
 
-function addVisage(ownerId, username) {
+function addVisage(ownerId) {
 	return async (dispatch, getState) => {
-		const { rootId, contentComp: content } = getState().contentState;
+		const {
+			rootId,
+			contentComp: content,
+			visageName: name,
+		} = getState().contentState;
 		const query = `
 			mutation addVisage($visage: VisageFields!) {
 				addVisage(visage: $visage) {
@@ -30,16 +45,15 @@ function addVisage(ownerId, username) {
 				await axios.post("/graphql", {
 					query,
 					variables: {
-						visage: { ownerId, rootId, content, name: `${username}'s Visage` },
+						visage: { ownerId, rootId, content, name },
 					},
 				})
 			).data;
-			if (data.addVisage) {
-				dispatch({ type: "BODY/SET_SAVED_CHANGES", payload: true });
-			}
-			return dispatch(authError(data.addVisage ? "" : "Could not add Visage"));
-		} catch (e) {
-			return dispatch(authError(e.toString()));
+			if (!data.addVisage) throw new Error("Could not add Visage");
+
+			return dispatch({ type: BODY_SET_SAVED_CHANGES, payload: true });
+		} catch (err) {
+			return dispatch(authError(err.toString()));
 		}
 	};
 }
@@ -71,39 +85,38 @@ export function login(username, password) {
 					variables: { username, password },
 				})
 			).data.data.login;
-			if (!error) {
-				dispatch({
-					type: "USER/LOGIN",
-					payload: {
-						token: token.toString(),
-						username: user.username,
-					},
-				});
-				dispatch({ type: "BODY/SET_DISPLAY_LOGIN", payload: false });
 
-				if (user.visage) {
-					dispatch({
-						type: "BODY/GET",
-						payload: {
-							...user.visage,
-						},
-					});
-					dispatch({ type: "BODY/SET_SAVED_CHANGES", payload: true });
-				} else {
-					dispatch(addVisage(user._id, user.username));
-				}
+			if (error) throw error;
+
+			dispatch({
+				type: USER_LOGIN,
+				payload: {
+					token: token.toString(),
+					username: user.username,
+				},
+			});
+			dispatch({ type: BODY_SET_DISPLAY_LOGIN, payload: false });
+
+			if (!user.visage) {
+				return dispatch(addVisage(user._id));
 			}
-			return dispatch(authError(error));
+
+			dispatch({
+				type: BODY_GET,
+				payload: { ...user.visage },
+			});
+
+			return dispatch({ type: BODY_SET_SAVED_CHANGES, payload: true });
 		} catch (err) {
-			return dispatch(authError(err.toString()));
+			return dispatch({ type: ERROR_LOGIN, payload: err });
 		}
 	};
 }
 
 export function logout() {
 	return (dispatch) => {
-		dispatch({ type: "USER/LOGOUT" });
-		dispatch({ type: "BODY/RESET" });
+		dispatch({ type: USER_LOGOUT });
+		dispatch({ type: BODY_RESET });
 	};
 }
 
@@ -129,9 +142,12 @@ export function register(username, password) {
 				dispatch(addVisage(addUser._id, username));
 				dispatch(login(username, password));
 			}
-			return dispatch(authError(addUser ? "" : "Failed to register user"));
+			return dispatch({
+				type: ERROR_LOGIN,
+				payload: addUser ? "" : "Failed to register user",
+			});
 		} catch (err) {
-			return dispatch(authError(err.toString()));
+			return dispatch({ type: ERROR_LOGIN, payload: err.toString() });
 		}
 	};
 }

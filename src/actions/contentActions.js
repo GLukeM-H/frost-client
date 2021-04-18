@@ -25,239 +25,194 @@ import {
 } from "../constants/actionTypes";
 
 /* ~~~~~ Body Actions ~~~~~ */
-export function resetBody() {
-	return {
-		type: BODY_RESET,
-	};
-}
+export const resetBody = () => ({
+	type: BODY_RESET,
+});
 
-export function errorBody(err) {
-	return {
-		type: BODY_ERROR,
-		payload: err.toString(),
-	};
-}
+export const errorBody = (err) => ({
+	type: BODY_ERROR,
+	payload: err.toString(),
+});
 
-// function createVisage(visage) {
-// 	return async () => {
-// 		const query = `
-// 			mutation addVisage($visage: VisageFields!) {
-// 				addVisage(visage: $visage) {
-// 					_id
-// 				}
-// 			}
-// 		`;
-
-// 		const { data, error } = (
-// 			await axios.post("/graphql", {
-// 				query,
-// 				variables: { visage },
-// 			})
-// 		).data;
-// 		if (!data.addVisage || error) {
-// 			console.log("Could not add Visage");
-// 		}
-// 	};
-// }
-
-export function getDefaultBody() {
-	return async (dispatch) => {
-		dispatch(setBodyLoading(true));
-		const query = `
-			query{
-				visage(id: "605435d7a9469248bc1486d3") {
-					rootId
-					content
-					name
-				}
+export const getDefaultBody = () => async (dispatch) => {
+	dispatch(setBodyLoading(true));
+	const query = `
+		query {
+			visage(id: "605435d7a9469248bc1486d3") {
+				rootId
+				content
+				name
 			}
-		`;
-
-		try {
-			const { visage } = (await axios.post("/graphql", { query })).data.data;
-			dispatch({ type: BODY_GET, payload: visage });
-			dispatch({ type: BODY_SET_SAVED_CHANGES, payload: false });
-		} catch (err) {
-			dispatch({ type: ERROR_GET_VISAGE, payload: err });
 		}
-		return dispatch(setBodyLoading(false));
-	};
-}
+	`;
 
-export function getBody() {
-	return async (dispatch, getState) => {
-		const { token } = getState().authState;
-		if (!token) return dispatch(getDefaultBody());
+	try {
+		const { data, errors } = (await axios.post("/graphql", { query })).data;
 
-		dispatch(setBodyLoading(true));
-		const query = `query{
-			viewer{
+		if (errors) throw errors;
+
+		dispatch({ type: BODY_GET, payload: data.visage });
+		dispatch({ type: BODY_SET_SAVED_CHANGES, payload: false });
+	} catch (err) {
+		dispatch({ type: ERROR_GET_VISAGE, payload: err });
+	}
+	return dispatch(setBodyLoading(false));
+};
+
+export const getBody = () => async (dispatch, getState) => {
+	const { token } = getState().authState;
+	if (!token) return dispatch(getDefaultBody());
+
+	dispatch(setBodyLoading(true));
+
+	const query = `
+		query {
+			viewer {
 				username
-				visage{
+				visage {
 					_id
 					content
 					name
 					rootId
 				}
 			}
-		}`;
-		const headers = {
-			Authorization: `Bearer ${token}`,
-		};
-
-		try {
-			const { visage, username } = (
-				await axios.post("/graphql", { query }, { headers })
-			).data.data.viewer;
-			dispatch({
-				type: BODY_GET,
-				payload: visage,
-			});
-			dispatch({ type: USER_SET_USERNAME, payload: username });
-		} catch (e) {
-			dispatch(errorBody(e.response?.data.error || e));
 		}
-		return dispatch(setBodyLoading(false));
-	};
-}
+	`;
+	const headers = { Authorization: `Bearer ${token}` };
 
-export function saveBody() {
-	return async (dispatch, getState) => {
-		const { contentComp, visageId, visageName } = getState().contentState;
-		if (!getState().authState.token) return dispatch(setDisplayLogin(true));
-		const query = `
-			mutation updateVisage($visageId: ID!, $contentComp: JSONObject, $visageName: String!){
-				updateVisage(id: $visageId, update:{ content: $contentComp, name: $visageName}) {
-					_id
-				}
+	try {
+		const { data, errors } = (
+			await axios.post("/graphql", { query }, { headers })
+		).data;
+
+		if (errors) throw errors;
+
+		dispatch({
+			type: BODY_GET,
+			payload: data.viewer.visage,
+		});
+		dispatch({ type: USER_SET_USERNAME, payload: data.viewer.username });
+	} catch (e) {
+		dispatch(errorBody(e.response?.data.error || e));
+	}
+	return dispatch(setBodyLoading(false));
+};
+
+export const saveBody = () => async (dispatch, getState) => {
+	const { contentComp, visageId, visageName } = getState().contentState;
+	if (!getState().authState.token) return dispatch(setDisplayLogin(true));
+	const query = `
+		mutation updateVisage(
+			$visageId: ID!
+			$contentComp: JSONObject
+			$visageName: String!
+		) {
+			updateVisage(
+				id: $visageId
+				update: { content: $contentComp, name: $visageName}
+			) {
+				_id
 			}
-		`;
-		const variables = {
-			visageId,
-			contentComp,
-			visageName,
-		};
-		try {
-			const { updateVisage } = (
-				await axios.post("/graphql", { query, variables })
-			).data.data;
-			return dispatch({
-				type: BODY_SAVE,
-				payload: updateVisage,
-			});
-		} catch (err) {
-			return dispatch(errorBody(err));
 		}
+	`;
+	const variables = {
+		visageId,
+		contentComp,
+		visageName,
 	};
-}
+	try {
+		const { data, errors } = (
+			await axios.post("/graphql", { query, variables })
+		).data;
 
-export function setBodyLoading(loading) {
-	return {
-		type: BODY_LOADING,
-		payload: loading,
-	};
-}
+		if (errors) throw errors;
 
-export function setDisplayLogin(isVisible) {
-	return {
-		type: BODY_SET_DISPLAY_LOGIN,
-		payload: isVisible,
-	};
-}
+		return dispatch({
+			type: BODY_SAVE,
+			payload: data.updateVisage,
+		});
+	} catch (err) {
+		return dispatch(errorBody(err));
+	}
+};
+
+export const setBodyLoading = (loading) => ({
+	type: BODY_LOADING,
+	payload: loading,
+});
+
+export const setDisplayLogin = (isVisible) => ({
+	type: BODY_SET_DISPLAY_LOGIN,
+	payload: isVisible,
+});
 
 /* ~~~~~ Edit Actions ~~~~~ */
-export function setSelected(id) {
-	return {
-		type: EDIT_SET_SELECTED,
+export const setSelected = (id) => ({
+	type: EDIT_SET_SELECTED,
+	payload: id,
+});
+
+export const setVisageName = (name) => (dispatch) => {
+	dispatch({
+		type: EDIT_SET_VISAGE_NAME,
+		payload: name,
+	});
+};
+
+export const disableParent = (id) => ({
+	type: EDIT_DISABLE_PARENT,
+	payload: id,
+});
+
+export const enableParent = (id) => ({
+	type: EDIT_ENABLE_PARENT,
+	payload: id,
+});
+
+export const toggleEditing = () => (dispatch) => {
+	dispatch(setSelected(""));
+	dispatch({ type: EDIT_TOGGLE });
+};
+
+export const setEditing = (editing) => (dispatch) => {
+	dispatch(setSelected(""));
+	dispatch({ type: EDIT_SET_EDITING, payload: editing });
+};
+
+export const insertComp = (compName, parentId, childId, props = {}) => ({
+	type: EDIT_INSERT,
+	payload: [compName, parentId, childId, props],
+});
+
+export const deleteComp = (id) => (dispatch) => {
+	dispatch(setSelected(""));
+	dispatch({
+		type: EDIT_DELETE,
 		payload: id,
-	};
-}
+	});
+};
 
-export function setVisageName(name) {
-	return (dispatch) => {
-		dispatch({
-			type: EDIT_SET_VISAGE_NAME,
-			payload: name,
-		});
-	};
-}
+export const deleteChildren = (id) => ({
+	type: EDIT_DELETE_CHILDREN,
+	payload: id,
+});
 
-export function disableParent(id) {
-	return {
-		type: EDIT_DISABLE_PARENT,
-		payload: id,
-	};
-}
+export const moveComp = (id, oldParent, newParent, index) => ({
+	type: EDIT_MOVE,
+	payload: [id, oldParent, newParent, index],
+});
 
-export function enableParent(id) {
-	return {
-		type: EDIT_ENABLE_PARENT,
-		payload: id,
-	};
-}
+export const replaceComp = (parentId, childId, compName) => (dispatch) => {
+	dispatch(insertComp(parentId, childId, compName));
+	dispatch(deleteComp(childId));
+};
 
-export function toggleEditing() {
-	return (dispatch) => {
-		dispatch(setSelected(""));
-		dispatch({ type: EDIT_TOGGLE });
-	};
-}
+export const setInner = (id, inner) => ({
+	type: EDIT_SET_INNER,
+	payload: { id, inner },
+});
 
-export function setEditing(editing) {
-	return (dispatch) => {
-		dispatch(setSelected(""));
-		dispatch({ type: EDIT_SET_EDITING, payload: editing });
-	};
-}
-
-export function insertComp(compName, parentId, childId, props = {}) {
-	return {
-		type: EDIT_INSERT,
-		payload: [compName, parentId, childId, props],
-	};
-}
-
-export function deleteComp(id) {
-	return (dispatch) => {
-		dispatch(setSelected(""));
-		dispatch({
-			type: EDIT_DELETE,
-			payload: id,
-		});
-	};
-}
-
-export function deleteChildren(id) {
-	return {
-		type: EDIT_DELETE_CHILDREN,
-		payload: id,
-	};
-}
-
-export function moveComp(id, oldParent, newParent, index) {
-	return {
-		type: EDIT_MOVE,
-		payload: [id, oldParent, newParent, index],
-	};
-}
-
-export function replaceComp(parentId, childId, compName) {
-	return (dispatch) => {
-		dispatch(insertComp(parentId, childId, compName));
-		dispatch(deleteComp(childId));
-	};
-}
-
-export function setInner(id, inner) {
-	return {
-		type: EDIT_SET_INNER,
-		payload: { id, inner },
-	};
-}
-
-export function setProps(id, props) {
-	return {
-		type: EDIT_SET_PROPS,
-		payload: { id, props },
-	};
-}
+export const setProps = (id, props) => ({
+	type: EDIT_SET_PROPS,
+	payload: { id, props },
+});

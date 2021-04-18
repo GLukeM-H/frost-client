@@ -23,7 +23,7 @@ export const setTools = (open) => ({
 	payload: open,
 });
 
-export const setToolsView = (payload) => ({
+export const setToolsView = (view) => ({
 	type: TOOLS_SET_VIEW,
-	payload,
+	payload: view,
 });

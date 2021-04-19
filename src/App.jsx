@@ -1,5 +1,6 @@
 import React from "react";
-import Grid from "@material-ui/core/Grid";
+import { BrowserRouter, Route } from "react-router-dom";
+import { Grid } from "@material-ui/core";
 import {
 	makeStyles,
 	createMuiTheme,
@@ -44,16 +45,14 @@ const userTheme = createMuiTheme({
 				height: "100vh",
 			},
 		},
-		navBackground: {
-			...(CSS.supports("backdrop-filter", "blur(20px)")
-				? {
-						backdropFilter: "blur(20px)",
-						backgroundColor: "rgba(248,248,255,0.7)",
-				  }
-				: {
-						backgroundColor: "ghostwhite",
-				  }),
-		},
+		navBackground: CSS.supports("backdrop-filter", "blur(20px)")
+			? {
+					backdropFilter: "blur(20px)",
+					backgroundColor: "rgba(248,248,255,0.7)",
+			  }
+			: {
+					backgroundColor: "ghostwhite",
+			  },
 	},
 	overrides: {
 		MuiButton: {
@@ -64,62 +63,68 @@ const userTheme = createMuiTheme({
 	},
 });
 
-const useStyles = makeStyles((theme) => ({
-	root: {
-		backgroundColor: "ghostwhite",
-	},
-	app: {
-		textAlign: "center",
-		position: "relative",
-	},
-	navbarContainer: {
-		position: "fixed",
-		width: "100vw",
-		zIndex: theme.zIndex.appBar,
-		...theme.mixins.navBackground,
-	},
-	drawer: {
-		zIndex: theme.zIndex.drawer,
-		...theme.mixins.navBackground,
-	},
-	bodyItem: {
-		zIndex: 0,
-		marginTop: theme.mixins.toolbar.minHeight,
-		[`${theme.breakpoints.up("xs")} and (orientation: landscape)`]: {
-			marginTop:
-				theme.mixins.toolbar[
-					`${theme.breakpoints.up("xs")} and (orientation: landscape)`
-				].minHeight,
+const useStyles = makeStyles((theme) => {
+	const xsBreakpoint = theme.breakpoints.up("xs");
+	const smBreakpoint = theme.breakpoints.up("sm");
+	return {
+		app: {
+			textAlign: "center",
+			position: "relative",
+			backgroundColor: "ghostwhite",
 		},
-		[theme.breakpoints.up("sm")]: {
-			marginTop: theme.mixins.toolbar[theme.breakpoints.up("sm")].minHeight,
+		navbarContainer: {
+			position: "fixed",
+			width: "100vw",
+			zIndex: theme.zIndex.appBar,
+			...theme.mixins.navBackground,
 		},
-	},
-	blurred: {
-		filter: "blur(10px)",
-		height: "70px",
-		width: "100%",
-		overflow: "hidden",
-		position: "fixed",
-	},
-}));
+		drawer: {
+			zIndex: theme.zIndex.drawer,
+			...theme.mixins.navBackground,
+		},
+		bodyItem: {
+			zIndex: 0,
+			marginTop: theme.mixins.toolbar.minHeight,
+			[`${xsBreakpoint} and (orientation: landscape)`]: {
+				marginTop:
+					theme.mixins.toolbar[`${xsBreakpoint} and (orientation: landscape)`]
+						.minHeight,
+			},
+			[smBreakpoint]: {
+				marginTop: theme.mixins.toolbar[smBreakpoint].minHeight,
+			},
+		},
+		blurred: {
+			filter: "blur(10px)",
+			height: "70px",
+			width: "100%",
+			overflow: "hidden",
+			position: "fixed",
+		},
+	};
+});
 
 function App() {
 	const classes = useStyles();
 
 	return (
 		<ThemeProvider theme={userTheme}>
-			<div className={classes.root}>
-				<Grid container className={classes.app}>
-					<Grid item xs={12} className={classes.navbarContainer}>
-						<AppNavBar />
-					</Grid>
-					<Grid item className={classes.bodyItem} xs={12}>
-						<AppBody />
-					</Grid>
-					<ToolsDrawer className={classes.drawer} />
-				</Grid>
-			</div>
+			<BrowserRouter>
+				<Route
+					path="/"
+					component={() => (
+						<Grid container className={classes.app}>
+							<Grid item xs={12} className={classes.navbarContainer}>
+								<AppNavBar />
+							</Grid>
+							<Grid item className={classes.bodyItem} xs={12}>
+								<AppBody />
+							</Grid>
+							<ToolsDrawer className={classes.drawer} />
+						</Grid>
+					)}
+				/>
+			</BrowserRouter>
 		</ThemeProvider>
 	);
 }

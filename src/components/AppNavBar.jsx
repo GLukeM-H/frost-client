@@ -48,6 +48,10 @@ const useStyles = makeStyles((theme) => {
 		userPopper: {
 			backgroundColor: palette.neutral.light,
 		},
+		// bottomDivider: {
+		// 	width: "100%",
+		// 	margin: "0 auto",
+		// },
 	};
 });
 
@@ -177,10 +181,25 @@ const UserMenu = connect(
 
 function AppNavBar() {
 	const classes = useStyles();
+	const [elevation, setElevation] = React.useState(0);
 
+	const handleScroll = React.useCallback(() => {
+		if (window.scrollY !== 0 && elevation === 0) {
+			setElevation(3);
+		} else if (window.scrollY === 0 && elevation !== 0) {
+			setElevation(0);
+		}
+	}, [elevation]);
+
+	React.useEffect(() => {
+		window.addEventListener("scroll", handleScroll);
+		return () => {
+			window.removeEventListener("scroll", handleScroll);
+		};
+	}, [handleScroll]);
 	return (
 		<div className={classes.appNav}>
-			<AppBar position="static" color="transparent">
+			<AppBar position="static" color="transparent" elevation={elevation}>
 				<Toolbar>
 					<IconButton
 						className={classes.menuButton}
@@ -195,6 +214,7 @@ function AppNavBar() {
 					<UserMenu />
 				</Toolbar>
 			</AppBar>
+			{/* {!elevation && <Divider className={classes.bottomDivider} />} */}
 		</div>
 	);
 }

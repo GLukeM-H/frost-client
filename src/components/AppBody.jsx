@@ -10,7 +10,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Fade from "@material-ui/core/Fade";
 import { contActions, authActions } from "../actions";
 import * as comp from "./visage";
-import Login from "./Login";
+import { ModalLogin } from "./Login";
 
 const useStyles = makeStyles((theme) => {
 	const { toolbar, drawer } = theme.mixins;
@@ -160,7 +160,7 @@ function AppBody(props) {
 					</Grid>
 				)}
 			</Transition>
-			{props.displayLogin && <Login />}
+			<ModalLogin />
 			<LoadingBackdrop loading={props.loading} />
 		</>
 	);
@@ -172,7 +172,6 @@ AppBody.propTypes = {
 	toolsOpen: PropTypes.bool.isRequired,
 	loading: PropTypes.bool.isRequired,
 	loggedIn: PropTypes.bool.isRequired,
-	displayLogin: PropTypes.bool.isRequired,
 	tokenExpired: PropTypes.bool.isRequired,
 };
 
@@ -180,7 +179,6 @@ const mapStateToProps = (state) => ({
 	toolsOpen: state.navState.toolsOpen,
 	loading: state.contentState.loading,
 	loggedIn: Boolean(state.authState.token),
-	displayLogin: state.contentState.displayLogin,
 	tokenExpired: state.contentState.error === "TokenExpiredError",
 });
 

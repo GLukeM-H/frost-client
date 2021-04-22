@@ -2,6 +2,7 @@ finish implementing cards
 add scrollbar component
 improve error handling in actions
 convert contentState.hoverDisabled to map
+finish landing page (link to example visage, handle login submit, transition background image on load)
 
 need workaround for touch controls when editing on mobile
 

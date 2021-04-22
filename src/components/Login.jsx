@@ -1,6 +1,6 @@
+/* eslint-disable no-useless-computed-key */
 import React from "react";
 import { connect } from "react-redux";
-import PropTypes from "prop-types";
 import {
 	Modal,
 	Paper,
@@ -9,14 +9,28 @@ import {
 	TextField,
 	Button,
 	Link,
+	useTheme,
+	Fade,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { SwitchTransition } from "react-transition-group";
 import { authActions, contActions, errActions } from "../actions";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
 	paper: {
 		width: "100%",
 		padding: "2em 1em 2em 1em",
+		backgroundColor: theme.palette.translucent.main,
+		backdropFilter: "blur(20px)",
+		color: theme.palette.primary.dark,
+		...theme.mixins.navBackground,
+		transition: `transform ${theme.transitions.duration.short}ms ease-out`,
+	},
+	enteringPaper: {
+		transform: "rotate3d(1,2,0,90deg)",
+	},
+	exitingPaper: {
+		transform: "rotate3d(1,2,0,-90deg)",
 	},
 	container: {
 		position: "absolute",
@@ -27,13 +41,29 @@ const useStyles = makeStyles(() => ({
 	item: {
 		textAlign: "center",
 	},
+	input: {
+		color: theme.palette.neutral.main,
+	},
 	link: {
 		cursor: "pointer",
+		["&:hover"]: {
+			opacity: "0.8",
+		},
 	},
 }));
 
-function Login(props) {
+export const LoginPaper = connect(
+	(state) => ({
+		loginError: Boolean(state.errorState.login),
+	}),
+	{
+		login: authActions.login,
+		register: authActions.register,
+		setLoginErr: errActions.setLoginErr,
+	}
+)((props) => {
 	const classes = useStyles();
+	const theme = useTheme();
 	const [username, setUsername] = React.useState("");
 	const [password, setPassword] = React.useState("");
 	const [checkPassword, setCheckPassword] = React.useState("");
@@ -63,30 +93,18 @@ function Login(props) {
 	};
 
 	return (
-		<Modal
-			open={props.displayLogin}
-			onClose={() => props.setDisplayLogin(false)}
-		>
-			<Grid
-				container
-				item
-				xs={9}
-				sm={7}
-				md={5}
-				lg={3}
-				className={classes.container}
-				justify="center"
+		<SwitchTransition>
+			<Fade
+				key={registering}
+				direction="right"
+				timeout={theme.transitions.duration.shorter}
 			>
-				<Paper className={classes.paper} elevation={3}>
+				<Paper className={classes.paper} elevation={4}>
 					<Grid container direction="column" spacing={3} justify="center">
 						<Grid item className={classes.item}>
 							{registering ? (
 								<>
-									<Typography
-										variant="h4"
-										color="primary"
-										style={{ cursor: "default" }}
-									>
+									<Typography variant="h4" style={{ cursor: "default" }}>
 										Register
 									</Typography>
 									<Typography>
@@ -97,11 +115,7 @@ function Login(props) {
 								</>
 							) : (
 								<>
-									<Typography
-										variant="h4"
-										color="primary"
-										style={{ cursor: "default" }}
-									>
+									<Typography variant="h4" style={{ cursor: "default" }}>
 										Login
 									</Typography>
 									<Typography>
@@ -128,8 +142,8 @@ function Login(props) {
 						<Grid item className={classes.item}>
 							<TextField
 								variant="outlined"
-								label="Password"
 								color="primary"
+								label="Password"
 								type="password"
 								value={password}
 								error={props.loginError}
@@ -140,8 +154,8 @@ function Login(props) {
 							<Grid item className={classes.item}>
 								<TextField
 									variant="outlined"
-									label="Confirm Password"
 									color="primary"
+									label="Confirm Password"
 									type="password"
 									value={checkPassword}
 									error={passwordError}
@@ -150,38 +164,42 @@ function Login(props) {
 							</Grid>
 						)}
 						<Grid item className={classes.item}>
-							<Button
-								color="primary"
-								variant="contained"
-								onClick={handleSubmit}
-							>
+							<Button color="primary" variant="outlined" onClick={handleSubmit}>
 								Submit
 							</Button>
 						</Grid>
 					</Grid>
 				</Paper>
-			</Grid>
-		</Modal>
+			</Fade>
+		</SwitchTransition>
 	);
-}
-
-Login.propTypes = {
-	login: PropTypes.func.isRequired,
-	register: PropTypes.func.isRequired,
-	setDisplayLogin: PropTypes.func.isRequired,
-	setLoginErr: PropTypes.func.isRequired,
-	displayLogin: PropTypes.bool.isRequired,
-	loginError: PropTypes.bool.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-	displayLogin: state.contentState.displayLogin,
-	loginError: Boolean(state.errorState.login),
 });
 
-export default connect(mapStateToProps, {
-	login: authActions.login,
-	register: authActions.register,
-	setDisplayLogin: contActions.setDisplayLogin,
-	setLoginErr: errActions.setLoginErr,
-})(Login);
+export const Login = () => {
+	const classes = useStyles();
+	return (
+		<Grid
+			container
+			item
+			xs={9}
+			sm={7}
+			md={5}
+			lg={3}
+			className={classes.container}
+			justify="center"
+		>
+			<LoginPaper />
+		</Grid>
+	);
+};
+
+export const ModalLogin = connect(
+	(state) => ({
+		displayLogin: state.contentState.displayLogin,
+	}),
+	{ setDisplayLogin: contActions.setDisplayLogin }
+)((props) => (
+	<Modal open={props.displayLogin} onClose={() => props.setDisplayLogin(false)}>
+		<Login />
+	</Modal>
+));

@@ -1,15 +1,9 @@
 import React from "react";
 import { BrowserRouter, Route } from "react-router-dom";
-import { Grid } from "@material-ui/core";
-import {
-	makeStyles,
-	createMuiTheme,
-	ThemeProvider,
-} from "@material-ui/core/styles";
-import AppBody from "./components/AppBody";
-import AppNavBar from "./components/AppNavBar";
-import ToolsDrawer from "./components/drawer";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import "./App.css";
+import Landing from "./pages/Landing";
+import Visage from "./pages/Visage";
 
 const userTheme = createMuiTheme({
 	palette: {
@@ -63,67 +57,12 @@ const userTheme = createMuiTheme({
 	},
 });
 
-const useStyles = makeStyles((theme) => {
-	const xsBreakpoint = theme.breakpoints.up("xs");
-	const smBreakpoint = theme.breakpoints.up("sm");
-	return {
-		app: {
-			textAlign: "center",
-			position: "relative",
-			backgroundColor: "ghostwhite",
-		},
-		navbarContainer: {
-			position: "fixed",
-			width: "100vw",
-			zIndex: theme.zIndex.appBar,
-			...theme.mixins.navBackground,
-		},
-		drawer: {
-			zIndex: theme.zIndex.drawer,
-			...theme.mixins.navBackground,
-		},
-		bodyItem: {
-			zIndex: 0,
-			marginTop: theme.mixins.toolbar.minHeight,
-			[`${xsBreakpoint} and (orientation: landscape)`]: {
-				marginTop:
-					theme.mixins.toolbar[`${xsBreakpoint} and (orientation: landscape)`]
-						.minHeight,
-			},
-			[smBreakpoint]: {
-				marginTop: theme.mixins.toolbar[smBreakpoint].minHeight,
-			},
-		},
-		blurred: {
-			filter: "blur(10px)",
-			height: "70px",
-			width: "100%",
-			overflow: "hidden",
-			position: "fixed",
-		},
-	};
-});
-
 function App() {
-	const classes = useStyles();
-
 	return (
 		<ThemeProvider theme={userTheme}>
 			<BrowserRouter>
-				<Route
-					path="/"
-					component={() => (
-						<Grid container className={classes.app}>
-							<Grid item xs={12} className={classes.navbarContainer}>
-								<AppNavBar />
-							</Grid>
-							<Grid item className={classes.bodyItem} xs={12}>
-								<AppBody />
-							</Grid>
-							<ToolsDrawer className={classes.drawer} />
-						</Grid>
-					)}
-				/>
+				<Route path="/visage" exact component={Visage} />
+				<Route path="/" exact component={Landing} />
 			</BrowserRouter>
 		</ThemeProvider>
 	);

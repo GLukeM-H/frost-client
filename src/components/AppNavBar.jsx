@@ -48,10 +48,10 @@ const useStyles = makeStyles((theme) => {
 		userPopper: {
 			backgroundColor: palette.neutral.light,
 		},
-		// bottomDivider: {
-		// 	width: "100%",
-		// 	margin: "0 auto",
-		// },
+		divider: {
+			width: "80%",
+			margin: "0 auto",
+		},
 	};
 });
 
@@ -72,7 +72,7 @@ const UserMenu = connect(
 	}
 )((props) => {
 	const theme = useTheme();
-	const style = useStyles();
+	const classes = useStyles();
 	const [open, setOpen] = React.useState(false);
 	const [editVisible, setEditVisible] = React.useState(false);
 	const anchorRef = React.useRef(null);
@@ -136,7 +136,7 @@ const UserMenu = connect(
 				aria-controls={open ? "menu-list-grow" : undefined}
 				aria-haspopup="true"
 				onClick={handleToggle}
-				className={style.userMenu}
+				className={classes.userMenu}
 			>
 				<AccountCircleIcon />
 				{props.username}
@@ -151,7 +151,7 @@ const UserMenu = connect(
 			>
 				{({ TransitionProps }) => (
 					<Grow {...TransitionProps} style={{ transformOrigin: "center top" }}>
-						<Paper className={style.userPopper}>
+						<Paper className={classes.userPopper}>
 							<ClickAwayListener onClickAway={handleClose}>
 								<MenuList autoFocusItem={open} id="menu-list-grow">
 									{editVisible ? (
@@ -159,7 +159,7 @@ const UserMenu = connect(
 									) : (
 										<MenuItem onClick={handleEditing}>Edit Visage</MenuItem>
 									)}
-									<Divider />
+									<Divider className={classes.divider} />
 									{props.loggedIn ? (
 										<MenuItem onClick={handleLogout}>
 											<Typography color="textSecondary">Logout</Typography>

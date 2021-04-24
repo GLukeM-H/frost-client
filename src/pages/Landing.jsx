@@ -1,5 +1,8 @@
-import { Box, Grid, makeStyles } from "@material-ui/core";
 import React from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
+import { Box, Grid, makeStyles } from "@material-ui/core";
 import { LoginPaper } from "../components/Login";
 
 const useStyles = makeStyles(() => ({
@@ -21,23 +24,31 @@ const useStyles = makeStyles(() => ({
 	gridRight: {
 		backgroundColor: "transparent",
 	},
+	gridLeft: {
+		backgroundImage:
+			"radial-gradient(white, transparent, transparent, transparent)",
+	},
+	enterTypography: {},
 }));
 
-const Landing = () => {
+const Landing = (props) => {
 	const classes = useStyles();
+
+	React.useEffect(() => {
+		const loggedIn =
+			props.token &&
+			// true if token is not expired
+			JSON.parse(atob(props.token.split(".")[1])).exp * 1000 >= Date.now();
+
+		if (loggedIn) {
+			props.history.push("/visage");
+		}
+	}, [props.token]);
 
 	return (
 		<Grid className={classes.container} container justify="flex-end">
-			<Grid
-				className={classes.gridRight}
-				item
-				container
-				xs={12}
-				md={5}
-				alignContent="center"
-				justify="center"
-			>
-				<Grid item container xs={11} sm={9} md={11} lg={9}>
+			<Grid item container xs={12} alignContent="center" justify="center">
+				<Grid item container xs={10} sm={7} md={5} lg={4} xl={3}>
 					<LoginPaper />
 				</Grid>
 			</Grid>
@@ -46,4 +57,17 @@ const Landing = () => {
 	);
 };
 
-export default Landing;
+Landing.defaultProps = {
+	token: null,
+};
+
+Landing.propTypes = {
+	token: PropTypes.string,
+	history: PropTypes.array.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+	token: state.authState.token,
+});
+
+export default connect(mapStateToProps)(withRouter(Landing));

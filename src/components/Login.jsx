@@ -200,6 +200,6 @@ export const ModalLogin = connect(
 	{ setDisplayLogin: contActions.setDisplayLogin }
 )((props) => (
 	<Modal open={props.displayLogin} onClose={() => props.setDisplayLogin(false)}>
-		<Login />
+		{Login()}
 	</Modal>
 ));

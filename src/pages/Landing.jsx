@@ -17,28 +17,21 @@ const IMG_DIMENSIONS = [window.innerWidth, window.innerHeight]
 
 const useStyles = makeStyles((theme) => ({
 	container: {
-		height: "100vh",
+		minHeight: "100vh",
 	},
-	// backgroundFilter: {
-	// 	position: "absolute",
-	// 	zIndex: -1,
-	// 	overflow: "hidden",
-	// 	height: "100%",
-	// 	width: "100%",
-	// 	backgroundImage: `radial-gradient(top right, transparent, transparent, transparent, black)`,
-	// },
 	backgroundImg: {
 		position: "fixed",
+		top: 0,
+		left: 0,
 		filter: "brightness(50%) hue-rotate(180deg)",
 		zIndex: -1,
-		// backgroundSize: "cover",
 	},
 	gridLeft: {
-		height: "100%",
+		height: "100vh",
 		backgroundColor: theme.palette.primary.main,
 		padding: "2em",
 		[theme.breakpoints.down("sm")]: {
-			marginTop: "3em",
+			marginTop: "2em",
 			height: "auto",
 		},
 	},

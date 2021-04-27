@@ -4,23 +4,79 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import "./App.css";
 import Landing from "./pages/Landing";
 import Visage from "./pages/Visage";
+import {
+	DARK,
+	DARK_TRANSLUCENT,
+	BLUE,
+	BLUE_TRANSLUCENT,
+	FOCUS,
+	HOVER,
+	LIGHT,
+	LIGHT_TRANSLUCENT,
+} from "./constants/colors";
+
+const colorTheme = "light";
+
+let primary;
+let secondary;
+let primaryTranslucent;
+let secondaryTranslucent;
+let neutral;
+let neutralTranslucent;
+switch (colorTheme) {
+	case "blue":
+		primary = LIGHT;
+		primaryTranslucent = LIGHT_TRANSLUCENT;
+		secondary = BLUE;
+		secondaryTranslucent = BLUE_TRANSLUCENT;
+		neutral = "rgb(0,0,0)";
+		neutralTranslucent = "rgb(0,0,0,0.7)";
+		break;
+	case "dark":
+		primary = BLUE;
+		primaryTranslucent = BLUE_TRANSLUCENT;
+		secondary = DARK;
+		secondaryTranslucent = DARK_TRANSLUCENT;
+		neutral = "rgb(255,255,255)";
+		neutralTranslucent = "rgb(255,255,255,0.7)";
+		break;
+	case "light":
+	default:
+		primary = BLUE;
+		primaryTranslucent = BLUE_TRANSLUCENT;
+		secondary = LIGHT;
+		secondaryTranslucent = LIGHT_TRANSLUCENT;
+		neutral = "rgb(0,0,0)";
+		neutralTranslucent = "rgb(0,0,0,0.7)";
+}
 
 const userTheme = createMuiTheme({
 	palette: {
 		primary: {
-			main: "#486d99",
+			main: primary,
 			translucent: {
-				main: "rgba(72,109,153,0.2)",
-				dark: "rgba(72,109,153,0.5)",
-				light: "rgba(72,109,153,0.075)",
+				main: primaryTranslucent,
+				// dark: "rgba(72,109,153,0.5)",
+				// light: "rgba(72,109,153,0.075)",
 			},
 		},
 		secondary: {
-			main: "#8c4f5a",
+			main: secondary,
+			translucent: {
+				main: secondaryTranslucent,
+			},
 		},
 		neutral: {
-			main: "#e5e5ec",
-			light: "#f8f8ff",
+			main: neutral,
+			translucent: {
+				main: neutralTranslucent,
+			},
+		},
+		hover: {
+			main: HOVER,
+		},
+		focus: {
+			main: FOCUS,
 		},
 		translucent: {
 			main: "rgba(0,0,0,0.2)",
@@ -42,10 +98,10 @@ const userTheme = createMuiTheme({
 		navBackground: CSS.supports("backdrop-filter", "blur(20px)")
 			? {
 					backdropFilter: "blur(20px)",
-					backgroundColor: "rgba(248,248,255,0.7)",
+					backgroundColor: secondaryTranslucent,
 			  }
 			: {
-					backgroundColor: "ghostwhite",
+					backgroundColor: secondary,
 			  },
 	},
 	overrides: {

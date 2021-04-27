@@ -19,7 +19,7 @@ import {
 	AccountCircle as AccountCircleIcon,
 	Menu as MenuIcon,
 } from "@material-ui/icons";
-import { navActions, contActions, authActions } from "../actions";
+import { navActions, contActions, authActions } from "../../actions";
 
 /* ~~~~~ Styles ~~~~~ */
 const useStyles = makeStyles((theme) => {
@@ -179,7 +179,7 @@ const UserMenu = connect(
 	);
 });
 
-function AppNavBar() {
+function AppNavbar() {
 	const classes = useStyles();
 	const [elevation, setElevation] = React.useState(0);
 
@@ -219,4 +219,4 @@ function AppNavBar() {
 	);
 }
 
-export default AppNavBar;
+export default AppNavbar;

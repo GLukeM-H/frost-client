@@ -2,8 +2,8 @@ import React from "react";
 import { Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBody from "../components/AppBody";
-import AppNavBar from "../components/AppNavBar";
-import ToolsDrawer from "../components/drawer";
+import AppNavbar from "../components/AppNavbar";
+import EditDrawer from "../components/EditDrawer";
 
 const useStyles = makeStyles((theme) => {
 	const xsBreakpoint = theme.breakpoints.up("xs");
@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => {
 		app: {
 			textAlign: "center",
 			position: "relative",
-			backgroundColor: "ghostwhite",
+			backgroundColor: theme.palette.secondary.main,
 		},
 		navbarContainer: {
 			position: "fixed",
@@ -44,12 +44,12 @@ const Visage = () => {
 	return (
 		<Grid container className={classes.app}>
 			<Grid item xs={12} className={classes.navbarContainer}>
-				<AppNavBar />
+				<AppNavbar />
 			</Grid>
 			<Grid item className={classes.bodyItem} xs={12}>
 				<AppBody />
 			</Grid>
-			<ToolsDrawer className={classes.drawer} />
+			<EditDrawer className={classes.drawer} />
 		</Grid>
 	);
 };

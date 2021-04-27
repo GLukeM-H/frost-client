@@ -17,7 +17,7 @@ const useStyles = makeStyles(() => ({
 		minWidth: "3rem",
 	},
 	editing: {
-		border: `1px solid lightblue`,
+		outline: `1px solid lightblue`,
 		borderRadius: "5px",
 	},
 }));

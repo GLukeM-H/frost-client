@@ -4,12 +4,8 @@ import { connect } from "react-redux";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import clsx from "clsx";
 import { SwitchTransition } from "react-transition-group";
-import Button from "@material-ui/core/Button";
-import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
-import Grow from "@material-ui/core/Grow";
-import Box from "@material-ui/core/Box";
-import Backdrop from "@material-ui/core/Backdrop";
+import { Button, Grow, Box, Backdrop } from "@material-ui/core";
+import { Edit as EditIcon, Delete as DeleteIcon } from "@material-ui/icons";
 import { contActions } from "../../actions";
 
 const useStyles = makeStyles((theme) => ({

@@ -1,4 +1,3 @@
-/* eslint-disable no-useless-computed-key */
 import React from "react";
 import { connect } from "react-redux";
 import {
@@ -14,43 +13,66 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { SwitchTransition } from "react-transition-group";
-import { authActions, contActions, errActions } from "../actions";
+import { authActions, contActions, errActions } from "../../actions";
 
-const useStyles = makeStyles((theme) => ({
-	paper: {
-		width: "100%",
-		padding: "2em 1em 2em 1em",
-		backgroundColor: theme.palette.translucent.main,
-		backdropFilter: "blur(20px)",
-		color: theme.palette.primary.dark,
-		...theme.mixins.navBackground,
-		transition: `transform ${theme.transitions.duration.short}ms ease-out`,
-	},
-	enteringPaper: {
-		transform: "rotate3d(1,2,0,90deg)",
-	},
-	exitingPaper: {
-		transform: "rotate3d(1,2,0,-90deg)",
-	},
-	container: {
-		position: "absolute",
-		top: "50%",
-		left: "50%",
-		transform: "translate(-50%, -50%)",
-	},
-	item: {
-		textAlign: "center",
-	},
-	input: {
-		color: theme.palette.neutral.main,
-	},
-	link: {
-		cursor: "pointer",
-		["&:hover"]: {
-			opacity: "0.8",
+const useStyles = makeStyles((theme) => {
+	const { secondary, primary } = theme.palette;
+	return {
+		paper: {
+			width: "100%",
+			padding: "2em 1em 2em 1em",
+			color: primary.main,
+			...theme.mixins.navBackground,
+			transition: `transform ${theme.transitions.duration.short}ms ease-out`,
+			"& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+				borderColor: primary.main,
+			},
+			"& .MuiOutlinedInput-root:hover": {
+				filter: "brightness(140%)",
+			},
+			"& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+				borderColor: "white",
+			},
+			"& .MuiOutlinedInput-input": {
+				color: secondary.contrastText,
+			},
+			"& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-input": {
+				color: secondary.contrastText,
+			},
+			"& .MuiInputLabel-outlined": {
+				color: secondary.contrastText,
+			},
+			"& .MuiInputLabel-outlined.Mui-focused": {
+				color: primary.main,
+			},
 		},
-	},
-}));
+		submit: {
+			borderColor: primary.main,
+			"& .MuiButton-label": {
+				color: primary.main,
+			},
+			"&:hover": {
+				filter: "brightness(130%)",
+			},
+		},
+		container: {
+			position: "absolute",
+			top: "50%",
+			left: "50%",
+			transform: "translate(-50%, -50%)",
+		},
+		item: {
+			textAlign: "center",
+		},
+		link: {
+			color: secondary.contrastText,
+			cursor: "pointer",
+			"&:hover": {
+				filter: "brightness(120%)",
+			},
+		},
+	};
+});
 
 export const LoginPaper = connect(
 	(state) => ({
@@ -133,7 +155,6 @@ export const LoginPaper = connect(
 							<TextField
 								variant="outlined"
 								label="Username"
-								color="primary"
 								value={username}
 								error={props.loginError}
 								onChange={(e) => setUsername(e.target.value)}
@@ -142,7 +163,6 @@ export const LoginPaper = connect(
 						<Grid item className={classes.item}>
 							<TextField
 								variant="outlined"
-								color="primary"
 								label="Password"
 								type="password"
 								value={password}
@@ -154,7 +174,6 @@ export const LoginPaper = connect(
 							<Grid item className={classes.item}>
 								<TextField
 									variant="outlined"
-									color="primary"
 									label="Confirm Password"
 									type="password"
 									value={checkPassword}
@@ -164,7 +183,11 @@ export const LoginPaper = connect(
 							</Grid>
 						)}
 						<Grid item className={classes.item}>
-							<Button color="primary" variant="outlined" onClick={handleSubmit}>
+							<Button
+								className={classes.submit}
+								variant="outlined"
+								onClick={handleSubmit}
+							>
 								Submit
 							</Button>
 						</Grid>

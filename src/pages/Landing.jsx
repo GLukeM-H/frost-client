@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 	gridLeft: {
 		height: "100vh",
-		backgroundColor: theme.palette.primary.main,
+		backgroundColor: theme.palette.neutral.main,
 		padding: "2em",
 		[theme.breakpoints.down("sm")]: {
 			marginTop: "2em",
@@ -42,8 +42,7 @@ const useStyles = makeStyles((theme) => ({
 	link: {
 		color: "inherit",
 		textDecoration: "none",
-		// eslint-disable-next-line
-		["&:hover"]: {
+		"&:hover": {
 			textDecoration: "underline",
 		},
 	},
@@ -85,19 +84,22 @@ const Landing = (props) => {
 				justify="center"
 			>
 				<Grid item>
-					<Typography variant="h2" color="textPrimary">
+					<Typography variant="h2" color="primary">
 						Go to{" "}
 						<Link to="/visage" className={classes.link}>
 							<b>SPADES</b>
 						</Link>
 					</Typography>
-					<Typography className={classes.typography} variant="subtitle1">
+					<Typography
+						className={classes.typography}
+						variant="subtitle1"
+						color="primary"
+					>
 						Or if you&apos;re interested, view the source on{" "}
 						<ExtLink
 							href="https://github.com/glukem-h/frost-client"
 							target="_blank"
 							rel="noopener"
-							color="textPrimary"
 						>
 							<b>Github</b>
 						</ExtLink>

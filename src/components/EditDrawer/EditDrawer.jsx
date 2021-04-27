@@ -29,8 +29,8 @@ import {
 import { Scrollbars } from "react-custom-scrollbars";
 import { navActions, contActions } from "../../actions";
 import useStyles from "./styles";
-import GridView from "./GridView";
-import PaperView from "./PaperView";
+import GridOptions from "./GridOptions";
+import PaperOptions from "./PaperOptions";
 
 const ComponentView = connect(
 	(state) => ({
@@ -106,10 +106,10 @@ function ToolsDrawer(props) {
 
 		switch (props.contentComp[props.selected].comp) {
 			case "Grid":
-				view = <GridView breadcrumbs={breadcrumbs} />;
+				view = <GridOptions breadcrumbs={breadcrumbs} />;
 				break;
 			case "Paper":
-				view = <PaperView breadcrumbs={breadcrumbs} />;
+				view = <PaperOptions breadcrumbs={breadcrumbs} />;
 				break;
 			default:
 				view = <ComponentView visageName={props.visageName} />;

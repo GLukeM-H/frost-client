@@ -8,6 +8,8 @@ import {
 	makeStyles,
 	Typography,
 	Link as ExtLink,
+	Paper,
+	Box,
 } from "@material-ui/core";
 import { LoginPaper } from "../components/Login";
 
@@ -21,22 +23,32 @@ const useStyles = makeStyles((theme) => ({
 	},
 	backgroundImg: {
 		position: "fixed",
+		width: "100%",
+		height: "100%",
 		top: 0,
 		left: 0,
-		filter: "brightness(50%) hue-rotate(180deg)",
+		filter: "brightness(50%)",
 		zIndex: -1,
 	},
 	gridLeft: {
 		height: "100vh",
-		backgroundColor: theme.palette.neutral.main,
-		padding: "2em",
 		[theme.breakpoints.down("sm")]: {
 			marginTop: "2em",
 			height: "auto",
 		},
 	},
+	paperLeft: {
+		backgroundColor: "transparent",
+		backdropFilter: "hue-rotate(180deg) blur(20px)",
+		color: "ghostwhite",
+		height: "100%",
+		width: "100%",
+	},
+	paperGrid: {
+		height: "100%",
+	},
 	loginContainer: {
-		width: "25rem",
+		width: "30rem",
 		padding: "1.5em",
 	},
 	link: {
@@ -47,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
 		},
 	},
 	typography: {
-		padding: "2em 0",
+		margin: "2em",
 	},
 }));
 
@@ -74,37 +86,35 @@ const Landing = (props) => {
 			alignItems="center"
 			alignContent="center"
 		>
-			<Grid
-				className={classes.gridLeft}
-				item
-				container
-				xs={12}
-				md={5}
-				alignContent="center"
-				justify="center"
-			>
-				<Grid item>
-					<Typography variant="h2" color="primary">
-						Go to{" "}
-						<Link to="/visage" className={classes.link}>
-							<b>SPADES</b>
-						</Link>
-					</Typography>
-					<Typography
-						className={classes.typography}
-						variant="subtitle1"
-						color="primary"
+			<Grid className={classes.gridLeft} item xs={12} md={5}>
+				<Paper className={classes.paperLeft} square elevation={10}>
+					<Grid
+						className={classes.paperGrid}
+						container
+						alignContent="center"
+						justify="center"
 					>
-						Or if you&apos;re interested, view the source on{" "}
-						<ExtLink
-							href="https://github.com/glukem-h/frost-client"
-							target="_blank"
-							rel="noopener"
-						>
-							<b>Github</b>
-						</ExtLink>
-					</Typography>
-				</Grid>
+						<Grid className={classes.typography} item>
+							<Typography variant="h2">
+								Go to{" "}
+								<Link to="/visage" className={classes.link}>
+									<b>SPADES</b>
+								</Link>
+							</Typography>
+							<Typography variant="subtitle1">
+								&nbsp;Or if you&apos;re interested, view the source on{" "}
+								<ExtLink
+									href="https://github.com/glukem-h/frost-client"
+									target="_blank"
+									rel="noopener"
+									style={{ color: "inherit" }}
+								>
+									<b>Github</b>
+								</ExtLink>
+							</Typography>
+						</Grid>
+					</Grid>
+				</Paper>
 			</Grid>
 			<Grid
 				item
@@ -118,12 +128,14 @@ const Landing = (props) => {
 					<LoginPaper />
 				</Grid>
 			</Grid>
+			<Box
+				className={classes.backgroundImg}
+				style={{ backgroundColor: "black" }}
+			/>
 			<Fade in={imgLoaded}>
 				<img
 					src={`https://source.unsplash.com/random/${IMG_DIMENSIONS}`}
 					className={classes.backgroundImg}
-					width="100%"
-					height="100%"
 					alt=""
 					onLoad={() => setImgLoaded(true)}
 				/>

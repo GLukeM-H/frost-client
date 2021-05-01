@@ -2,7 +2,7 @@ finish implementing cards
 add scrollbar component
 improve error handling in actions
 convert contentState.hoverDisabled to map
-work on color schemes
+work on color themes
 
 need workaround for touch controls when editing on mobile
 

@@ -21,38 +21,43 @@ const useStyles = makeStyles((theme) => {
 		paper: {
 			width: "100%",
 			padding: "2em 1em 2em 1em",
-			color: primary.main,
-			...theme.mixins.navBackground,
+			color: "ghostwhite",
+			// ...theme.mixins.navBackground,
+			backgroundColor: "transparent",
+			border: "1px solid ghostwhite",
 			transition: `transform ${theme.transitions.duration.short}ms ease-out`,
 			"& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-				borderColor: primary.main,
+				borderColor: "ghostwhite",
 			},
-			"& .MuiOutlinedInput-root:hover": {
-				filter: "brightness(140%)",
+			"& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
+				borderWidth: "2px",
 			},
 			"& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-				borderColor: "white",
+				borderColor: "ghostwhite",
 			},
 			"& .MuiOutlinedInput-input": {
-				color: secondary.contrastText,
+				color: "ghostwhite",
 			},
 			"& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-input": {
-				color: secondary.contrastText,
+				color: "ghostwhite",
 			},
 			"& .MuiInputLabel-outlined": {
-				color: secondary.contrastText,
+				color: "ghostwhite",
 			},
 			"& .MuiInputLabel-outlined.Mui-focused": {
-				color: primary.main,
+				color: "ghostwhite",
 			},
 		},
 		submit: {
-			borderColor: primary.main,
+			borderColor: "ghostwhite",
 			"& .MuiButton-label": {
-				color: primary.main,
+				color: "ghostwhite",
 			},
 			"&:hover": {
-				filter: "brightness(130%)",
+				outline: "1px solid ghostwhite",
+			},
+			"&:hover .MuiButton-label": {
+				color: "ghostwhite",
 			},
 		},
 		container: {
@@ -65,10 +70,10 @@ const useStyles = makeStyles((theme) => {
 			textAlign: "center",
 		},
 		link: {
-			color: secondary.contrastText,
+			color: "ghostwhite",
 			cursor: "pointer",
 			"&:hover": {
-				filter: "brightness(120%)",
+				color: "white",
 			},
 		},
 	};
@@ -121,7 +126,7 @@ export const LoginPaper = connect(
 				direction="right"
 				timeout={theme.transitions.duration.shorter}
 			>
-				<Paper className={classes.paper} elevation={4}>
+				<Paper className={classes.paper} elevation={0}>
 					<Grid container direction="column" spacing={3} justify="center">
 						<Grid item className={classes.item}>
 							{registering ? (
@@ -222,7 +227,11 @@ export const ModalLogin = connect(
 	}),
 	{ setDisplayLogin: contActions.setDisplayLogin }
 )((props) => (
-	<Modal open={props.displayLogin} onClose={() => props.setDisplayLogin(false)}>
+	<Modal
+		open={props.displayLogin}
+		style={{ backdropFilter: "blur(20px)" }}
+		onClose={() => props.setDisplayLogin(false)}
+	>
 		{Login()}
 	</Modal>
 ));

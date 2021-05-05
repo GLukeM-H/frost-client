@@ -6,6 +6,6 @@ Prominent front-end technologies include React, Redux and Material-UI.
 
 # Links
 
-Deployed at - https://gentle-sands-16072.herokuapp.com/
+Deployed on Heroku - https://gentle-sands-16072.herokuapp.com/
 
 Back-end source - https://github.com/GLukeM-H/frost

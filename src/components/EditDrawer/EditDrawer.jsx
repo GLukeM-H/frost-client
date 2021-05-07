@@ -81,7 +81,7 @@ ComponentView.propTypes = {
 	visageName: PropTypes.string.isRequired,
 };
 
-function ToolsDrawer(props) {
+function EditDrawer(props) {
 	const theme = useTheme();
 	const classes = useStyles();
 	const mdBreakpoint = useMediaQuery(theme.breakpoints.up("md"));
@@ -146,7 +146,10 @@ function ToolsDrawer(props) {
 			<Divider style={{ marginTop: "auto" }} />
 			<Button
 				onClick={handleSave}
-				color={props.savedChanges ? "primary" : "secondary"}
+				className={clsx({
+					[classes.save]: !props.savedChanges,
+					[classes.saved]: props.savedChanges,
+				})}
 				size="large"
 			>
 				{props.savedChanges ? (
@@ -162,7 +165,7 @@ function ToolsDrawer(props) {
 	);
 }
 
-ToolsDrawer.propTypes = {
+EditDrawer.propTypes = {
 	toolsOpen: PropTypes.bool.isRequired,
 	toolsView: PropTypes.string.isRequired,
 	toggleTools: PropTypes.func.isRequired,
@@ -190,4 +193,4 @@ export default connect(mapStateToProps, {
 	insertComp: contActions.insertComp,
 	saveBody: contActions.saveBody,
 	setSelected: contActions.setSelected,
-})(ToolsDrawer);
+})(EditDrawer);

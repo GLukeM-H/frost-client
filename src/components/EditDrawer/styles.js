@@ -1,4 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
+import { red, blue } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme) => ({
 	drawer: {
@@ -15,7 +16,8 @@ const useStyles = makeStyles((theme) => ({
 		justifyContent: "flex-end",
 	},
 	downButton: {
-		backgroundColor: theme.palette.neutral.main,
+		backgroundColor: "ghostwhite",
+		border: "1px solid lightgrey",
 		position: "absolute",
 		top: 0,
 		left: "50%",
@@ -27,7 +29,6 @@ const useStyles = makeStyles((theme) => ({
 		...theme.mixins.navBackground,
 		...theme.mixins.drawer,
 		overflowY: "visible",
-		// backgroundColor: "#aeaeff"
 	},
 	drawerPaper: {
 		backdropFilter: "blur(20px)",
@@ -59,6 +60,12 @@ const useStyles = makeStyles((theme) => ({
 	formControl: {
 		margin: theme.spacing(1),
 		width: "100%",
+	},
+	save: {
+		color: red[900],
+	},
+	saved: {
+		color: blue[900],
 	},
 }));
 

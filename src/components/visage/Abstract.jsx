@@ -6,6 +6,7 @@ import clsx from "clsx";
 import { SwitchTransition } from "react-transition-group";
 import { Button, Grow, Box, Backdrop } from "@material-ui/core";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@material-ui/icons";
+import { red, blue } from "@material-ui/core/colors";
 import { contActions } from "../../actions";
 
 const useStyles = makeStyles((theme) => ({
@@ -25,10 +26,10 @@ const useStyles = makeStyles((theme) => ({
 		height: "2rem",
 	},
 	edit: {
-		color: theme.palette.primary.main,
+		color: blue[900],
 	},
 	delete: {
-		color: theme.palette.secondary.main,
+		color: red[900],
 	},
 	none: {
 		display: "none",
@@ -48,7 +49,6 @@ const useStyles = makeStyles((theme) => ({
 			marginLeft: `${theme.mixins.drawer[theme.breakpoints.up("md")].width}`,
 		},
 	},
-	backdropDrawerLeft: {},
 }));
 
 const EditButton = connect(
@@ -139,9 +139,7 @@ function Abstract(props) {
 			<Backdrop
 				open={props.selected}
 				onClick={() => props.setSelected("")}
-				className={clsx(classes.backdrop, {
-					[classes.backdropDrawerLeft]: props.toolsOpen,
-				})}
+				className={classes.backdrop}
 				{...editHoverProps}
 			/>
 			{props.children({

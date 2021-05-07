@@ -1,5 +1,5 @@
-export const BLUE = "rgb(72,109,153)";
-export const BLUE_TRANSLUCENT = "rgba(72,109,153,0.7)";
+export const BLUE = "rgb(62,99,183)";
+export const BLUE_TRANSLUCENT = "rgba(62,99,183,0.7)";
 export const RED = "rgb(140,79,90)";
 export const RED_TRANSLUCENT = "rgba(140,79,90,0.2)";
 export const LIGHT = "rgb(248,248,255)";

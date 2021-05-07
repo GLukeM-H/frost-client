@@ -15,69 +15,66 @@ import { makeStyles } from "@material-ui/core/styles";
 import { SwitchTransition } from "react-transition-group";
 import { authActions, contActions, errActions } from "../../actions";
 
-const useStyles = makeStyles((theme) => {
-	const { secondary, primary } = theme.palette;
-	return {
-		paper: {
-			width: "100%",
-			padding: "2em 1em 2em 1em",
-			color: "ghostwhite",
-			// ...theme.mixins.navBackground,
-			backgroundColor: "transparent",
-			border: "1px solid ghostwhite",
-			transition: `transform ${theme.transitions.duration.short}ms ease-out`,
-			"& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-				borderColor: "ghostwhite",
-			},
-			"& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
-				borderWidth: "2px",
-			},
-			"& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-				borderColor: "ghostwhite",
-			},
-			"& .MuiOutlinedInput-input": {
-				color: "ghostwhite",
-			},
-			"& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-input": {
-				color: "ghostwhite",
-			},
-			"& .MuiInputLabel-outlined": {
-				color: "ghostwhite",
-			},
-			"& .MuiInputLabel-outlined.Mui-focused": {
-				color: "ghostwhite",
-			},
-		},
-		submit: {
+const useStyles = makeStyles((theme) => ({
+	paper: {
+		width: "100%",
+		padding: "2em 1em 2em 1em",
+		color: "ghostwhite",
+		// ...theme.mixins.navBackground,
+		backgroundColor: "transparent",
+		border: "1px solid ghostwhite",
+		transition: `transform ${theme.transitions.duration.short}ms ease-out`,
+		"& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
 			borderColor: "ghostwhite",
-			"& .MuiButton-label": {
-				color: "ghostwhite",
-			},
-			"&:hover": {
-				outline: "1px solid ghostwhite",
-			},
-			"&:hover .MuiButton-label": {
-				color: "ghostwhite",
-			},
 		},
-		container: {
-			position: "absolute",
-			top: "50%",
-			left: "50%",
-			transform: "translate(-50%, -50%)",
+		"& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
+			borderWidth: "2px",
 		},
-		item: {
-			textAlign: "center",
+		"& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+			borderColor: "ghostwhite",
 		},
-		link: {
+		"& .MuiOutlinedInput-input": {
 			color: "ghostwhite",
-			cursor: "pointer",
-			"&:hover": {
-				color: "white",
-			},
 		},
-	};
-});
+		"& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-input": {
+			color: "ghostwhite",
+		},
+		"& .MuiInputLabel-outlined": {
+			color: "ghostwhite",
+		},
+		"& .MuiInputLabel-outlined.Mui-focused": {
+			color: "ghostwhite",
+		},
+	},
+	submit: {
+		borderColor: "ghostwhite",
+		"& .MuiButton-label": {
+			color: "ghostwhite",
+		},
+		"&:hover": {
+			outline: "1px solid ghostwhite",
+		},
+		"&:hover .MuiButton-label": {
+			color: "ghostwhite",
+		},
+	},
+	container: {
+		position: "absolute",
+		top: "50%",
+		left: "50%",
+		transform: "translate(-50%, -50%)",
+	},
+	item: {
+		textAlign: "center",
+	},
+	link: {
+		color: "ghostwhite",
+		cursor: "pointer",
+		"&:hover": {
+			color: "white",
+		},
+	},
+}));
 
 export const LoginPaper = connect(
 	(state) => ({

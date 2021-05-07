@@ -27,7 +27,17 @@ const useStyles = makeStyles((theme) => ({
 		height: "100%",
 		top: 0,
 		left: 0,
-		filter: "brightness(50%)",
+		filter: "brightness(50%) blur(15px)",
+		zIndex: -1,
+	},
+	backgroundColor: {
+		filter: "brightness(30%)",
+		backgroundColor: theme.palette.primary.dark,
+		position: "fixed",
+		width: "100%",
+		height: "100%",
+		top: 0,
+		left: 0,
 		zIndex: -1,
 	},
 	gridLeft: {
@@ -38,8 +48,7 @@ const useStyles = makeStyles((theme) => ({
 		},
 	},
 	paperLeft: {
-		backgroundColor: "transparent",
-		backdropFilter: "hue-rotate(180deg) blur(20px)",
+		backgroundColor: theme.palette.primary.dark,
 		color: "ghostwhite",
 		height: "100%",
 		width: "100%",
@@ -87,7 +96,7 @@ const Landing = (props) => {
 			alignContent="center"
 		>
 			<Grid className={classes.gridLeft} item xs={12} md={5}>
-				<Paper className={classes.paperLeft} square elevation={10}>
+				<Paper className={classes.paperLeft} square elevation={3}>
 					<Grid
 						className={classes.paperGrid}
 						container
@@ -128,10 +137,7 @@ const Landing = (props) => {
 					<LoginPaper />
 				</Grid>
 			</Grid>
-			<Box
-				className={classes.backgroundImg}
-				style={{ backgroundColor: "black" }}
-			/>
+			<Box className={classes.backgroundColor} />
 			<Fade in={imgLoaded}>
 				<img
 					src={`https://source.unsplash.com/random/${IMG_DIMENSIONS}`}

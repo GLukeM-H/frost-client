@@ -3,6 +3,7 @@ add scrollbar component
 improve error handling in actions
 convert contentState.hoverDisabled to map
 work on color themes
+move all logic for editing to abstract component
 
 need workaround for touch controls when editing on mobile
 

@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
 		maxWidth: "100%",
 		padding: "10px",
 		position: "relative",
-		background: theme.palette.primary.main,
+		background: theme.palette.primary.dark,
 		color: theme.palette.primary.contrastText,
 		width: "100%",
 	},
@@ -21,10 +21,6 @@ const useStyles = makeStyles((theme) => ({
 	},
 	typography: {
 		overflow: "hidden",
-	},
-	backdrop: {
-		zIndex: theme.zIndex.appBar + 1,
-		width: "calc(100% - 300px / 2)",
 	},
 }));
 
